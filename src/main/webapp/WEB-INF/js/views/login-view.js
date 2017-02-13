@@ -5,6 +5,7 @@ window.LoginView = Backbone.View.extend({
         events: {
             'click #signinButton' : 'login',
             'click #signupRedirectButton' : 'signupRedirect',
+            'click #signinRedirectButton' : 'signinRedirect',
             'click #signupButton' : 'signup'
         },
         initialize : function() {
@@ -41,12 +42,17 @@ window.LoginView = Backbone.View.extend({
              });            
         },
         signupRedirect : function(){
-            $('#popup1').w2popup();
+            $("#signinform").css("display", "none");
+            $("#signupform").css("display", "block");
+        },
+        signinRedirect : function(){
+            $("#signinform").css("display", "block");
+            $("#signupform").css("display", "none");
         },
         signup : function(){
             var registerValues = {
-              email:$('#w2ui-popup #registerEmail').val(),
-              password: $('#w2ui-popup #registerPassword').val()
+              email:$('#registerEmail').val(),
+              password: $('#registerPassword').val()
           };
         $.ajax({
             url:'/protocolanalyzer/signup',
@@ -57,16 +63,14 @@ window.LoginView = Backbone.View.extend({
               success:function (data) {
                   if(data === "success") {
                     alert("User successfully registered.");
-                    w2popup.close();
-                     app.navigate("#");
+                    signinRedirect();
+                    // app.navigate("#");
                   }
                   else if(data === "failure"){ 
-                    w2popup.close();
                     alert("An account with this email ID already exists");
                   }
               },
               error:function(){
-                w2popup.close();
                 alert("There was an issue connecting at this time, please try again later");
               }
            });

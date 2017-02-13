@@ -1,37 +1,90 @@
-
-
-
-<form class="form-horizontal">
-        <div class="form-group">
-          <label for="experimentName" class="col-sm-2 control-label">Experiment Name</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="experimentName" placeholder="Name of the experiment (must be unique)">
-            </div>
+<ul id="dropdown1" class="dropdown-content">
+  <li><a href="#!">one</a></li>
+  <li><a href="#!">two</a></li>
+  <li class="divider"></li>
+  <li><a href="#!">three</a></li>
+</ul>
+<div class="navbar-fixed">
+<nav>
+  <div class="nav-wrapper">
+    <a href="#!" class="brand-logo">Packet Analyzer</a>
+    <ul class="right hide-on-med-and-down">
+      <li><a id="help" style="cursor:help">Help</a></li>
+      <li><a id="logout" style="cursor:default">Logout</a></li>
+      <!-- Dropdown Trigger -->
+      <!-- <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li> -->
+    </ul>
+  </div>
+</nav>
+</div>
+<div class="valign-wrapper" style="width:100%;height:85%;position: absolute;">
+<div class="valign" style="width:100%;">
+<div class="container">
+<div class="row">
+        <div class="col s6 offset-s3" style="min-height: 9vh">
         </div>
-        <div class="form-group">
-          <label for="description" class="col-sm-2 control-label">Description</label>
-            <div class="col-sm-10">
-                <textarea  class="form-control" id="description" placeholder="A short description"></textarea>
-            </div>
+</div>
+    <div class="row" style="display: block">
+        <div class="col l10 m12 s12 offset-l1">
+            <div class="card blue-grey darken-3">
+            <div class="card-content white-text">
+                <span class="card-title center-align">Experiment Dashboard</span>
+                <p class="center-align">Fill the required details</p> <br><br><br>
+                <form class="form-">
+                <div class="row">
+                    <div class="input-field col s4 offset-s2">
+                          <input type="text" id="experimentName">
+                          <label for="experimentName">Experiment Name (unique)</label>
+                    </div>
+                    <div class="input-field col s4">
+                          <input type="text" id="experimenter">
+                          <label for="experimenter">Experimenter</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s8 offset-s2">
+                          <textarea class="materialize-textarea" id="description"></textarea>
+                          <label for="description">Description</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s8 offset-s2">
+                            <input type="text" id="pcapPath">
+                            <label for="pcapPath">Pcap File Path</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s8 offset-s2">
+                            <button type="submit" class="waves-effect waves-light btn" id="newExperiment" style="display:inline;">NEW EXPERIMENT</button>
+                            <button type="submit" class="waves-effect waves-light btn" id="loadExperiment" style="display:inline;">LOAD EXPERIMENT</button>
+                    </div>
+                </div>
+                </form>
           </div>
-        <div class="form-group">
-          <label for="experimenter" class="col-sm-2 control-label">Experimenter</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="experimenter" >
-            </div>
+          </div>
         </div>
-        <div class="form-group">
-            <label for="pcapPath" class="col-sm-2 control-label">Pcap File Path</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Add pcap file path" id="pcapPath">
-            </div>
-        </div>
-        <div class="btn-toolbar" >
-            <button type="submit" style="margin-left: 62px;margin-right: 61px;" class="btn btn-lg btn-primary " id="newExperiment">NEW EXPERIMENT</button>
-            <button type="submit" style="margin-right: 62px;margin-left: 61px;" class="btn btn-lg btn-primary " id="loadExperiment">LOAD EXPERIMENT</button>
-        </div>
-      </form>
+    </div>
+</div>
+</div>
+</div>
+<!-- <ul id="dropdown1" class="dropdown-content">
+  <li><a href="#!">one</a></li>
+  <li><a href="#!">two</a></li>
+  <li class="divider"></li>
+  <li><a href="#!">three</a></li>
+</ul>
 
+<nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Experiment</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Settings<i class="material-icons right">arrow_drop_down</i></a></li>
+        <li><a id="help" style="cursor:help">Help</a></li>
+        <li><a id="logout" style="cursor:default">Logout</a></li>
+      </ul>
+    </div>
+  </nav> -->
+<!-- 
       <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -58,4 +111,4 @@
           </ul>
         </div>
       </div>
-    </nav>
+    </nav> -->

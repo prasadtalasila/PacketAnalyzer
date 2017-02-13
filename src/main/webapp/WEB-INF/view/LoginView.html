@@ -1,16 +1,88 @@
-<form class="form-signin">
-            <h3 class="form-signin-heading">Sign in to Packet Analyzer</h3>
-            <label for="inputEmail" class="sr-only">Email address</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-              <label>
-                <button type="button" class = "btn btn-link" id ="signupRedirectButton"> New User? Sign Up !</button>
-              </label>
-            <button class="btn btn-lg btn-primary btn-block" type = "submit" id="signinButton">Sign in</button>
-</form>
+<div class="valign-wrapper" style="width:100%;height:100%;position: absolute;">
+<div class="valign" style="width:100%;">
+<div class="container">
+    <div class="row" id="signinform" style="display: block">
+        <div class="col s6 offset-s3">
+            <div class="card blue-grey darken-3">
+            <div class="card-content white-text">
+                <span class="card-title center-align">Welcome to Packet Analyzer</span>
+                <p class="center-align">Sign in to make analysis on pcap files</p> <br><br><br>
+                    <form class="form-signin">
+                        <div class="row">
+                            <div class="input-field col s8 offset-s2">
+                                <input type="email" id="inputEmail" required>
+                                <label for="inputEmail">Email address</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s8 offset-s2">
+                                <input type="password" id="inputPassword" required>
+                                <label for="inputPassword">Password</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s10 offset-s1 center-align">
+                                <!-- <button type="button" class = "btn btn-link" id ="signupRedirectButton"></button> -->
+                                <button class="waves-effect waves-light btn" type = "submit" id="signinButton"><i class="material-icons left">lock_open</i>Sign in</button>
+                            </div>
+                        </div>
+                        <div class="card-action">
+                        <!-- <button type="button" class = "btn" id ="signupRedirectButton"></button> -->
+                           <!--  <a id="signupRedirectButton"> New User? Sign Up !</a> -->
+                           <a id="signupRedirectButton" style="cursor: pointer;"> New User? Sign Up !</a>
+                        </div>
+                    </form>
+            </div>
+            </div>
+        </div>
+    </div>
 
-<form class = "form-signin" id="popup1" style="display: none; width: 650px; height: 400px; overflow: auto">
+    <div class="row" id="signupform" style="display: none">
+        <div class="col s6 offset-s3">
+            <div class="card blue-grey darken-3">
+            <div class="card-content white-text">
+                <span class="card-title center-align">Welcome to Packet Analyzer</span>
+                <p class="center-align">Sign in to make analysis on pcap files</p> <br><br><br>
+                    <form class="form-signin">
+                            <div class="row">
+                                <div class="input-field col s8 offset-s2">
+                                    <input type="text" id="registerUsername" required>
+                                    <label for="registerUsername">Username</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s8 offset-s2">
+                                    <input type="email" id="registerEmail" required>
+                                    <label for="registerEmail">Email address</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s8 offset-s2">
+                                    <input type="password" id="registerPassword" required>
+                                    <label for="registerPassword">Password</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s10 offset-s1 center-align">
+                                <button class="waves-effect waves-light btn" type = "submit" id="signupButton"><i class="material-icons left">perm_identity</i>Sign Up</button>
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <a id="signinRedirectButton"> Cancel</a>
+                            </div>
+                    </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+
+
+<!-- <form class = "form-signin" id="popup1" style="display: none; width: 650px; height: 400px; overflow: auto">
     <div rel="title">
         Welcome to Protocol Analyzer!
     </div>
@@ -20,4 +92,4 @@
             <input type="password" id="registerPassword" class="form-control" placeholder="Password" required>
             <button class="btn btn-lg btn-primary btn-block" type = "submit" id="signupButton">Sign Up!</button>
     </div>
-</form>
+</form> -->
