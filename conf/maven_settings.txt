@@ -1,0 +1,5 @@
+<server>
+    <id>TomcatServer</id>
+    <username>adminscript</username>
+    <password>passwordscript</password>
+</server>
