@@ -75,7 +75,7 @@ public class PcapAnalyzer {
 						packetId, packetType, startByte, endByte);
 				packetWrapper.setPacketTimestamp(handle.getTimestamp());
 
-				analyzePacket(packetWrapper);
+				//analyzePacket(packetWrapper);
 				packet = handle.getNextPacket();
 			}
 			log.info("Final read count = " + packetReadCount);

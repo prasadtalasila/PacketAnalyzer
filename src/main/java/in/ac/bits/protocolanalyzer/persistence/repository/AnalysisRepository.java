@@ -56,6 +56,7 @@ public class AnalysisRepository {
 			public void run() {
 				while (!queries.isEmpty()) {
 					int size = currentBucket.size();
+						log.info(">> AnalysisRepository: " + System.currentTimeMillis() + " SIZE: " + size);
 					if (size < bucketCapacity) {
 						while (!queries.isEmpty() && size < bucketCapacity) {
 							currentBucket.add(queries.poll());
@@ -63,6 +64,7 @@ public class AnalysisRepository {
 						}
 					} else {
 						saveRepo.setBucket(currentBucket);
+						log.info(">> Saving bucket in SaveRepository at " + System.currentTimeMillis());
 						if (!saveRepo.isRunning()) {
 							executorService.execute(saveRepo);
 						}
@@ -71,6 +73,7 @@ public class AnalysisRepository {
 				}
 				if (isFinished) {
 					saveRepo.setBucket(currentBucket);
+					log.info(">> Saving bucket in SaveRepository at " + System.currentTimeMillis());
 					if (!saveRepo.isRunning()) {
 						executorService.execute(saveRepo);
 					}

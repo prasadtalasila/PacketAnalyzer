@@ -39,9 +39,9 @@ public class SaveRepository implements Runnable {
 	public void run() {
 		this.isRunning = true;
 		while (!buckets.isEmpty()) {
-			log.info("Save started at " + System.currentTimeMillis());
+			log.info("SaveRepository started at " + System.currentTimeMillis() + " with bucket size: " + buckets.size());
 			template.bulkIndex(buckets.poll());
-			log.info("Save finished at " + System.currentTimeMillis());
+			log.info("SaveRepository finished at " + System.currentTimeMillis());
 		}
 		isRunning = false;
 	}
