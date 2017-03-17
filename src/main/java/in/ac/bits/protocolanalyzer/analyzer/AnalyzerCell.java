@@ -126,7 +126,7 @@ public class AnalyzerCell implements Runnable {
 	public void run() {
 		
 		final long absoluteStartTime = System.currentTimeMillis();
-
+		/*
 		Timer t = new Timer();
 		TimerTask probe = new TimerTask() {
 			@Override
@@ -136,7 +136,7 @@ public class AnalyzerCell implements Runnable {
 			}
 		};
 		t.schedule(probe, 0, 1);
-		
+		*/
 		// long previousTime = absoluteStartTime;
 		while (isRunning) {
 			// if ( (System.currentTimeMillis() - previousTime) >= 1 ) {
@@ -152,8 +152,8 @@ public class AnalyzerCell implements Runnable {
 		}
 		log.info(this.cellID + " execution stop time = "
 				+ System.currentTimeMillis());
-		t.cancel();
-		t.purge();
+		//t.cancel();
+		//t.purge();
 	}
 
 	private void process(PacketWrapper packet) {

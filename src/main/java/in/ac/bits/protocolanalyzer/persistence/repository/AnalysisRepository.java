@@ -1,5 +1,7 @@
 package in.ac.bits.protocolanalyzer.persistence.repository;
 
+import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
+
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Timer;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Component;
+
+import com.google.common.eventbus.EventBus;
 
 @Component
 @Scope("prototype")
@@ -32,12 +36,15 @@ public class AnalysisRepository {
 	private ArrayList<IndexQuery> currentBucket;
 	private int bucketCapacity = 20000;
 
-	public void configure() {
+	private EventBus eventBus;
+
+	public void configure(EventBus eventBus) {
 		this.queries = new ArrayBlockingQueue<>(100000);
 		executorService = Executors.newFixedThreadPool(2);
 		currentBucket = new ArrayList<IndexQuery>();
 		pullTimer = new Timer("pullTimer");
-		saveRepo.configure();
+		this.eventBus = eventBus;
+		saveRepo.configure(eventBus);
 	}
 
 	public void isFinished() {
@@ -56,7 +63,7 @@ public class AnalysisRepository {
 			public void run() {
 				while (!queries.isEmpty()) {
 					int size = currentBucket.size();
-						log.info(">> AnalysisRepository: " + System.currentTimeMillis() + " SIZE: " + size);
+					//log.info(">> AnalysisRepository: " + System.currentTimeMillis() + " SIZE: " + size);
 					if (size < bucketCapacity) {
 						while (!queries.isEmpty() && size < bucketCapacity) {
 							currentBucket.add(queries.poll());
@@ -64,24 +71,47 @@ public class AnalysisRepository {
 						}
 					} else {
 						saveRepo.setBucket(currentBucket);
-						log.info(">> Saving bucket in SaveRepository at " + System.currentTimeMillis());
+						//log.info(">> Saving bucket in SaveRepository at " + System.currentTimeMillis());
 						if (!saveRepo.isRunning()) {
 							executorService.execute(saveRepo);
 						}
 						currentBucket = new ArrayList<IndexQuery>();
+						checkBucketLevel();
 					}
 				}
+				//checkBucketLevel();
 				if (isFinished) {
 					saveRepo.setBucket(currentBucket);
-					log.info(">> Saving bucket in SaveRepository at " + System.currentTimeMillis());
+					//log.info(">> Saving bucket in SaveRepository at " + System.currentTimeMillis());
 					if (!saveRepo.isRunning()) {
 						executorService.execute(saveRepo);
 					}
 					isFinished = false;
+					checkBucketLevel();
 				}
 			}
 		};
 		pullTimer.schedule(pull, 0, 10);
 	}
 
+	private void checkBucketLevel() {
+		//log.info("BUCKET SIZE: " + saveRepo.getBucketSize());
+		if ( saveRepo.getBucketSize() >= 7 ) {
+			this.publishHigh();
+		}
+		if ( saveRepo.getBucketSize() <= 3 ) {
+			//this.publishLow();
+		}
+	}
+
+	private void publishHigh() {
+		//log.info("Publishing STOP");
+        eventBus.post(new BucketLimitEvent("STOP"));
+    }
+    /*
+    private void publishLow() {
+    	//log.info("Publishing GO");
+        eventBus.post(new BucketLimitEvent("GO"));
+    }
+    */
 }

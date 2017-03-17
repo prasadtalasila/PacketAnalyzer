@@ -1,5 +1,8 @@
 package in.ac.bits.protocolanalyzer.persistence.repository;
 
+
+import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
+
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -10,6 +13,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Component;
+
+import com.google.common.eventbus.EventBus;
 
 @Component
 @Scope("prototype")
@@ -23,16 +28,23 @@ public class SaveRepository implements Runnable {
 
 	private boolean isRunning = false;
 
+	private EventBus eventBus;
+
 	public boolean isRunning() {
 		return isRunning;
 	}
 
-	public void configure() {
+	public void configure(EventBus eventBus) {
 		buckets = new ConcurrentLinkedQueue<ArrayList<IndexQuery>>();
+		this.eventBus = eventBus;
 	}
 
 	public void setBucket(ArrayList<IndexQuery> bucket) {
 		buckets.add(bucket);
+	}
+
+	public int getBucketSize() {
+		return this.buckets.size();
 	}
 
 	@Override
@@ -40,10 +52,19 @@ public class SaveRepository implements Runnable {
 		this.isRunning = true;
 		while (!buckets.isEmpty()) {
 			log.info("SaveRepository started at " + System.currentTimeMillis() + " with bucket size: " + buckets.size());
-			template.bulkIndex(buckets.poll());
+			template.bulkIndex(buckets.poll()); //blocking call
 			log.info("SaveRepository finished at " + System.currentTimeMillis());
+			
+			if ( buckets.size() <= 3 ) {
+				this.publishLow();
+			}
+			
 		}
 		isRunning = false;
 	}
 
+    private void publishLow() {
+        eventBus.post(new BucketLimitEvent("GO"));
+    }
+	
 }
