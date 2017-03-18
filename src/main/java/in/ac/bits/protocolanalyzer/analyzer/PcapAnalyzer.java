@@ -29,6 +29,7 @@ import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
  *
  * @author amit
  * @author crygnus
+ * @author anurag-rai
  */
 
 @Component
@@ -45,6 +46,11 @@ public class PcapAnalyzer {
 
 	private long packetReadCount = 0;
 
+	/**
+	*	The 'volatile' keyword is needed. The absence of it shows inconsistent behaviour
+	*	in different runs of the experiment during the save in Elastic Search.
+	*	Having it 'volatile' makes the variable thread-safe.
+	*/
 	private volatile boolean readFromPcap = true;
 
 	public void setNextAnalyzerCell(AnalyzerCell cell) {
