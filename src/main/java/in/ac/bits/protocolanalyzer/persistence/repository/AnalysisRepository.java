@@ -19,6 +19,10 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.eventbus.EventBus;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 @Component
 @Scope("prototype")
 @Log4j
@@ -38,6 +42,8 @@ public class AnalysisRepository {
 
 	private EventBus eventBus;
 
+	private int highWaterMark;
+
 	public void configure(EventBus eventBus) {
 		this.queries = new ArrayBlockingQueue<>(100000);
 		executorService = Executors.newFixedThreadPool(2);
@@ -45,6 +51,16 @@ public class AnalysisRepository {
 		pullTimer = new Timer("pullTimer");
 		this.eventBus = eventBus;
 		saveRepo.configure(eventBus);
+		try {
+			Context ctx = new InitialContext();
+	    	Context env = (Context) ctx.lookup("java:comp/env");
+	    	highWaterMark = Integer.parseInt((String) env.lookup("highWaterMark"));
+	    	log.info("HIGH WATER MARK READ FROM FILE IS: " + highWaterMark);
+	    } catch (NamingException e) {
+	    	log.info("EXCEPTION IN READING FROM CONFIG FILE");
+	    	highWaterMark = 5;
+	    }
+		
 	}
 
 	public void isFinished() {
@@ -99,8 +115,8 @@ public class AnalysisRepository {
 	*	If the number of buckets is more than high water-mark. Analysis stops.
 	*/
 	private void checkBucketLevel() {
-		//log.info("BUCKET SIZE: " + saveRepo.getBucketSize());
-		if ( saveRepo.getBucketSize() >= 7 ) {
+		//log.info("BUCKET SIZE: " + saveRepo.getBucketSize() + " || highWaterMark =" + this.highWaterMark);
+		if ( saveRepo.getBucketSize() >= highWaterMark ) {
 			this.publishHigh();
 		}
 		/*

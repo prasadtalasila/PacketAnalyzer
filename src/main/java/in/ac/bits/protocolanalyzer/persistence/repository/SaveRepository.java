@@ -16,6 +16,10 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.eventbus.EventBus;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 @Component
 @Scope("prototype")
 @Log4j
@@ -30,6 +34,8 @@ public class SaveRepository implements Runnable {
 
 	private EventBus eventBus;
 
+	private int lowWaterMark;
+
 	public boolean isRunning() {
 		return isRunning;
 	}
@@ -37,6 +43,15 @@ public class SaveRepository implements Runnable {
 	public void configure(EventBus eventBus) {
 		buckets = new ConcurrentLinkedQueue<ArrayList<IndexQuery>>();
 		this.eventBus = eventBus;
+		try {
+			Context ctx = new InitialContext();
+	    	Context env = (Context) ctx.lookup("java:comp/env");
+	    	lowWaterMark = Integer.parseInt((String) env.lookup("lowWaterMark"));
+	    	log.info("LOW WATER MARK READ FROM FILE IS: " + lowWaterMark);
+	    } catch (NamingException e) {
+	    	log.info("EXCEPTION IN READING FROM CONFIG FILE");
+	    	lowWaterMark = 3;
+	    }
 	}
 
 	public void setBucket(ArrayList<IndexQuery> bucket) {
@@ -55,7 +70,7 @@ public class SaveRepository implements Runnable {
 			template.bulkIndex(buckets.poll()); //blocking call
 			log.info("SaveRepository finished at " + System.currentTimeMillis());
 			
-			if ( buckets.size() <= 3 ) {
+			if ( buckets.size() <= lowWaterMark ) {
 				this.publishLow();
 			}
 			
@@ -68,6 +83,7 @@ public class SaveRepository implements Runnable {
 	*	analysis will resume when low water-mark is reached.
 	*/
     private void publishLow() {
+    	//log.info("Publishing GO");
         eventBus.post(new BucketLimitEvent("GO"));
     }
 	
