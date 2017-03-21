@@ -57,6 +57,8 @@ public class PerformanceMetrics {
 		log.info("------------------------------------------");
 		duration = (double) (analysis_end - start_time) / 1000;
 		log.info("Analysis Time without ES : " + duration + "s");
+		duration = (double) (endTime - start_time) / 1000;
+		log.info("Total analysis Time : " + duration + "s");
 		log.info("==========================================");
 	}
 }

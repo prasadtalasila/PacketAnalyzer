@@ -100,6 +100,7 @@ public class Session {
 		/* Create pcap analyzer and connect linkCell with it */
 		this.pcapAnalyzer.setNextAnalyzerCell(linkCell);
 		this.pcapAnalyzer.setPcapPath(pcapPath);
+		this.pcapAnalyzer.setMetrics(metrics);
 		/* Register pcap analyzer to controller event bus */
 		factory.getEventBus(this.controllerBus).register(pcapAnalyzer);
 	}
@@ -177,7 +178,6 @@ public class Session {
 		/* repository.terminate(); */
 		log.info("Session ended!");
 		repository.isFinished();
-		this.metrics.calculateMetrics();
 	}
 
 	public String getSessionName() {

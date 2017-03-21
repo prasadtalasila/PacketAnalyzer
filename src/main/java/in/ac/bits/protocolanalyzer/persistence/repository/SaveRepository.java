@@ -2,6 +2,8 @@ package in.ac.bits.protocolanalyzer.persistence.repository;
 
 
 import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
+import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
+import in.ac.bits.protocolanalyzer.analyzer.event.SaveRepoEndEvent;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -15,6 +17,7 @@ import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Component;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -32,6 +35,8 @@ public class SaveRepository implements Runnable {
 
 	private boolean isRunning = false;
 
+	private boolean analysisRunning = true;
+
 	private EventBus eventBus;
 
 	private int lowWaterMark;
@@ -43,6 +48,7 @@ public class SaveRepository implements Runnable {
 	public void configure(EventBus eventBus) {
 		buckets = new ConcurrentLinkedQueue<ArrayList<IndexQuery>>();
 		this.eventBus = eventBus;
+		this.eventBus.register(this);
 		try {
 			Context ctx = new InitialContext();
 	    	Context env = (Context) ctx.lookup("java:comp/env");
@@ -70,6 +76,10 @@ public class SaveRepository implements Runnable {
 			template.bulkIndex(buckets.poll()); //blocking call
 			log.info("SaveRepository finished at " + System.currentTimeMillis());
 			
+			if ( buckets.size() == 0 && !analysisRunning ) {
+				this.publishEndOfSave(System.currentTimeMillis());
+			}
+
 			if ( buckets.size() <= lowWaterMark ) {
 				this.publishLow();
 			}
@@ -86,5 +96,15 @@ public class SaveRepository implements Runnable {
     	//log.info("Publishing GO");
         eventBus.post(new BucketLimitEvent("GO"));
     }
+
+    @Subscribe
+	public void end(EndAnalysisEvent event) {
+		//log.info("Save repo received signal that analysis has ended");
+		analysisRunning = false;
+	}
 	
+	private void publishEndOfSave(long time) {
+		//log.info("Publishing end of Save Repository");
+		eventBus.post(new SaveRepoEndEvent(time));
+	}
 }

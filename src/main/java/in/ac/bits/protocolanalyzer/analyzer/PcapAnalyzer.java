@@ -24,6 +24,7 @@ import com.google.common.eventbus.Subscribe;
 
 import in.ac.bits.protocolanalyzer.protocol.Protocol;
 import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
+import in.ac.bits.protocolanalyzer.analyzer.event.SaveRepoEndEvent;
 
 /**
  *
@@ -43,6 +44,9 @@ public class PcapAnalyzer {
 
 	@Setter
 	private String pcapPath;
+
+	@Setter
+	private PerformanceMetrics metrics;
 
 	private long packetReadCount = 0;
 
@@ -120,5 +124,12 @@ public class PcapAnalyzer {
 			readFromPcap = false;
 		}
 		//log.info("readFromPcap = " + readFromPcap);
+	}
+
+	@Subscribe
+	public void bucketThings(SaveRepoEndEvent event) {
+		//log.info("RECEIVED SIGNAL FROM SAVE REPO");
+		this.metrics.setEndTime(event.getTime());
+		this.metrics.calculateMetrics();
 	}
 }
