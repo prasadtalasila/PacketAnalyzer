@@ -10,3 +10,4 @@ after_success:
   - mvn pmd:pmd || echo "========PMD checks failed========"
   - mvn checkstyle:checkstyle || echo "========CheckStyle checks failed========"
   - mvn findbugs:findbugs || echo "========FindBugs checks failed========"
+  - mvn site
