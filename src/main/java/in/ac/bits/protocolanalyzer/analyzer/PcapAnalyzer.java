@@ -50,6 +50,8 @@ public class PcapAnalyzer {
 
 	private long packetReadCount = 0;
 
+	private long sizeOfPcap = 0;
+
 	/**
 	*	The 'volatile' keyword is needed. The absence of it shows inconsistent behaviour
 	*	in different runs of the experiment during the save in Elastic Search.
@@ -83,6 +85,7 @@ public class PcapAnalyzer {
 			while (packet != null) {
 				if ( readFromPcap ) {
 					packetReadCount++;
+					sizeOfPcap += packet.length();
 					long packetId = packetReadCount;
 					String packetType = getPacketType(handle);
 					int startByte = 0;
@@ -96,6 +99,9 @@ public class PcapAnalyzer {
 					//log.info("STUCK IN ELSE ... WAITING ");
 				}
 			}
+			double kilobytes = (sizeOfPcap / 1024);
+			double megabytes = (kilobytes / 1024);
+			this.metrics.setPcapSize(megabytes);
 			log.info("Final read count = " + packetReadCount);
 		} catch (PcapNativeException ex) {
 			Logger.getLogger(PcapAnalyzer.class.getName()).log(Level.SEVERE,

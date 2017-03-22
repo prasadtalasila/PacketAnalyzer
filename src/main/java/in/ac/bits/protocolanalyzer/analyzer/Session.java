@@ -1,7 +1,5 @@
 package in.ac.bits.protocolanalyzer.analyzer;
 
-import java.io.File;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -40,6 +38,7 @@ public class Session {
 	@Autowired
 	private PcapAnalyzer pcapAnalyzer;
 
+	@Autowired
 	private PerformanceMetrics metrics;
 
 	@Autowired
@@ -79,19 +78,9 @@ public class Session {
 		this.controllerBus = CONTROLLER_BUS_PREFIX + "_" + this.sessionName;
 		log.info("The session name = " + sessionName);
 		
-		this.metrics = new PerformanceMetrics();
+		//this.metrics = new PerformanceMetrics();
 		this.metrics.setSessionName(this.sessionName);
 		this.metrics.setPcapPath(pcapPath);
-		File file = new File(pcapPath);
-		if( file.exists() ){
-			double bytes = file.length();
-			double kilobytes = (bytes / 1024);
-			double megabytes = (kilobytes / 1024);
-			this.metrics.setPcapSize(megabytes);
-		} else {
-			log.info("CANNOT FIND PCAP FILE");
-		}
-
 		this.cellMap = new HashMap<Integer, AnalyzerCell>();
 		setLinkCell();
 		setNetworkCell();
