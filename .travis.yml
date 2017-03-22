@@ -11,3 +11,4 @@ after_success:
   - mvn checkstyle:checkstyle || echo "========CheckStyle checks failed========"
   - mvn findbugs:findbugs || echo "========FindBugs checks failed========"
   - mvn site
+  - bash conf/mvn_reports_publish.sh
