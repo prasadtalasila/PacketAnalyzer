@@ -44,28 +44,41 @@ window.AnalysisView = BaseView.extend({
 		footerDisplay :function(){
       $("#packetInfo tr").remove(); 
       _this = this;
-      $('#lowerHalf').html('');
+      $('#lowerHalfcol').html('');
       $('#lowerHalfTitle').click(function() {
           $('#lowerHalf').toggle();
       });
       var layerCount =0; //for knowing number of layers
       var layers = sessionStorage.getItem('layers').split(',');    
       //loop for appending required number of summary tags in the footer for full display of each layer
-      var lowerHalfAppend = document.getElementById('lowerHalf');
+      // var lowerHalfAppend = document.getElementById('lowerHalf');
+      // for(var i =1;i<layers.length -1;i++){
+      //   layerCount++;
+      //   var newDivId = 'dataContainer'+i;
+      //   var newDiv = document.createElement('section');
+      //   newDiv.setAttribute('id',newDivId);
+      //   lowerHalfAppend.appendChild(newDiv);
+      //   newDiv.outerHTML = '<section>'+
+      //     '<article>'+
+      //       '<details>'+
+      //         '<summary >'+layers[i].charAt(0).toUpperCase() + layers[i].slice(1)+'</summary>'+
+      //           '<summary id = dataContainer'+ i+' ></summary>'+
+      //       '</details>'+
+      //     '</article>'+
+      //     '</section>';
+      // }
+      var lowerHalfAppend = document.getElementById('lowerHalfcol');
       for(var i =1;i<layers.length -1;i++){
         layerCount++;
         var newDivId = 'dataContainer'+i;
         var newDiv = document.createElement('section');
         newDiv.setAttribute('id',newDivId);
         lowerHalfAppend.appendChild(newDiv);
-        newDiv.outerHTML = '<section>'+
-          '<article>'+
-            '<details>'+
-              '<summary >'+layers[i].charAt(0).toUpperCase() + layers[i].slice(1)+'</summary>'+
-                '<summary id = dataContainer'+ i+' ></summary>'+
-            '</details>'+
-          '</article>'+
-          '</section>';
+        newDiv.outerHTML = '<li>'+
+              '<div class="collapsible-header blue-grey darken-3"><i class="material-icons">filter_drama</i>'+
+              layers[i].charAt(0).toUpperCase() + layers[i].slice(1)+'</div>'+
+                '<div class="collapsible-body"><span id = dataContainer'+ i+'></span></div>'+
+            '</li>';
       }
 
       //function creates multi-get request and receiving and displaying data initially

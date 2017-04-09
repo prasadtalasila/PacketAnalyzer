@@ -65,6 +65,7 @@
             <div class="card-content white-text">
                 <span class="card-title center-align">Stored Packets - Primary Attributes</span>
                 <div class="row">
+                <div class="col l8 m12 s12">
                     <table>
                     <thead><tr><th>Packet ID</th><th>Source MAC</th><th>Destination MAC</th></tr></thead>
                     </table>
@@ -72,10 +73,12 @@
                     <tbody></tbody>
                     </table>
                 </div>
-                <div class="row">
+
+                <div class="col l4 m12 s12">
                 <span class="card-title center-align">Packet Information</span>
                   <div id="lowerHalf" class="scroll">
-                    
+                    <ul id="lowerHalfcol" class="collapsible" data-collapsible="accordion">
+                    </ul>
                   </div> 
                 </div>
           </div>
@@ -85,6 +88,11 @@
 </div>
 </div>
 </div>
+<script>
+$(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
+</script>
 <style type="text/css">
 #packetInfo {
   display: block;
