@@ -48,7 +48,8 @@ window.Router = Backbone.Router.extend({
         '':'loginViewDisplay',
         'home': 'experimentViewDisplay',
         'config': 'configPlaygroundViewDisplay',
-        'analysis': 'analysisViewDisplay'
+        'analysis': 'analysisViewDisplay',
+        'load': 'loadViewDisplay'
     },
 
     initialize: function () {
@@ -85,6 +86,15 @@ window.Router = Backbone.Router.extend({
             _this.render(view);
         });    
     },
+    loadViewDisplay: function(){
+        _this = this;
+        loginCheck(function(result) {
+            if (result) {
+             view = new LoadView();
+            }
+            _this.render(view);
+        });    
+    },
     render : function(view){
         //Close the current view
         if (this.currentView) {
@@ -98,7 +108,7 @@ window.Router = Backbone.Router.extend({
     }
 });
 
-templateLoader.load(["LoginView","ExperimentView","ConfigPlaygroundView","AnalysisView"],
+templateLoader.load(["LoadView","LoginView","ExperimentView","ConfigPlaygroundView","AnalysisView"],
     function () {
         app = new Router();
         Backbone.history.start();

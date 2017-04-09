@@ -48,7 +48,7 @@ window.ExperimentView = BaseView.extend({
             sessionStorage.setItem('sliderValue',$('#slider').slider("option", "value"));  
         },
     	loadExperiment : function() {
-        	
+            app.navigate("#/load");
     	},
 		initialize: function () {
 			this.delegateEvents();
