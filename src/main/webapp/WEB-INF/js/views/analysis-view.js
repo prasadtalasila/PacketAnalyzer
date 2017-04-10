@@ -49,24 +49,7 @@ window.AnalysisView = BaseView.extend({
           $('#lowerHalf').toggle();
       });
       var layerCount =0; //for knowing number of layers
-      var layers = sessionStorage.getItem('layers').split(',');    
-      //loop for appending required number of summary tags in the footer for full display of each layer
-      // var lowerHalfAppend = document.getElementById('lowerHalf');
-      // for(var i =1;i<layers.length -1;i++){
-      //   layerCount++;
-      //   var newDivId = 'dataContainer'+i;
-      //   var newDiv = document.createElement('section');
-      //   newDiv.setAttribute('id',newDivId);
-      //   lowerHalfAppend.appendChild(newDiv);
-      //   newDiv.outerHTML = '<section>'+
-      //     '<article>'+
-      //       '<details>'+
-      //         '<summary >'+layers[i].charAt(0).toUpperCase() + layers[i].slice(1)+'</summary>'+
-      //           '<summary id = dataContainer'+ i+' ></summary>'+
-      //       '</details>'+
-      //     '</article>'+
-      //     '</section>';
-      // }
+      var layers = sessionStorage.getItem('layers').split(',');
       var lowerHalfAppend = document.getElementById('lowerHalfcol');
       for(var i =1;i<layers.length -1;i++){
         layerCount++;
