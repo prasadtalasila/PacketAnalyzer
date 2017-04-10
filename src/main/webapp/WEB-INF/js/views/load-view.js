@@ -4,7 +4,7 @@ window.LoadView =  BaseView.extend({
     events: {
       'click #help' :'userHelpPage',
       'click #logout' : 'userLogout',
-      'click #analyzeBtn' : 'analysis',
+      'click #loadExperiment' : 'load',
       'click #validateBtn' : 'graphValidation',
       'click #expList tbody tr': 'rowClick',
       'slidechange #slider': 'setPrefetchValue'
@@ -45,10 +45,43 @@ window.LoadView =  BaseView.extend({
     sessionStorage.setItem('sessionName',session);
     app.navigate("#/analysis",{trigger: true});
   },
+    load : function(event){
+    var session = document.getElementById('loadExperiment').getAttribute('session');
+    $.ajax({
+      url:'http://localhost:9200/' + session + '/_search',
+      type:'POST',
+      contentType: 'application/json; charset=utf-8',
+      dataType:'text',
+      data: '',
+      success:function (data) {
+          var packetCount = JSON.parse(data).hits.total;
+          sessionStorage.setItem('sessionName',session.replace('protocol_',''));
+          sessionStorage.setItem('packetCount', packetCount);
+          sessionStorage.setItem('layers','start,ethernet,ipv4,tcp,end');
+          sessionStorage.setItem('sliderValue','50');
+          app.navigate("#/analysis",{trigger: true});
+        },
+        error:function(){
+          alert("Error running experiment. Please try again later.");
+        }
+      });
+    },
 
     rowClick: function(event) {
     var session = event.currentTarget.children[0].innerHTML;
-    this.analysis(session);
+     $('#sidePanel').html('');
+    var sidePanel = document.getElementById('sidePanel');
+    var newDiv = document.createElement('section');
+    sidePanel.appendChild(newDiv);
+    newDiv.outerHTML = '<p>'+
+          'Experiment Name : ' + '<>' + '<br/>' +
+          'Experimenter : '+'<>'+ '<br/>' +
+          'Description : '+'<>'+'<br/>' +
+          'PCAP Path : '+'<>'+ '<br/>' +
+          'Session: '+ session.replace('protocol_session_','') +
+        '</p>';
+    document.getElementById('loadExperiment').setAttribute('session',session);
+    // this.analysis(session);
     },
 
     render: function () {
