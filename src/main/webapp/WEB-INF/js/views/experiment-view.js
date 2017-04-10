@@ -15,7 +15,7 @@ window.ExperimentView = BaseView.extend({
         	var formValues = {
         		experimentName : $('#experimentName').val(),
         		description : $('#description').val(),
-        		experimenter : $('#experimenter').val(),
+        		experimenter : Cookies.get('userName'),
         		pcapPath : $('#pcapPath').val()
         	};
             //for passing to backend
