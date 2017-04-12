@@ -36,7 +36,17 @@ window.ConfigPlaygroundView =  BaseView.extend({
           sessionStorage.setItem('sessionName',sessionName);
           sessionStorage.setItem('packetCount', packetCount);
           sessionStorage.setItem('layers',_this._layers);
-          app.navigate("#/analysis",{trigger: true});
+          var experimentId = sessionStorage.getItem('experimentId');
+          $.ajax({
+            url:'http://localhost:9200/protocol/info/' + experimentId + '/_update',
+            type:'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType:'text',
+            data: '{"doc":{"session":"' + sessionName + '"}}',
+            success:function (data) {
+                app.navigate("#/analysis",{trigger: true});
+            }
+          });
         },
         error:function(){
           alert("Error running experiment. Please try again later.");

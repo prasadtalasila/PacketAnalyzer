@@ -21,7 +21,7 @@ window.ExperimentView = BaseView.extend({
             //for passing to backend
             sessionStorage.setItem('pcapPath', $('#pcapPath').val());
             //set dafult slider value
-            sessionStorage.setItem('sliderValue',50); 
+            sessionStorage.setItem('sliderValue',50);
             $.ajax({
             url:'/protocolanalyzer/sessioninfo',
              type:'POST',
@@ -32,7 +32,17 @@ window.ExperimentView = BaseView.extend({
                  var jsonData = JSON.parse(data);
                  var status = jsonData.status;
                  if(status === "success") {
-                    app.navigate("#/config");
+                    $.ajax({
+                        url:'http://localhost:9200/protocol/_search',
+                        type:'POST',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType:'text',
+                        data: '{"query":{"match":{"experimentName":"' + $('#experimentName').val() + '"}}}',
+                        success:function (data) {
+                            sessionStorage.setItem('experimentId', JSON.parse(data).hits.hits[0]._id);
+                            app.navigate("#/config");
+                        }
+                    });
                  }
                  else if(status ==="failure"){
                     alert(jsonData.remark);
