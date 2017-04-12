@@ -42,7 +42,7 @@ window.ConfigPlaygroundView =  BaseView.extend({
             type:'POST',
             contentType: 'application/json; charset=utf-8',
             dataType:'text',
-            data: '{"doc":{"session":"' + sessionName + '"}}',
+            data: '{"doc":{"id":"' + sessionName + '"}}',
             success:function (data) {
                 app.navigate("#/analysis",{trigger: true});
             }
