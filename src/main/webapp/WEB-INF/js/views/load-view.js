@@ -10,28 +10,25 @@ window.LoadView =  BaseView.extend({
       'slidechange #slider': 'setPrefetchValue'
     },
     initialize: function () {
-      this.delegateEvents();
-      this.userParseGraph = null;
-      this._layers = [];
+      LoadView.globalData = [];
       this.fillTable();
     },  
 
     fillTable : function(event) {
       $.ajax({
-      url:'http://localhost:9200/_stats/index',
+      url:'http://localhost:9200/protocol/info/_search',
       type:'GET',
       contentType: 'application/json; charset=utf-8',
       success:function (data) {
-          var indices = Object.keys(JSON.parse(JSON.stringify(data)).indices);
-          indices = $.grep(indices, function(item, index) {
-            return item.includes('protocol_session');
-          });
-          for(var id=0; id<indices.length;id+=1){    //index of array starts from 0
+          LoadView.globalData = JSON.parse(JSON.stringify(data)).hits.hits;
+          for(var id=1; id<=LoadView.globalData.length;id+=1){    //index of array starts from 0
           var td, tr;
           var tdata = $("#expList tbody")
           tr = $("<tr>");
+          td = $("<td>").text(id);
+          tr.append(td);
           //packetList
-          td = $("<td>").text(indices[id]);
+          td = $("<td>").text(LoadView.globalData[id-1]._source.experimentName);
           tr.append(td);
           tdata.append(tr);
       }
@@ -48,7 +45,7 @@ window.LoadView =  BaseView.extend({
     load : function(event){
     var session = document.getElementById('loadExperiment').getAttribute('session');
     $.ajax({
-      url:'http://localhost:9200/' + session + '/_search',
+      url:'http://localhost:9200/protocol_' + session + '/_search',
       type:'POST',
       contentType: 'application/json; charset=utf-8',
       dataType:'text',
@@ -68,20 +65,19 @@ window.LoadView =  BaseView.extend({
     },
 
     rowClick: function(event) {
-    var session = event.currentTarget.children[0].innerHTML;
-     $('#sidePanel').html('');
+    var id = Number(event.currentTarget.children[0].innerHTML) - 1;
+    $('#sidePanel').html('');
     var sidePanel = document.getElementById('sidePanel');
     var newDiv = document.createElement('section');
     sidePanel.appendChild(newDiv);
     newDiv.outerHTML = '<p>'+
-          'Experiment Name : ' + '<>' + '<br/>' +
-          'Experimenter : '+'<>'+ '<br/>' +
-          'Description : '+'<>'+'<br/>' +
-          'PCAP Path : '+'<>'+ '<br/>' +
-          'Session: '+ session.replace('protocol_session_','') +
+          'Experiment Name : ' + LoadView.globalData[id]._source.experimentName + '<br/>' +
+          'Experimenter : '+ LoadView.globalData[id]._source.experimenter + '<br/>' +
+          'Description : '+ LoadView.globalData[id]._source.description +'<br/>' +
+          'PCAP Path : '+ LoadView.globalData[id]._source.pcapPath + '<br/>' +
+          'Session: '+ LoadView.globalData[id]._source.id +
         '</p>';
-    document.getElementById('loadExperiment').setAttribute('session',session);
-    // this.analysis(session);
+    document.getElementById('loadExperiment').setAttribute('session',LoadView.globalData[id]._source.id);
     },
 
     render: function () {
