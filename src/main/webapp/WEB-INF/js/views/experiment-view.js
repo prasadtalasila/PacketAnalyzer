@@ -39,8 +39,18 @@ window.ExperimentView = BaseView.extend({
                         dataType:'text',
                         data: '{"query":{"match":{"experimentName":"' + $('#experimentName').val() + '"}}}',
                         success:function (data) {
-                            sessionStorage.setItem('experimentId', JSON.parse(data).hits.hits[0]._id);
-                            app.navigate("#/config");
+                            var experimentId = JSON.parse(data).hits.hits[0]._id;
+                            sessionStorage.setItem('experimentId', experimentId);
+                            $.ajax({
+                                url:'http://localhost:9200/protocol/delegate/' + experimentId,
+                                type:'POST',
+                                contentType: 'application/json; charset=utf-8',
+                                dataType:'text',
+                                data: '{"experimenter" : "' + Cookies.get('userName') + '","collaborators" : ""}',
+                                success:function (data) {
+                                    app.navigate("#/config");
+                                }
+                            });
                         }
                     });
                  }
