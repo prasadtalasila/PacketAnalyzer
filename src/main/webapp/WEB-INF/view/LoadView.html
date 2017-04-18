@@ -25,7 +25,7 @@
                 <span class="card-title center-align">Experiment Dashboard</span>
                 <p class="center-align">Fill the required details</p> <br><br><br>
                 <div class="row">
-                <div class="col l7 m12 s12">
+                <div class="col l6 m12 s12">
                     <table>
                     <thead><tr><th>Experiment</th></tr></thead>
                     </table>
@@ -33,17 +33,26 @@
                     <tbody></tbody>
                     </table>
                   </div>
-                  <div class="col l5 m12 s12"> 
+                  <div class="col l6 m12 s12"> 
                   <table>
                     <thead><tr><th>Details</th></tr></thead>
                     </table>
-                  <div class="card blue-grey darken-3" style="height:35vh">
-                    <div class="card-content white-text">
+                  <div id="sidePanelWrap" class="blue-grey darken-3" style="height:35vh">
                       <p id="sidePanel">Select experiment to be detailed here.</p>
                       <div class="input-field col l12">
-                            <button type="submit" class="waves-effect waves-light btn" id="shareExperiment" style="display:inline;">SHARE</button>
                             <button type="submit" class="waves-effect waves-light btn" id="loadExperiment" style="display:inline;">LOAD ANALYSIS</button>
-                    </div>
+                            <div class="row">
+                            <div id="shareWrap" class="input-field col s5">
+                              <select id="share" multiple>
+                                <option value="" disabled selected>None</option>
+
+                              </select>
+                              <label>Shared with</label>
+                            </div>
+                            <div class="input-field col s3">
+                            <button type="submit" class="waves-effect waves-light btn" id="shareExperiment" style="display:inline;">SHARE</button>
+                            </div>
+                            </div>
                     </div>
                   </div>
                   </div>
@@ -54,8 +63,13 @@
       </div>
     </div>
   </div>
-
+</div>
 <style type="text/css">
+#sidePanelWrap {
+  border: solid 2px #eee;
+  padding: 10px;
+  word-wrap: break-word;
+}
 #expList {
   display: block;
   height: 35vh;
@@ -68,3 +82,8 @@ table.highlight tbody tr:hover {
     background-color: rgb(27, 156, 226); !important;
 }
 </style>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+</script>
