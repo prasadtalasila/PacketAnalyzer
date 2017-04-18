@@ -1,0 +1,52 @@
+.valign-wrapper {
+	width:100%;
+	height:100%;
+	position: absolute;
+}
+.valign {
+	width:100%;
+}
+
+#parentWrap {
+	display: block;
+}
+
+#sidePanelWrap {
+  border: solid 2px #eee;
+  padding: 10px;
+  word-wrap: break-word;
+}
+#expList {
+  display: block;
+  height: 35vh;
+  overflow-y: scroll;
+  border: solid 2px #eee;
+  cursor: pointer;
+}
+
+table.highlight tbody tr:hover {
+    background-color: rgb(27, 156, 226); !important;
+}
+
+#packetInfo {
+  display: block;
+  height: 35vh;
+  overflow-y: scroll;
+  border: solid 2px #eee;
+  cursor: pointer;
+}
+
+table.highlight tbody tr:hover {
+    background-color: rgb(27, 156, 226); !important;
+}
+body {
+  overflow: hidden;
+}
+#editor {
+  /*margin: 40px;*/
+  position: absolute;
+  top: 120px;
+  bottom: 0;
+  left: 30px;
+  right: 440px;
+}

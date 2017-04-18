@@ -12,14 +12,14 @@
   </div>
 </nav>
 </div>
-    <div class="valign-wrapper" style="width:100%;height:85%;position: absolute;">
-<div class="valign" style="width:100%;">
+    <div class="valign-wrapper">
+<div class="valign">
 <div class="container">
 <div class="row">
         <div class="col s6 offset-s3" style="min-height: 9vh">
         </div>
 </div>
-    <div class="row" style="display: block">
+    <div id="parentWrap" class="row" style="display: block">
         <div class="col l10 m12 s12 offset-l1">
             <div class="card blue-grey darken-3">
             <div class="card-content white-text">
@@ -53,16 +53,3 @@ $(document).ready(function(){
     $('.collapsible').collapsible();
   });
 </script>
-<style type="text/css">
-#packetInfo {
-  display: block;
-  height: 35vh;
-  overflow-y: scroll;
-  border: solid 2px #eee;
-  cursor: pointer;
-}
-
-table.highlight tbody tr:hover {
-    background-color: rgb(27, 156, 226); !important;
-}
-</style>
