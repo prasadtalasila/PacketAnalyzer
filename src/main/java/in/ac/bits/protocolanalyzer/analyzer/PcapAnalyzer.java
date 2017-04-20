@@ -20,12 +20,17 @@ import org.pcap4j.packet.namednumber.DataLinkType;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.google.common.eventbus.Subscribe;
+
 import in.ac.bits.protocolanalyzer.protocol.Protocol;
+import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
+import in.ac.bits.protocolanalyzer.analyzer.event.SaveRepoEndEvent;
 
 /**
  *
  * @author amit
  * @author crygnus
+ * @author anurag-rai
  */
 
 @Component
@@ -40,7 +45,17 @@ public class PcapAnalyzer {
 	@Setter
 	private String pcapPath;
 
+	@Setter
+	private PerformanceMetrics metrics;
+
 	private long packetReadCount = 0;
+
+	/**
+	*	The 'volatile' keyword is needed. The absence of it shows inconsistent behaviour
+	*	in different runs of the experiment during the save in Elastic Search.
+	*	Having it 'volatile' makes the variable thread-safe.
+	*/
+	private volatile boolean readFromPcap = true;
 
 	public void setNextAnalyzerCell(AnalyzerCell cell) {
 		this.nextAnalyzerCell = cell;
@@ -66,17 +81,20 @@ public class PcapAnalyzer {
 			log.info("PcapPath fed to sysfile::" + sysFile);
 			Packet packet = handle.getNextPacket();
 			while (packet != null) {
-				packetReadCount++;
-				long packetId = packetReadCount;
-				String packetType = getPacketType(handle);
-				int startByte = 0;
-				int endByte = packet.length() - 1;
-				PacketWrapper packetWrapper = new PacketWrapper(packet,
-						packetId, packetType, startByte, endByte);
-				packetWrapper.setPacketTimestamp(handle.getTimestamp());
-
-				analyzePacket(packetWrapper);
-				packet = handle.getNextPacket();
+				if ( readFromPcap ) {
+					packetReadCount++;
+					long packetId = packetReadCount;
+					String packetType = getPacketType(handle);
+					int startByte = 0;
+					int endByte = packet.length() - 1;
+					PacketWrapper packetWrapper = new PacketWrapper(packet,
+							packetId, packetType, startByte, endByte);
+					packetWrapper.setPacketTimestamp(handle.getTimestamp());
+					analyzePacket(packetWrapper);
+					packet = handle.getNextPacket();
+				} else {
+					//log.info("STUCK IN ELSE ... WAITING ");
+				}
 			}
 			log.info("Final read count = " + packetReadCount);
 		} catch (PcapNativeException ex) {
@@ -95,5 +113,23 @@ public class PcapAnalyzer {
 			packetType = Protocol.get("ETHERNET");
 		}
 		return packetType;
+	}
+
+	@Subscribe
+	public void bucketThings(BucketLimitEvent event) {
+		if ( event.getStatus().equals("GO") ) {
+			readFromPcap = true;
+		}
+		else if ( event.getStatus().equals("STOP") ) {
+			readFromPcap = false;
+		}
+		//log.info("readFromPcap = " + readFromPcap);
+	}
+
+	@Subscribe
+	public void bucketThings(SaveRepoEndEvent event) {
+		//log.info("RECEIVED SIGNAL FROM SAVE REPO");
+		this.metrics.setEndTime(event.getTime());
+		this.metrics.calculateMetrics();
 	}
 }
