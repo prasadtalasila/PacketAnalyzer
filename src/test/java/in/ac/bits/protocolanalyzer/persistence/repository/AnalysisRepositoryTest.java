@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -37,6 +38,7 @@ public class AnalysisRepositoryTest {
 		assertNotNull(analysisRepository);
 	}
 
+	@Ignore
 	@Test
 	public void testConfiguration() {
 		
