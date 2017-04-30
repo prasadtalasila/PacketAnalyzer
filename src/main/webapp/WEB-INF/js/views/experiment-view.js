@@ -7,7 +7,8 @@ window.ExperimentView = BaseView.extend({
              'click #attachBtn' : 'readSingleFile',
              'click #help' :'userHelpPage',
              'click #logout' : 'userLogout',
-             'slidechange #slider': 'setPrefetchValue'
+             'slidechange #slider': 'setPrefetchValue',
+             'click #navclick': 'loadDash'
 		},
 
 		newExperiment : function(event) {

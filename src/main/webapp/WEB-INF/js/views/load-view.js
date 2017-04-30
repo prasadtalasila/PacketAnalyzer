@@ -10,7 +10,8 @@ window.LoadView =  BaseView.extend({
       'click #expListShared tbody tr': 'rowClick',
       'slidechange #slider': 'setPrefetchValue',
       'change #share' : 'share',
-      'click #shareExperiment' : 'shareExperiment'
+      'click #shareExperiment' : 'shareExperiment',
+      'click #navclick': 'loadDash'
     },
     initialize: function () {
       this.fillShare();

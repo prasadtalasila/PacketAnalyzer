@@ -6,7 +6,7 @@ window.LoginView = Backbone.View.extend({
             'click #signinButton' : 'login',
             'click #signupRedirectButton' : 'signupRedirect',
             'click #signinRedirectButton' : 'signinRedirect',
-            'click #signupButton' : 'signup'
+            'click #signupButton' : 'signup',
         },
         initialize : function() {
         	this.delegateEvents();
@@ -30,7 +30,7 @@ window.LoginView = Backbone.View.extend({
                  if(status === "success") {
                     Cookies.set('userName', $('#inputEmail').val(),{ expires: 1 });
                     Cookies.set('userAuth', loginHash,{ expires: 1 });
-                    app.navigate("#/home");
+                    app.navigate("#/dashboard");
                  }
                  else if(status ==="failure"){
                     alert("Error logging in, please check your details");

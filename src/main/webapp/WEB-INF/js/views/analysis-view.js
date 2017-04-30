@@ -6,7 +6,8 @@ window.AnalysisView = BaseView.extend({
 			 'click #logout': 'userLogout',
 			 'click #populateTable': 'footerDisplay',
        'click #packetInfo tbody tr': 'rowClick',
-       'slidechange #slider': 'setPrefetchValue'
+       'slidechange #slider': 'setPrefetchValue',
+       'click #navclick': 'loadDash'
 		},
 		initialize: function () {
 			this.delegateEvents();

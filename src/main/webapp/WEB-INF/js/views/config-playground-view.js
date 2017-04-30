@@ -6,7 +6,8 @@ window.ConfigPlaygroundView =  BaseView.extend({
 		'click #logout' : 'userLogout',
     'click #analyzeBtn' : 'analysis',
     'click #validateBtn' : 'graphValidation',
-    'slidechange #slider': 'setPrefetchValue'
+    'slidechange #slider': 'setPrefetchValue',
+    'click #navclick': 'loadDash'
 	},
 	initialize: function () {
 		this.delegateEvents();
