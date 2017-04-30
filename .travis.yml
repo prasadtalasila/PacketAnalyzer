@@ -5,10 +5,12 @@ install: true
 
 before_script:
   - npm install -g csslint
+  - npm install --prefix ./ vnu-jar
 
 script:
   - mvn test -B
   - csslint src/main/webapp/WEB-INF/css/main.css
+  - java -jar node_modules/vnu-jar/build/dist/vnu.jar src/main/webapp/WEB-INF/view
 
 after_success:
   - mvn clean test jacoco:report coveralls:report || echo "========Tests failed========"
