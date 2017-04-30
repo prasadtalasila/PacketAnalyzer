@@ -28,7 +28,7 @@ function loginCheck(callback) {
                  else{
                     Cookies.remove('userName');
                     Cookies.remove('userAuth');
-                    app.navigate("#",{trigger:true});
+                    app.navigate("/",{trigger:true});
                     alert("You have been logged out. Please login to continue");
                     callback(false);
                  }
