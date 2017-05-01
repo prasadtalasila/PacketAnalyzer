@@ -1,11 +1,33 @@
 {
-  "private": true,
+  "name": "bits-darshini",
+  "version": "1.0.0",
+  "description": "A Modular, Concurrent and Customizable Protocol Analyzer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prasadtalasila/BITS-Darshini.git"
+  },
+  "keywords": [
+    "network",
+    "protocol",
+    "analyzer"
+  ],
+  "author": "Prasad Talasila",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/prasadtalasila/BITS-Darshini/issues"
+  },
+  "homepage": "https://github.com/prasadtalasila/BITS-Darshini#readme",
+  "devDependencies": {
+  },
   "dependencies": {
-    "backbone": "^1.1.2",
-    "backbone.localstorage": "^1.1.16",
-    "jquery": "^2.1.3",
-    "todomvc-app-css": "^2.0.0",
-    "todomvc-common": "^1.0.1",
-    "underscore": "^1.7.0"
+    "backbone": "^1.3.3",
+    "backbone-localstorage": "^0.3.2",
+    "jquery": "^3.2.1",
+    "js-cookie": "^2.1.4",
+    "underscore": "^1.8.3"
   }
 }

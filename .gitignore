@@ -3,3 +3,4 @@
 .settings
 .project
 .vagrant
+src/main/webapp/WEB-INF/node_modules

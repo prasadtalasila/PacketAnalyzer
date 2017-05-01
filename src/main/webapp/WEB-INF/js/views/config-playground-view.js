@@ -16,9 +16,6 @@ window.ConfigPlaygroundView =  BaseView.extend({
   setPrefetchValue : function(){
     sessionStorage.setItem('sliderValue',$('#slider').slider("option", "value"));  
   },
-  disableAnalyzeButton:function(){
-    document.getElementById('analyzeBtn').disabled = true; 
-  },
 	analysis : function(event){
 		event.preventDefault();
     _this = this;
@@ -36,7 +33,17 @@ window.ConfigPlaygroundView =  BaseView.extend({
           sessionStorage.setItem('sessionName',sessionName);
           sessionStorage.setItem('packetCount', packetCount);
           sessionStorage.setItem('layers',_this._layers);
-          app.navigate("#/analysis",{trigger: true});
+          var experimentId = sessionStorage.getItem('experimentId');
+          $.ajax({
+            url:'http://localhost:9200/protocol/info/' + experimentId + '/_update',
+            type:'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType:'text',
+            data: '{"doc":{"id":"' + sessionName + '"}}',
+            success:function (data) {
+                app.navigate("#/analysis",{trigger: true});
+            }
+          });
         },
         error:function(){
           alert("Error running experiment. Please try again later.");
@@ -208,7 +215,10 @@ window.ConfigPlaygroundView =  BaseView.extend({
       });
       $("#prefetch-amount").val($("#slider").slider("value"));
     });
-    $(document).ready(this.disableAnalyzeButton);
+    $(document).ready(function() {
+      document.getElementById('analyzeBtn').disabled = true;
+      document.getElementById("username").innerHTML = Cookies.get('userName');
+    });
 		return this;
 	}
 });

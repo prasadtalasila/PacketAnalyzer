@@ -3,7 +3,12 @@ jdk: oraclejdk8
 
 install: true
 
-script: mvn test -B
+before_script:
+  - npm install -g csslint
+
+script:
+  - mvn test -B
+  - csslint src/main/webapp/WEB-INF/css/main.css
 
 after_success:
   - mvn clean test jacoco:report coveralls:report || echo "========Tests failed========"
