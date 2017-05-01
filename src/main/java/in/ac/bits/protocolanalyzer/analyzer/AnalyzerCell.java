@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -118,11 +120,39 @@ public class AnalyzerCell implements Runnable {
 	@Subscribe
 	public void end(EndAnalysisEvent event) {
 		this.isRunning = false;
+		if ( this.cellID.equals("linkCell") ) {
+			event.getMetrics().setLinkEnd(System.currentTimeMillis());
+		} else if ( this.cellID.equals("networkCell") ) {
+			event.getMetrics().setNetworkEnd(System.currentTimeMillis());
+		} else if ( this.cellID.equals("transportCell") ) {
+			event.getMetrics().setTransportEnd(System.currentTimeMillis());
+		}
+		else {
+			log.info("UNKNOWN CELL TYPE FOR END EVENT ANALYSIS");
+		}
 	}
 
 	@Override
 	public void run() {
+		
+		final long absoluteStartTime = System.currentTimeMillis();
+		/*
+		Timer t = new Timer();
+		TimerTask probe = new TimerTask() {
+			@Override
+			public void run() {
+				log.info("Time: " + (System.currentTimeMillis() - absoluteStartTime) + 
+						" cell: " + cellID + " Packets in Queue: " + inputQueue.size() );
+			}
+		};
+		t.schedule(probe, 0, 1);
+		*/
+		// long previousTime = absoluteStartTime;
 		while (isRunning) {
+			// if ( (System.currentTimeMillis() - previousTime) >= 1 ) {
+			// 	log.info("Time: " + (previousTime- absoluteStartTime) + " cell: " + this.cellID + " Packets in Queue: " + this.inputQueue.size() );
+			// 	previousTime = System.currentTimeMillis();
+			// }
 			if (!isProcessing) {
 				if (!inputQueue.isEmpty()) {
 					isProcessing = true;
@@ -132,6 +162,8 @@ public class AnalyzerCell implements Runnable {
 		}
 		log.info(this.cellID + " execution stop time = "
 				+ System.currentTimeMillis());
+		//t.cancel();
+		//t.purge();
 	}
 
 	private void process(PacketWrapper packet) {
