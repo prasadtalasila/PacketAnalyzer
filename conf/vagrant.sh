@@ -13,6 +13,7 @@ cp -rf /home/vagrant/darshini/conf/settings.xml /usr/share/maven/conf/settings.x
 printf 'Y\n' | apt-get install -y tomcat7 tomcat7-admin tomcat7-common
 echo "export CATALINA_BASE=/var/lib/tomcat7" >> /usr/share/tomcat7/bin/setenv.sh
 cp -rf /home/vagrant/darshini/conf/tomcat-users.xml /var/lib/tomcat7/conf/tomcat-users.xml
++sed -i '/JAVA_OPTS="-Djava.awt.*/c\JAVA_OPTS="-Djava.awt.headless=true -Xmx1024m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:InitiatingHeapOccupancyPercent=0 -Dcom.sun.management.jmxremote.port=8086 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"' /etc/default/tomcat7
 mvn package
 service tomcat7 restart
 mvn tomcat7:deploy

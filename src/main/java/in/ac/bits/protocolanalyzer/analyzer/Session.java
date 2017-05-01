@@ -78,7 +78,7 @@ public class Session {
 		setLinkCell();
 		setNetworkCell();
 		setTransportCell();
-		repository.configure();
+		repository.configure(factory.getEventBus(this.controllerBus));
 		/* Create pcap analyzer and connect linkCell with it */
 		this.pcapAnalyzer.setNextAnalyzerCell(linkCell);
 		this.pcapAnalyzer.setPcapPath(pcapPath);

@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
+import com.google.common.eventbus.Subscribe;
+
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
@@ -20,6 +22,8 @@ import org.pcap4j.packet.namednumber.DataLinkType;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+
+import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
 import in.ac.bits.protocolanalyzer.protocol.Protocol;
 
 /**
@@ -41,6 +45,8 @@ public class PcapAnalyzer {
 	private String pcapPath;
 
 	private long packetReadCount = 0;
+
+	private volatile boolean readFromPcap = true;
 
 	public void setNextAnalyzerCell(AnalyzerCell cell) {
 		this.nextAnalyzerCell = cell;
@@ -66,17 +72,18 @@ public class PcapAnalyzer {
 			log.info("PcapPath fed to sysfile::" + sysFile);
 			Packet packet = handle.getNextPacket();
 			while (packet != null) {
-				packetReadCount++;
-				long packetId = packetReadCount;
-				String packetType = getPacketType(handle);
-				int startByte = 0;
-				int endByte = packet.length() - 1;
-				PacketWrapper packetWrapper = new PacketWrapper(packet,
-						packetId, packetType, startByte, endByte);
-				packetWrapper.setPacketTimestamp(handle.getTimestamp());
-
-				analyzePacket(packetWrapper);
-				packet = handle.getNextPacket();
+				if ( readFromPcap ) {
+					packetReadCount++;
+					long packetId = packetReadCount;
+					String packetType = getPacketType(handle);
+					int startByte = 0;
+					int endByte = packet.length() - 1;
+					PacketWrapper packetWrapper = new PacketWrapper(packet,
+							packetId, packetType, startByte, endByte);
+					packetWrapper.setPacketTimestamp(handle.getTimestamp());
+					analyzePacket(packetWrapper);
+					packet = handle.getNextPacket();
+				}
 			}
 			log.info("Final read count = " + packetReadCount);
 		} catch (PcapNativeException ex) {
@@ -95,5 +102,16 @@ public class PcapAnalyzer {
 			packetType = Protocol.get("ETHERNET");
 		}
 		return packetType;
+	}
+
+	@Subscribe
+	public void bucketThings(BucketLimitEvent event) {
+		if ( event.getStatus().equals("GO") ) {
+			readFromPcap = true;
+		}
+		else if ( event.getStatus().equals("STOP") ) {
+			readFromPcap = false;
+		}
+		//log.info("readFromPcap = " + readFromPcap);
 	}
 }
