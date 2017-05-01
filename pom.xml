@@ -120,6 +120,24 @@
             <artifactId>spring-data-elasticsearch</artifactId>
             <version>1.3.4.RELEASE</version>
         </dependency>
+         <!-- YAML BEANS https://mvnrepository.com/artifact/com.esotericsoftware.yamlbeans/yamlbeans -->
+    		<dependency>
+    		<groupId>com.esotericsoftware.yamlbeans</groupId>
+    		<artifactId>yamlbeans</artifactId>
+    		<version>1.11</version>
+    	</dependency>
+    	<!-- spring testing framework -->
+    	<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>3.2.1.RELEASE</version>
+        </dependency>
+        <!-- hamcrest matchers -->
+        <dependency>
+		    <groupId>org.hamcrest</groupId>
+		    <artifactId>hamcrest-all</artifactId>
+		    <version>1.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>

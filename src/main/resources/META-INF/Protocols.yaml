@@ -1,0 +1,30 @@
+---
+name: Ethernet
+analyzerName: in.ac.bits.protocolanalyzer.analyzer.link.EthernetAnalyzer
+level: 1
+clients: [ IPv6, IPv4 ]
+---
+name: IPv6
+analyzerName: in.ac.bits.protocolanalyzer.analyzer.network.IPv6Analyzer
+level: 2
+clients: [ Tcp, Udp, Icmp ]
+---
+name: IPv4
+analyzerName: in.ac.bits.protocolanalyzer.analyzer.network.IPv4Analyzer
+level: 2
+clients: [ Tcp, Udp, Icmp ]
+---
+name: Tcp
+analyzerName: in.ac.bits.protocolanalyzer.analyzer.transport.TcpAnalyzer
+level: 3
+clients: []
+---
+name: Udp
+analyzerName: in.ac.bits.protocolanalyzer.analyzer.transport.UdpAnalyzer
+level: 3
+clients: []
+---
+name: Icmp
+analyzerName: in.ac.bits.protocolanalyzer.analyzer.transport.IcmpAnalyzer
+level: 3
+clients: []
