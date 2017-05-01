@@ -1,0 +1,82 @@
+<div class="navbar-fixed">
+<nav>
+  <div class="nav-wrapper">
+    <a href="#!" class="brand-logo center">Packet Analyzer</a>
+    <ul class="right hide-on-med-and-down">
+      <li><a id="username" style="cursor:default">Anonymous</a></li>
+      <li><a id="help" style="cursor:help">Help</a></li>
+      <li><a id="logout" style="cursor:default">Logout</a></li>
+    </ul>
+  </div>
+</nav>
+</div>
+<div class="valign-wrapper">
+  <div class="valign">
+  <div class="container">
+  <div id="parentWrap" class="row parentWrap">
+        <div class="col l10 m12 s12 offset-l1">
+            <div class="card blue-grey darken-3">
+            <div class="card-content white-text">
+                <span class="card-title center-align">Experiment Dashboard</span>
+                <p class="center-align">Fill the required details</p> <br>
+                <div class="row">
+                <div class="col l6 m12 s12">
+                <ul class="collapsible" data-collapsible="accordion">
+                    <li>
+                    <div class="collapsible-header blue-grey darken-3"><i class="material-icons">filter_drama</i>My Experiment</div>
+                    <div class="collapsible-body">
+                    <table id="expListMy" class="bordered highlight expList">
+                    <tbody></tbody>
+                    </table>
+                    </div>
+                    </li>
+                    <li>
+                    <div class="collapsible-header blue-grey darken-3"><i class="material-icons">filter_drama</i>Shared with me</div>
+                    <div class="collapsible-body">
+                    <table id="expListShared" class="bordered highlight expList">
+                    <tbody></tbody>
+                    </table>
+                    </div>
+                    </li>
+                  </ul> 
+                  
+                  </div>
+                  <div class="col l6 m12 s12"> 
+                  <table>
+                    <thead><tr><th>Details</th></tr></thead>
+                    </table>
+                  <div id="sidePanelWrap" class="blue-grey darken-3 sidePanelWrap">
+                      <p id="sidePanel">Select experiment to be detailed here.</p>
+                      <div class="input-field col l12">
+                            <button type="submit" class="waves-effect waves-light btn" id="loadExperiment" style="display:inline;">LOAD ANALYSIS</button>
+                            <div class="row">
+                            <div id="shareWrap" class="input-field col s5">
+                              <select id="share" multiple>
+                                <option id="noneop" value="" disabled selected>None</option>
+
+                              </select>
+                              <label>Shared with</label>
+                            </div>
+                            <div class="input-field col s3">
+                            <button type="submit" class="waves-effect waves-light btn" id="shareExperiment" style="display:inline;">SHARE</button>
+                            </div>
+                            </div>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+  $(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
+</script>

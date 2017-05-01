@@ -5,7 +5,6 @@ window.BaseView = Backbone.View.extend({
 		'click #help' :'userHelpPage',
 		'click #logout' : 'userLogout',
 	},
-
 	userHelpPage : function(){
 	  window.open("https://github.com/prasadtalasila/packetanalyzer",'_blank');
 	},

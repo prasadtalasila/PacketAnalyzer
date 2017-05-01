@@ -7,6 +7,16 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:spring/appconfig.xml</param-value>
 	</context-param>
+	<env-entry> 
+    	<env-entry-name>highWaterMark</env-entry-name>
+    	<env-entry-type>java.lang.String</env-entry-type>
+    	<env-entry-value>7</env-entry-value> 
+	</env-entry>
+	<env-entry> 
+   	<env-entry-name>lowWaterMark</env-entry-name>
+    	<env-entry-type>java.lang.String</env-entry-type>
+    	<env-entry-value>3</env-entry-value> 
+	</env-entry>	
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>

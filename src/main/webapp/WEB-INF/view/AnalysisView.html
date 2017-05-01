@@ -1,69 +1,56 @@
-
- <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" style="cursor:default">Profile</a>
+<div class="navbar-fixed">
+<nav>
+  <div class="nav-wrapper">
+    <a href="#!" class="brand-logo center">Packet Analyzer</a>
+    <ul class="left hide-on-med-and-down">
+      <li>&nbsp;<button class="waves-effect waves-light btn" id ="populateTable">Populate Table</button>&nbsp;&nbsp;</li>
+    </ul>
+    <ul class="right hide-on-med-and-down">
+      <li><a id="username" style="cursor:default">Anonymous</a></li>
+      <li><a id="help" style="cursor:help">Help</a></li>
+      <li><a id="logout" style="cursor:default">Logout</a></li>
+    </ul>
+  </div>
+</nav>
+</div>
+    <div class="valign-wrapper">
+<div class="valign">
+<div class="container">
+<div class="row">
+        <div class="col s6 offset-s3" style="min-height: 9vh">
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-              <a  style = "padding-top:15px;cursor:default;">Settings</a>
-              <ul>
-                <li><a id = "prefetch">Prefetch</a></li>
-                <li><input type="text" id="prefetch-amount" readonly ></li>
-                <li><div id="slider"></div></li>
-              </ul>
-            </li>
-            <li><a id="help" style="cursor:help">Help</a></li>
-            <li><a id="logout" style="cursor:default">Logout</a></li>
-          </ul>
-           <form class="navbar-form navbar-left">
-            <button type="button" class="btn btn-primary" id ="populateTable">Populate Table</button>
-            </form>
+</div>
+    <div id="parentWrap" class="row parentWrap">
+        <div class="col l10 m12 s12 offset-l1">
+            <div class="card blue-grey darken-3">
+            <div class="card-content white-text">
+                <span class="card-title center-align">Stored Packets - Primary Attributes</span>
+                <div class="row">
+                <div class="col l8 m12 s12">
+                    <table>
+                    <thead><tr><th>Packet ID</th><th>Source MAC</th><th>Destination MAC</th></tr></thead>
+                    </table>
+                    <table id="packetInfo" class="bordered highlight packetInfo">
+                    <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="col l4 m12 s12">
+                <span class="card-title center-align">Packet Information</span>
+                  <div id="lowerHalf" class="scroll">
+                    <ul id="lowerHalfcol" class="collapsible" data-collapsible="accordion">
+                    </ul>
+                  </div> 
+                </div>
           </div>
-      </div>
-    </nav>
-
-  <div class="container-fluid">
-    <div class="row">
-        <nav class='sidebar sidebar-menu-collapsed '>
-          <a id='justify-icon'>
-            <span class='glyphicon glyphicon-align-justify'></span>
-          </a>
-          <ul>
-            <li>
-            <!--<li class='active'> keep this if you want highlighted-->
-              <a class='expandable'  title='Dashboard'>
-                <span class='glyphicon glyphicon-list-alt collapsed-element'></span>
-                <span class='expanded-element'>Tabular View</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-
-    <div id="splitView" class="main max-width">
-      <div id="upperHalf" class="scroll" style="cursor:default">
-        <h4 class="sub-header">Stored Packets - Primary Attributes</h4>
-          <div class="table-responsive">
-            <table id="packetInfo" class="table table-striped">
-              <thead><tr><th>Packet ID</th><th>Source MAC</th><th>Destination MAC</th></tr></thead><tbody></tbody>
-            </table>
           </div>
         </div>
-      </div>
     </div>
-  </div>
-
-<footer class="footer navbar-fixed-bottom" style="background-color: #eee;">
-  <div id="lowerHalfTitle" style="cursor:default; background-color: #286090; color: white;">
-        Packet Information (Click to hide or show footer)
-  </div>
-  <div id="lowerHalf" class="scroll">
-  </div>
-</footer>
+</div>
+</div>
+</div>
+<script>
+$(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
+</script>

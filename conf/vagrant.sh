@@ -9,10 +9,13 @@ apt-get install -y oracle-java7-installer
 printf 'Y\n' | apt install -y oracle-java7-set-default
 printf 'Y\n' | apt-get install -y maven
 printf 'Y\n' | apt install git
+printf 'Y\n' | apt install npm
 cp -rf /home/vagrant/darshini/conf/settings.xml /usr/share/maven/conf/settings.xml
 printf 'Y\n' | apt-get install -y tomcat7 tomcat7-admin tomcat7-common
 echo "export CATALINA_BASE=/var/lib/tomcat7" >> /usr/share/tomcat7/bin/setenv.sh
 cp -rf /home/vagrant/darshini/conf/tomcat-users.xml /var/lib/tomcat7/conf/tomcat-users.xml
+mkdir -p src/main/webapp/WEB-INF/node_modules
+npm install --prefix ./src/main/webapp/WEB-INF
 mvn package
 service tomcat7 restart
 mvn tomcat7:deploy

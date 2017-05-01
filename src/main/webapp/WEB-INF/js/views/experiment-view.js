@@ -15,13 +15,13 @@ window.ExperimentView = BaseView.extend({
         	var formValues = {
         		experimentName : $('#experimentName').val(),
         		description : $('#description').val(),
-        		experimenter : $('#experimenter').val(),
+        		experimenter : Cookies.get('userName'),
         		pcapPath : $('#pcapPath').val()
         	};
             //for passing to backend
             sessionStorage.setItem('pcapPath', $('#pcapPath').val());
             //set dafult slider value
-            sessionStorage.setItem('sliderValue',50); 
+            sessionStorage.setItem('sliderValue',50);
             $.ajax({
             url:'/protocolanalyzer/sessioninfo',
              type:'POST',
@@ -32,7 +32,27 @@ window.ExperimentView = BaseView.extend({
                  var jsonData = JSON.parse(data);
                  var status = jsonData.status;
                  if(status === "success") {
-                    app.navigate("#/config");
+                    $.ajax({
+                        url:'http://localhost:9200/protocol/_search',
+                        type:'POST',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType:'text',
+                        data: '{"query":{"match":{"experimentName":"' + $('#experimentName').val() + '"}}}',
+                        success:function (data) {
+                            var experimentId = JSON.parse(data).hits.hits[0]._id;
+                            sessionStorage.setItem('experimentId', experimentId);
+                            $.ajax({
+                                url:'http://localhost:9200/protocol/info/' + experimentId + '/_update',
+                                type:'POST',
+                                contentType: 'application/json; charset=utf-8',
+                                dataType:'text',
+                                data: '{"doc":{"collaborators":""}}',
+                                success:function (data) {
+                                    app.navigate("#/config");
+                                }
+                            });
+                        }
+                    });
                  }
                  else if(status ==="failure"){
                     alert(jsonData.remark);
@@ -48,7 +68,7 @@ window.ExperimentView = BaseView.extend({
             sessionStorage.setItem('sliderValue',$('#slider').slider("option", "value"));  
         },
     	loadExperiment : function() {
-        	
+            app.navigate("#/load");
     	},
 		initialize: function () {
 			this.delegateEvents();
@@ -82,6 +102,10 @@ window.ExperimentView = BaseView.extend({
                     }
                 });
                 $("#prefetch-amount").val($("#slider").slider("value"));
+            });
+
+            $(document).ready(function() {
+              document.getElementById("username").innerHTML = Cookies.get('userName');
             });
             return this;
 		}
