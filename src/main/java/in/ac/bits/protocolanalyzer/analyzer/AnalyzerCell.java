@@ -118,6 +118,16 @@ public class AnalyzerCell implements Runnable {
 	@Subscribe
 	public void end(EndAnalysisEvent event) {
 		this.isRunning = false;
+		if ( this.cellID.equals("linkCell") ) {
+			event.getMetrics().setLinkEnd(System.currentTimeMillis());
+		} else if ( this.cellID.equals("networkCell") ) {
+			event.getMetrics().setNetworkEnd(System.currentTimeMillis());
+		} else if ( this.cellID.equals("transportCell") ) {
+			event.getMetrics().setTransportEnd(System.currentTimeMillis());
+		}
+		else {
+			log.info("UNKNOWN CELL TYPE FOR END EVENT ANALYSIS");
+		}
 	}
 
 	@Override

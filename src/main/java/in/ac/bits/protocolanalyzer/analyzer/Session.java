@@ -39,6 +39,9 @@ public class Session {
 	private PcapAnalyzer pcapAnalyzer;
 
 	@Autowired
+	private PerformanceMetrics metrics;
+
+	@Autowired
 	private AnalyzerCell linkCell;
 
 	@Autowired
@@ -74,6 +77,10 @@ public class Session {
 		this.sessionName = sessionName;
 		this.controllerBus = CONTROLLER_BUS_PREFIX + "_" + this.sessionName;
 		log.info("The session name = " + sessionName);
+
+		this.metrics.setSessionName(this.sessionName);
+		this.metrics.setPcapPath(pcapPath);
+
 		this.cellMap = new HashMap<Integer, AnalyzerCell>();
 		setLinkCell();
 		setNetworkCell();
@@ -82,20 +89,28 @@ public class Session {
 		/* Create pcap analyzer and connect linkCell with it */
 		this.pcapAnalyzer.setNextAnalyzerCell(linkCell);
 		this.pcapAnalyzer.setPcapPath(pcapPath);
+		this.pcapAnalyzer.setMetrics(metrics);
 		/* Register pcap analyzer to controller event bus */
 		factory.getEventBus(this.controllerBus).register(pcapAnalyzer);
 	}
 
 	public long startExperiment() {
 		executorService = Executors.newFixedThreadPool(5);
-		log.info("Session " + this.sessionName + "::Starting linkcell at: " + System.currentTimeMillis());
+		long time = System.currentTimeMillis();
+		log.info("Session " + this.sessionName + "::Starting linkcell at: " + time);
+		this.metrics.setLinkStart(time);
 		executorService.execute(linkCell);
-		log.info("Session " + this.sessionName + "::Starting networkcell at: " + System.currentTimeMillis());
+		time = System.currentTimeMillis();
+		log.info("Session " + this.sessionName + "::Starting networkcell at: " + time);
+		this.metrics.setNetworkStart(time);
 		executorService.execute(networkCell);
-		log.info("Session " + this.sessionName + "::Starting transportcell at: " + System.currentTimeMillis());
+		time = System.currentTimeMillis();
+		log.info("Session " + this.sessionName + "::Starting transportcell at: " + time);
+		this.metrics.setTransportStart(time);
 		executorService.execute(transportCell);
 		repository.start();
 		this.packetReadCount = pcapAnalyzer.readFile();
+		this.metrics.setPacketCount(this.packetReadCount);
 		log.info("Read count at session " + this.sessionName + ":: = " + packetReadCount
 				+ " Process count now = " + packetProcessedCount);
 		if (packetReadCount == packetProcessedCount) {
@@ -147,7 +162,7 @@ public class Session {
 
 	private void endSession() {
 		log.info("Ending " + this.sessionName + "...");
-		factory.getEventBus(this.controllerBus).post(new EndAnalysisEvent());
+		factory.getEventBus(this.controllerBus).post(new EndAnalysisEvent(this.metrics));
 		executorService.shutdown();
 		/* repository.terminate(); */
 		log.info("Session ended!");
