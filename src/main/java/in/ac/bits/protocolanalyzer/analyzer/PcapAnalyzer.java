@@ -24,7 +24,9 @@ import org.springframework.stereotype.Component;
 
 
 import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
+import in.ac.bits.protocolanalyzer.analyzer.event.SaveRepoEndEvent;
 import in.ac.bits.protocolanalyzer.protocol.Protocol;
+
 
 /**
  *
@@ -44,7 +46,12 @@ public class PcapAnalyzer {
 	@Setter
 	private String pcapPath;
 
+	@Setter
+	private PerformanceMetrics metrics;
+
 	private long packetReadCount = 0;
+
+	private long sizeOfPcap = 0;
 
 	private volatile boolean readFromPcap = true;
 
@@ -74,6 +81,7 @@ public class PcapAnalyzer {
 			while (packet != null) {
 				if ( readFromPcap ) {
 					packetReadCount++;
+					sizeOfPcap += packet.length();
 					long packetId = packetReadCount;
 					String packetType = getPacketType(handle);
 					int startByte = 0;
@@ -85,6 +93,9 @@ public class PcapAnalyzer {
 					packet = handle.getNextPacket();
 				}
 			}
+			double kilobytes = (sizeOfPcap / 1024);
+			double megabytes = (kilobytes / 1024);
+			this.metrics.setPcapSize(megabytes);
 			log.info("Final read count = " + packetReadCount);
 		} catch (PcapNativeException ex) {
 			Logger.getLogger(PcapAnalyzer.class.getName()).log(Level.SEVERE,
@@ -113,5 +124,12 @@ public class PcapAnalyzer {
 			readFromPcap = false;
 		}
 		//log.info("readFromPcap = " + readFromPcap);
+	}
+
+	@Subscribe
+	public void bucketThings(SaveRepoEndEvent event) {
+		//log.info("RECEIVED SIGNAL FROM SAVE REPO");
+		this.metrics.setEndTime(event.getTime());
+		this.metrics.calculateMetrics();
 	}
 }
