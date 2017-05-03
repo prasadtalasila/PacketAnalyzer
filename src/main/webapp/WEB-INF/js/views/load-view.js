@@ -110,7 +110,7 @@ window.LoadView =  BaseView.extend({
           sessionStorage.setItem('sessionName',session.replace('protocol_',''));
           sessionStorage.setItem('packetCount', packetCount);
           sessionStorage.setItem('layers','start,ethernet,ipv4,tcp,end');
-          sessionStorage.setItem('sliderValue','50');
+          sessionStorage.setItem('sliderValue',10000);
           app.navigate("#/analysis",{trigger: true});
         },
         error:function(){

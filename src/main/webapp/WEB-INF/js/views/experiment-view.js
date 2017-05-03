@@ -22,7 +22,7 @@ window.ExperimentView = BaseView.extend({
             //for passing to backend
             sessionStorage.setItem('pcapPath', $('#pcapPath').val());
             //set dafult slider value
-            sessionStorage.setItem('sliderValue',50);
+            sessionStorage.setItem('sliderValue',10000);
             $.ajax({
             url:'/protocolanalyzer/sessioninfo',
              type:'POST',
