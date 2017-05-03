@@ -30,21 +30,32 @@
 }
 
 .highlight tbody tr:hover {
-    background-color: rgb(27, 156, 226);
+  /* csslint ignore:start */
+    background-color: rgb(27, 156, 226) !important;
+  /* csslint ignore:end */
 }
+
 
 .packetInfo {
   /* csslint ignore:start */
   border: solid 2px #eee;
   /* csslint ignore:end */
   cursor: pointer;
-  display: block;
+  display: inline-block;
   height: 35vh;
   overflow-y: scroll;
 }
 
+.packetInfo td {
+  width:400px;
+}
+
+.packetInfoHead th {
+  width:400px;
+}
+
 body {
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 .editor {
   bottom: 0;
