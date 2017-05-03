@@ -32,17 +32,7 @@ ratings:
   - "**.py"
   - "**.rb"
 exclude_paths:
-- src/main/webapp/WEB-INF/js/backbone.localstorage/
-- src/main/webapp/WEB-INF/js/backbone/
-- src/main/webapp/WEB-INF/js/bootstrap/
-- src/main/webapp/WEB-INF/js/cookie/
-- src/main/webapp/WEB-INF/js/interact/
-- src/main/webapp/WEB-INF/js/jquery/dist/
+- src/main/webapp/WEB-INF/js/materialize/
 - src/main/webapp/WEB-INF/js/src-noconflict/
-- src/main/webapp/WEB-INF/js/underscore/
-- src/main/webapp/WEB-INF/js/w2ui/
-- src/main/webapp/WEB-INF/js/wysiwyg/
-- src/main/webapp/WEB-INF/css/bootstrap/
-- src/main/webapp/WEB-INF/css/dragula/
-- src/main/webapp/WEB-INF/css/w2ui/
+- src/main/webapp/WEB-INF/css/materialize/
 - src/main/java/in/ac/bits/protocolanalyzer/
