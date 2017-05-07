@@ -131,6 +131,7 @@ window.LoadView =  BaseView.extend({
     var newDiv = document.createElement('section');
     sidePanel.appendChild(newDiv);
     var data = [];
+    var experimenter = '';
     if (share == "Owned") {
       data = LoadView.globalMy;
       var col = data[id]._source.collaborators.split(/\s*,\s*/);
@@ -140,12 +141,13 @@ window.LoadView =  BaseView.extend({
       selectEl.material_select('refresh');
     } else {
       data = LoadView.globalShared;
-      // document.getElementById("shareWrap").disabled = true;
+      experimenter = 'Experimenter : ' + data[id]._source.experimenter + '<br/>'
       $("#shareWrap *").attr("disabled", "disabled");
       document.getElementById('shareExperiment').disabled = true;
     }
     newDiv.outerHTML = '<p>'+
           'Experiment Name : ' + data[id]._source.experimentName + '<br/>' +
+          experimenter +
           'Description : '+ data[id]._source.description +'<br/>' +
           'PCAP Path : '+ data[id]._source.pcapPath + '<br/>' +
           'Session: '+ data[id]._source.id +
