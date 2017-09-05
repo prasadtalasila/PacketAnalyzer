@@ -35,18 +35,16 @@ public class TestController {
 	private WebApplicationContext context;
 
 	@Autowired
-	@Qualifier("concurrentExp")
-	private ConcurrentExp exp1,exp2;
+	@Qualifier("Experiment")
+	private Experiment exp1;
 
-	@RequestMapping(value = "/srun", method = RequestMethod.GET)
+//	@RequestMapping(method = RequestMethod.GET)
 	public void runSequentialExp()throws Exception {
-		String pcapPath = "/home/anurag/Downloads/Tests/sample_capture_test_109.pcap";
+		String pcapPath = "/home/vikram/Darshini/Test_pcap_files/sample_capture_test1.pcap";
 		String protocolGraphStr = "graph start {\n\tethernet;\n}\ngraph ethernet {\n\tswitch(ethertype) {\n\t\tcase 0800:			 ipv4;\n\t}\n}\ngraph ipv4 {\n\tswitch(protocol) {\n\t\tcase 06: tcp;\n\t}\n}\ngraph tcp {\n}\ngraph end {\n}";
 
-		log.info("] LAUNCHING EXPERIMENT ONE");
 		exp1.init(pcapPath, protocolGraphStr);
-		exp1.call();
-		log.info("EXPERIMENT ONE ENDED");
+		exp1.analyze();
 		/*
 		TimeUnit.SECONDS.sleep(10);
 		log.info("] LAUNCHING EXPERIMENT TWO");
@@ -54,12 +52,19 @@ public class TestController {
 		exp2.call();*/
 	}
 
-	@RequestMapping(value = "/crun", method = RequestMethod.GET)
-	public void runConcurrentExp()throws Exception {
-		ExecutorService executors =  Executors.newFixedThreadPool(2);
-		log.info("EXECUTING IN THREAD");
-		executors.submit(exp1);
-    	executors.submit(exp2);
-		log.info("FINISHED");
+//	@RequestMapping(value = "/experiment", method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
+	public @ResponseBody String runExp(@RequestParam("pcapPath") String pcapPath)throws Exception {
+		//String pcapPath = "/home/vikram/Darshini/Test_pcap_files/sample_capture_test1.pcap";
+		String protocolGraphStr = "graph start {\n\tethernet;\n}\ngraph ethernet {\n\tswitch(ethertype) {\n\t\tcase 0800:			 ipv4;\n\t}\n}\ngraph ipv4 {\n\tswitch(protocol) {\n\t\tcase 06: tcp;\n\t}\n}\ngraph tcp {\n}\ngraph end {\n}";
+
+		exp1.init(pcapPath, protocolGraphStr);
+		return exp1.analyze();
+		/*
+		TimeUnit.SECONDS.sleep(10);
+		log.info("] LAUNCHING EXPERIMENT TWO");
+		exp2.init(pcapPath, protocolGraphStr);
+		exp2.call();*/
 	}
+
 }

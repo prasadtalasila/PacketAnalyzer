@@ -19,15 +19,13 @@ import in.ac.bits.protocolanalyzer.protocol.Protocol;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolChecker;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolGraphParser;
 
-import java.util.concurrent.Callable;
-
 @Component
 @Scope("prototype")
-@Qualifier("concurrentExp")
+@Qualifier("Experiment")
 @Getter
 @Setter
 @Log4j
-public class ConcurrentExp implements Callable<Long> {
+public class Experiment {
 
 	@Autowired
 	private WebApplicationContext context;
@@ -51,12 +49,7 @@ public class ConcurrentExp implements Callable<Long> {
 		this.protocolGraphStr = protocolGraphStr;
 	}
 
-	public Long call() throws Exception {
-		log.info("In call method of the Concurrent exp");
-		return analyze();
-	}
-
-	public long analyze() {
+	public String analyze() {
 		// Initializing session and protocol
 		//log.info("Starting to analyze ..........");
 		init(pcapPath);
@@ -65,8 +58,11 @@ public class ConcurrentExp implements Callable<Long> {
 		log.info("Successfully completed session configuration!!");
 
 		long readCount = session.startExperiment();
-		log.info("------------Successfully completed one analysis!!----------------");
-		return readCount;
+		JSONObject expStatus = new JSONObject();
+		expStatus.put("status", "success");
+		expStatus.put("sessionName", session.getSessionName());
+		expStatus.put("packetCount", readCount);
+		return expStatus.toString();
 	}
 
 	/*
