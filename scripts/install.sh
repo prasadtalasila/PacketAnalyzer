@@ -11,7 +11,6 @@ export PATH
 
 printf 'Y\n' | apt-get install -y maven
 printf 'Y\n' | apt-get install git
-printf 'Y\n' | apt-get install npm
 
 #adjust tomcat7 settings
 cp -rf conf/settings.xml /usr/share/maven/conf/settings.xml
@@ -22,6 +21,12 @@ chmod +x /usr/share/tomcat7/bin/setenv.sh
 cp -rf conf/tomcat-users.xml /var/lib/tomcat7/conf/tomcat-users.xml
 sudo sed -i '/JAVA_OPTS="-Djava.awt.*/c\JAVA_OPTS="-Djava.awt.headless=true -Xmx1024m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:InitiatingHeapOccupancyPercent=0 -Dcom.sun.management.jmxremote.port=8086 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"' /etc/default/tomcat7
 echo "JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> /etc/default/tomcat7
+
+#Tomcat classpath error fix
+sudo wget https://archive.apache.org/dist/logging/log4j/2.8.2/apache-log4j-2.8.2-bin.tar.gz
+sudo tar -xvzf apache-log4j-2.8.2-bin.tar.gz -C /usr/share/tomcat7/lib/
+rm apache-log4j-2.8.2-bin.tar.gz
+echo "CLASSPATH=/usr/share/tomcat7/lib/apache-log4j-2.8.2-bin/">>/usr/share/tomcat7/bin/setenv.sh
 service tomcat7 restart
 
 #copy the correct property files and create the required directories
@@ -33,8 +38,12 @@ chmod 777 /opt/darshini-es/logs
 mkdir -p /opt/darshini-logs
 chmod 777 /opt/darshini-logs
 
+#install nodejs
+curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt-get install nodejs
+
 
 #get the npm modules for js files of webpages
 mkdir -p src/main/webapp/WEB-INF/node_modules
 npm install --prefix ./src/main/webapp/WEB-INF
-
