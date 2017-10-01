@@ -11,3 +11,6 @@ sudo apt-get install pfring nprobe ntopng ntopng-data n2disk cento nbox
 #install wireshark and tshark
 sudo apt-get install wireshark tshark
 sudo apt-get update
+
+#install bro
+sudo apt-get install bro

@@ -11,10 +11,6 @@ export PATH
 
 printf 'Y\n' | apt-get install -y maven
 printf 'Y\n' | apt-get install git
-printf 'Y\n' | apt-get install npm
-
-#install bro
-sudo apt-get install bro
 
 #adjust tomcat7 settings
 cp -rf conf/settings.xml /usr/share/maven/conf/settings.xml
