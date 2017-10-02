@@ -28,4 +28,3 @@ sudo apt-get clean all
 sudo apt-get update
 #rm bro-2.5.1.tar.gz
 export PATH=/usr/local/bro/bin:$PATH
-
