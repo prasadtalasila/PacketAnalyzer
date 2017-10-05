@@ -46,4 +46,4 @@ sudo apt-get install build-essential
 
 #get the npm modules for js files of webpages
 mkdir -p src/main/webapp/WEB-INF/node_modules
-npm install --prefix ./src/main/webapp/WEB-INF
+npm install --prefix ../src/main/webapp/WEB-INF
