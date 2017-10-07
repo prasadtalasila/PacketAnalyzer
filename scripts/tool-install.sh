@@ -12,19 +12,33 @@ sudo apt-get install pfring nprobe ntopng ntopng-data n2disk cento nbox
 sudo apt-get install wireshark tshark
 sudo apt-get update
 
-#install dependencies for bro
-sudo apt-get install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev
-
 #install C++ Actors Framework, Ignore the KEYEXPIRED 1503492954 or NO_PUBKEY error
 sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/libraries:/caf/xUbuntu_14.04/ /' > /etc/apt/sources.list.d/caf.list"
 sudo apt-get update
-sudo apt-get install -y caf
+sudo apt-get install -y caf --allow-unauthenticated
 
-#install bro
-sudo wget https://www.bro.org/downloads/bro-2.5.1.tar.gz
-mkdir /opt/bro
-sudo tar -xvzf bro-2.5.1.tar.gz -C /opt/bro
-sudo apt-get clean all
+#install dependencies for bro 
 sudo apt-get update
-rm bro-2.5.1.tar.gz
-export PATH=/usr/local/bro/bin:$PATH
+sudo apt-get install bison cmake flex g++ gdb make libmagic-dev libpcap-dev libgeoip-dev libssl-dev python-dev swig2.0 zlib1g-dev
+
+#Downloading and extract a GeoIP Database
+wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz
+gzip -d GeoLiteCity.dat.gz
+gzip -d GeoLiteCityv6.dat.gz
+sudo mv GeoLiteCity.dat /usr/share/GeoIP/GeoIPCity.dat
+sudo mv GeoLiteCityv6.dat /usr/share/GeoIP/GeoIPCityv6.dat
+rm GeoLiteCity.dat.gz
+rm GeoLiteCityv6.dat.gz
+
+#Installing Bro From Source
+git clone --recursive https://github.com/bro/bro
+cd bro
+./configure
+make
+sudo make install
+echo "export PATH=$PATH:/usr/local/bro/bin">>/etc/profile.d/3rd-party.sh
+source /etc/profile.d/3rd-party.sh
+
+#Visit the link below for more details on installing and configuring bro.
+#https://www.digitalocean.com/community/tutorials/how-to-install-bro-on-ubuntu-16-04
