@@ -43,6 +43,7 @@ curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
 sudo bash nodesource_setup.sh
 sudo apt-get install -y nodejs
 sudo apt-get install build-essential
+rm nodesource_setup.sh
 
 #get the npm modules for js files of webpages
 mkdir -p src/main/webapp/WEB-INF/node_modules
