@@ -1,6 +1,21 @@
 package in.ac.bits.protocolanalyzer.utils;
 
+/**
+ * This utility allows for various byte operations.
+ *
+ * @author Shilpa Raju
+ * @version 21-Oct-2017
+ */
+
 public class ByteOperator {
+
+/**
+ * This method converts the given byte array into an integer
+ *
+ * @param bytes byte array to be converted to int
+ * @return integer representing the byte array
+ * @throws ArrayIndexOutOfBoundsException if the byte array length is over 4
+ */
 
     public static int parseBytesint(byte[] bytes)
             throws ArrayIndexOutOfBoundsException {
@@ -16,6 +31,14 @@ public class ByteOperator {
             return val;
         }
     }
+    
+/**
+ * This method converts the given byte array into a single byte
+ *
+ * @param bytes byte array to be converted 
+ * @return byte representing the byte array
+ * @throws ArrayIndexOutOfBoundsException if the byte array length is over 1
+ */
 
     public static byte parseBytesbyte(byte[] bytes)
             throws ArrayIndexOutOfBoundsException {
@@ -31,6 +54,14 @@ public class ByteOperator {
             return (byte) val;
         }
     }
+    
+/**
+ * This method converts the given byte array into type short int
+ *
+ * @param bytes byte array to be converted 
+ * @return short int representing the byte array
+ * @throws ArrayIndexOutOfBoundsException if the byte array length is over 2
+ */
 
     public static short parseBytesshort(byte[] bytes)
             throws ArrayIndexOutOfBoundsException {
@@ -46,6 +77,13 @@ public class ByteOperator {
             return (short) val;
         }
     }
+/**
+ * This method converts the given byte array into a long int
+ *
+ * @param bytes byte array to be converted 
+ * @return long int representing the byte array
+ * @throws ArrayIndexOutOfBoundsException if the byte array length is over 8
+ */
 
     public static long parseByteslong(byte[] bytes) {
         if (bytes.length > 8) {

@@ -3,9 +3,10 @@ package in.ac.bits.protocolanalyzer.utils;
 import java.util.Arrays;
 
 /**
+ * This utility class allows for different bit operations. 
  * 
- * @author crygnus
- *
+ * @author Shilpa Raju
+ * @version 21-Oct-2017
  */
 
 public class BitOperator {
@@ -14,10 +15,10 @@ public class BitOperator {
      * Returns the bit in byte b at the given index. Note that index must be
      * between 0-7
      * 
-     * @param b
-     * @param index
-     * @return bit 0 or 1
-     * @throws ArrayIndexOutOfBoundsException
+     * @param b This is the byte from which a particular bit has to be extracted.
+     * @param index This gives the index of the bit to be extracted. 
+     * @return Bit 0 or 1 
+     * @throws ArrayIndexOutOfBoundsException if the index is not in the required range.
      */
     public static int getBit(byte b, int index)
             throws ArrayIndexOutOfBoundsException {
@@ -30,11 +31,10 @@ public class BitOperator {
     }
 
     /**
-     * Returns int array 'bit' of size 8 with bit[i] = bit at index 'i' in byte
-     * b
+     * Converts the given byte to an integer array.
      * 
-     * @param b
-     * @return array of int
+     * @param b This is the byte to be converted.
+     * @return Integer array representing the byte
      */
     public static int[] getBits(byte b) {
         int[] bits = new int[8];
@@ -48,11 +48,11 @@ public class BitOperator {
      * Returns int equivalent of bit array of specified start location and
      * length
      * 
-     * @param b
-     * @param startBit
-     * @param numberOfBits
-     * @return int val
-     * @throws ArrayIndexOutOfBoundsException
+     * @param b This is the byte from which values are obtained
+     * @param startBit Start location
+     * @param numberOfBits Length of bits required
+     * @return integer equivalent of bit array
+     * @throws ArrayIndexOutOfBoundsException if the bits specified are out of range
      */
     public static int getValue(byte b, int startBit, int numberOfBits)
             throws ArrayIndexOutOfBoundsException {
@@ -73,10 +73,10 @@ public class BitOperator {
      * Returns integer equivalent of the nibble in byte b with given nibble
      * index (either 0 or 1)
      * 
-     * @param b
-     * @param nibbleIndex
-     * @return int nibble
-     * @throws ArrayIndexOutOfBoundsException
+     * @param b byte from which nibble is returned
+     * @param nibbleIndex indicates which nibble is to be returned
+     * @return integer equivalent of required nibble
+     * @throws ArrayIndexOutOfBoundsException if nibbleIndex is anything but 0 or 1
      */
     public static int getNibble(byte b, int nibbleIndex)
             throws ArrayIndexOutOfBoundsException {
@@ -89,6 +89,11 @@ public class BitOperator {
                     "Nibble index can only be 0 or 1");
         }
     }
+    
+    /**
+     * @throws IllegalArgumentException if startBit and endBit aren't within the range of header.
+     */    
+    
 
     public static byte[] parse(byte[] header, int startBit, int endBit)
             throws IllegalArgumentException {
@@ -153,6 +158,10 @@ public class BitOperator {
         }
 
     }
+    
+    /**
+     * 
+     */
 
     private static byte bitToByte(byte[] original, int lower, int higher,
             int extraBits, boolean reverse) {
@@ -171,6 +180,15 @@ public class BitOperator {
             return (byte) val;
         }
     }
+    
+    /**
+     * Checks if the target lies between the lowerLimit and UpperLimit
+     * 
+     * @param target This is the value that must lie between the given values
+     * @param lowerLimit target must be above this.
+     * @param upperLimit target must be below this.
+     * @return true if target lies between the two numbers, otherwise false
+     */
 
     private static boolean lieBetween(int target, int lowerLimit,
             int upperLimit) {
