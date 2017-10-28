@@ -10,10 +10,10 @@
 
 truncate -s 0 darshini-test.log
 
-echo "performance of Darshini on four processors"  >> darshini-test.log
+
 echo "--------------------------------------" >> darshini-test.log
 
-for pcapFile in `ls Test_pcap_files/sample_capture_test*.pcap`
+for pcapFile in `sudo ls <Path to BITS-Darshini>/data/packet/*.pcap`
 do
     #perform a trial run to get all the data into RAM
     /usr/bin/time bro -r $pcapFile > /dev/null 2>&1
@@ -28,7 +28,7 @@ do
     echo -e "\n\n"  >> darshini-test.log
     #run one experiment in Darshini
     curl -H "Content-Type: application/json" -d '{"email": "abc", "password": "abc"}' http://localhost:8080/protocolanalyzer/signin
-    curl -X GET -H "Content-Type: application/json" http://localhost:8080/protocolanalyzer/test?pcapPath=\'$pcapFile\'
+    curl -X GET -H "Content-Type: application/json" http://localhost:8080/protocolanalyzer/test?pcapPath=$pcapFile
     sleep 10
     cat darshini-logs/darshini >> darshini-test.log
 done

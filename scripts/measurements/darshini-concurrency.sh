@@ -20,7 +20,7 @@ echo 0 > /sys/devices/system/cpu/cpu2/online
 echo 0 > /sys/devices/system/cpu/cpu1/online
 sleep 10
 #run darshini on single processor
-./darshini-test.sh
+./scripts/measurements/darshini-test.sh
 #save the darshini-test.log to darshini-concurrency.log
 cat darshini-test.log >> darshini-concurrency.log
 
@@ -35,7 +35,7 @@ echo 0 > /sys/devices/system/cpu/cpu2/online
 echo 1 > /sys/devices/system/cpu/cpu1/online
 sleep 10
 #run darshini on two processors
-./darshini-test.sh
+./scripts/measurements/darshini-test.sh
 #save the darshini-test.log to darshini-concurrency.log
 cat darshini-test.log >> darshini-concurrency.log
 
@@ -51,7 +51,7 @@ echo 1 > /sys/devices/system/cpu/cpu2/online
 echo 1 > /sys/devices/system/cpu/cpu1/online
 sleep 10
 #run darshini on three processors
-./darshini-test.sh
+./scripts/measurements/darshini-test.sh
 #save the darshini-test.log to darshini-concurrency.log
 cat darshini-test.log >> darshini-concurrency.log
 
@@ -67,9 +67,9 @@ echo 1 > /sys/devices/system/cpu/cpu2/online
 echo 1 > /sys/devices/system/cpu/cpu1/online
 sleep 10
 #run darshini on four processors
-./darshini-test.sh
+./scripts/measurements/darshini-test.sh
 #save the darshini-test.log to darshini-concurrency.log
 cat darshini-test.log >> darshini-concurrency.log
 
 #summarize results into another log file
-grep -f darshini-concurrency.grep darshini-concurrency.log > darshini-concurrency-summary.log
+grep -f ./scripts	/measurements/darshini-concurrency.grep darshini-concurrency.log > darshini-concurrency-summary.log

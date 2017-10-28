@@ -22,7 +22,7 @@ echo 0 > /sys/devices/system/cpu/cpu2/online
 echo 0 > /sys/devices/system/cpu/cpu1/online
 sleep 10
 #run all tools on single processor
-./tools_run.sh
+./scripts/measurements/tools_run.sh
 #save the performance.log to concurrency.log
 cat performance.log >> concurrency.log
 truncate -s 0 performance.log
@@ -38,7 +38,7 @@ echo 0 > /sys/devices/system/cpu/cpu2/online
 echo 1 > /sys/devices/system/cpu/cpu1/online
 sleep 10
 #run all tools on two processors
-./tools_run.sh
+./scripts/measurements/tools_run.sh
 #save the performance.log to concurrency.log
 cat performance.log >> concurrency.log
 truncate -s 0 performance.log
@@ -55,7 +55,7 @@ echo 1 > /sys/devices/system/cpu/cpu2/online
 echo 1 > /sys/devices/system/cpu/cpu1/online
 sleep 10
 #run all tools on three processors
-./tools_run.sh
+./scripts/measurements/tools_run.sh
 #save the performance.log to concurrency.log
 cat performance.log >> concurrency.log
 truncate -s 0 performance.log
@@ -72,7 +72,7 @@ echo 1 > /sys/devices/system/cpu/cpu2/online
 echo 1 > /sys/devices/system/cpu/cpu1/online
 sleep 10
 #run all tools on four processors
-./tools_run.sh
+./scripts/measurements/tools_run.sh
 #save the performance.log to concurrency.log
 cat performance.log >> concurrency.log
 truncate -s 0 performance.log
