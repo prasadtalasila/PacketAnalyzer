@@ -6,6 +6,7 @@ import java.util.Arrays;
  * This utility class allows for different bit operations. 
  * 
  * @author Shilpa Raju
+ * @author crygnus
  * @version 21-Oct-2017
  */
 
@@ -31,7 +32,8 @@ public class BitOperator {
     }
 
     /**
-     * Converts the given byte to an integer array.
+     * Converts the given byte to an integer array, such that the least significant bit is bits[0].
+     * If the input is b = 113, the returned integer array will be (1,0,0,0,1,1,1,0).
      * 
      * @param b This is the byte to be converted.
      * @return Integer array representing the byte
@@ -45,8 +47,9 @@ public class BitOperator {
     }
 
     /**
-     * Returns int equivalent of bit array of specified start location and
-     * length
+     * Returns int equivalent of numberOfBits number of least significant bits, left shifted by the number given by startBit
+     * if b = 113, startBit = 3 and numberOfBits = 2, 
+     * the returned value will be 8
      * 
      * @param b This is the byte from which values are obtained
      * @param startBit Start location
@@ -71,7 +74,8 @@ public class BitOperator {
 
     /**
      * Returns integer equivalent of the nibble in byte b with given nibble
-     * index (either 0 or 1)
+     * index (either 0 or 1). If nibbleIndex is 0, lower nibble is returned. If it is 1, upper nibble.
+     * If b = 113, for nibbleIndex = 0, return value is 1. If nibbleIndex is 1, return value is 7.
      * 
      * @param b byte from which nibble is returned
      * @param nibbleIndex indicates which nibble is to be returned
@@ -91,7 +95,13 @@ public class BitOperator {
     }
     
     /**
+     * This method takes in a byte array and returns a smaller byte array depending on the parameters. 
+     *
+     * @param header this is the byte array whose subarray is returned.
+     * @param startBit This is the beginning of the smaller array returned.
+     * @param endBit This is the end of the smaller array returned.
      * @throws IllegalArgumentException if startBit and endBit aren't within the range of header.
+     * @return A byte array which is from startBit to endBt of header.
      */    
     
 
@@ -160,7 +170,16 @@ public class BitOperator {
     }
     
     /**
+     * This method returns a modified byte from the byte array entered, based on the input parameters. 
+     * If reverse is 0, the method returns the byte at index higher, right shifted by (8 - extraBits) number of bits.
+     * If reverse is 1, the method returns the byte index lower-1, after making the upper extraBits number of bits 0.
      * 
+     * @param original This is the array from which the byte is taken.
+     * @param lower This is one of the indices from which the byte is returned.
+     * @param higher This is another one of the indices for which byte is returned.
+     * @param extraBits This specifies how the byte is manipulated.
+     * @param reverse This also specifies how the byte is manipulated. 
+     * @return the manipulated byte value.
      */
 
     private static byte bitToByte(byte[] original, int lower, int higher,

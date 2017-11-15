@@ -1,9 +1,10 @@
 package in.ac.bits.protocolanalyzer.utils;
 
 /**
- * This utility allows for various byte operations.
+ * The class contains utility methods for converting byte range into chosen primitive data types (int, short, long etc.).
  *
  * @author Shilpa Raju
+ * @author crygnus
  * @version 21-Oct-2017
  */
 

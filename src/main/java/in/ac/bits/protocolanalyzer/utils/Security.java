@@ -5,10 +5,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * This utility class is used to provide security. 
- * For this purpose it uses the SHA-256 hash function.
+ * This class contains wrapper functions around cryptographic algorithms.
  *
  * @author Shilpa Raju
+ * @author crygnus
  * @version 21-Oct-2017
  */
 

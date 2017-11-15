@@ -5,6 +5,7 @@ import org.apache.commons.codec.binary.Hex;
 /**
  * This class converts the given address into string format.
  * @author Shilpa Raju
+ * @author crygnus
  * @version 21-Oct-2017
  */
 
