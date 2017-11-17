@@ -96,6 +96,9 @@ public class BitOperator {
     
     /**
      * This method takes in a byte array and returns a smaller byte array depending on the parameters. 
+     * It returns a subarray of the input which goes from the startBit specified to the endBit specified.
+     * For example, if b = (113,100,60,45,90), startBit = 8 and endBit = 35, the output would be 100 60 45 5 
+     * because three bytes would be returned as they are, as well as a small part of the next byte.
      *
      * @param header this is the byte array whose subarray is returned.
      * @param startBit This is the beginning of the smaller array returned.
