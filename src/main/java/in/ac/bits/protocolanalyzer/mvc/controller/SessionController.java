@@ -6,6 +6,7 @@
 package in.ac.bits.protocolanalyzer.mvc.controller;
 
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +29,15 @@ public class SessionController {
 	@RequestMapping(value = "/analysis", method = RequestMethod.GET)
 	public @ResponseBody String analyze(
 			@RequestParam("graph") String protocolGraphStr,
-			@RequestParam("pcapPath") String pcapPath) throws Exception {
-		experiment.initWithPcapFileCheck(pcapPath,protocolGraphStr);
-		String result = experiment.analyze();
+			@RequestParam("pcapPath") String pcapPath) {
+		String result = null;
+		try {
+			experiment.initWithPcapFileCheck(pcapPath,protocolGraphStr);
+ 			result = experiment.analyze();
+ 		}
+ 		catch(Exception e) {
+ 	    	return (new JSONObject()).put("packetCount", 0).put("status", "failure").put("comment", e.getMessage()).toString();
+		}
 		return result;
 	}
 }
