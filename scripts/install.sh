@@ -12,7 +12,8 @@ export PATH
 printf 'Y\n' | apt-get install -y maven
 printf 'Y\n' | apt-get install git
 
-#adjust tomcat7 settings
+sudo apt-get install curl
+#adjust tomcat settings
 cp -rf conf/settings.xml /usr/share/maven/conf/settings.xml
 #Create a user and group named tomcat
 groupadd tomcat
@@ -26,7 +27,7 @@ sudo chgrp -R tomcat /opt/tomcat
 sudo chmod -R g+r /opt/tomcat/conf
 sudo chmod g+x /opt/tomcat/conf
 sudo chown -R tomcat /opt/tomcat
-cp tomcat.service /etc/systemd/system/
+cp conf/tomcat.service /etc/systemd/system/
 cp -rf conf/tomcat-users.xml /opt/tomcat/conf/tomcat-users.xml
 
 #reload the systemd daemon so that it knows about our service file
@@ -56,4 +57,4 @@ rm nodesource_setup.sh
 
 #get the npm modules for js files of webpages
 mkdir -p src/main/webapp/WEB-INF/node_modules
-npm install --prefix ../src/main/webapp/WEB-INF
+npm install --prefix src/main/webapp/WEB-INF
