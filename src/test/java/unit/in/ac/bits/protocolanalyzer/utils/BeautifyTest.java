@@ -1,6 +1,7 @@
 package unit.in.ac.bits.protocolanalyzer.utils;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,23 +10,23 @@ import org.junit.rules.ExpectedException;
 import in.ac.bits.protocolanalyzer.utils.Beautify;
 
 public class BeautifyTest {	
+	@Rule
+	public ExpectedException expectedEx = ExpectedException.none();
 	@Test
 	public void testBeautify() {
 		byte bytes1[] = {0 , 16 , 2 , 15 , 4};
 		String mode = "ip4";
-		assertEquals("INVALID-ADDRESS",Beautify.beautify(bytes1, mode));
+		assertThat(Beautify.beautify(bytes1, mode), equalTo("INVALID-ADDRESS"));
 		byte bytes2[] = {-65 , 66 , -67 , 68 };
-		assertEquals("191.66.189.68",Beautify.beautify(bytes2, mode));
+		assertThat(Beautify.beautify(bytes2, mode), equalTo("191.66.189.68"));
 		mode = "hex";
-		assertEquals("0010020f04",Beautify.beautify(bytes1, mode));
+		assertThat(Beautify.beautify(bytes1, mode), equalTo("0010020f04"));
 		mode = "hex2";
-		assertEquals("00:10:02:0f:04",Beautify.beautify(bytes1, mode));
+		assertThat(Beautify.beautify(bytes1, mode), equalTo("00:10:02:0f:04"));
 		mode = "hex4";
-		assertEquals("bf42:bd44",Beautify.beautify(bytes2, mode));
+		assertThat(Beautify.beautify(bytes2, mode), equalTo("bf42:bd44"));
 	}
 	
-	@Rule
-	public ExpectedException expectedEx = ExpectedException.none();
 	@Test
 	public void testBeautifyException() {
 		expectedEx.expect(IllegalArgumentException.class);
