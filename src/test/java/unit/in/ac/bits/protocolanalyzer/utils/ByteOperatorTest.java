@@ -54,7 +54,7 @@ public class ByteOperatorTest {
 		byte[] falseBytes = {1,0,0,0,0,0,0,0,0};
 		assertThat("Error in converting byte array to long",
 				ByteOperator.parseByteslong(trueBytes), 
-				equalTo(72057594037927936l));
+				equalTo(72057594037927936L));
 		expectedEx.expect(ArrayIndexOutOfBoundsException.class);
 		ByteOperator.parseByteslong(falseBytes);
 	}
