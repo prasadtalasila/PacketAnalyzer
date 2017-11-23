@@ -13,7 +13,7 @@ public class ByteOperatorTest {
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
 	
-	static final String error = "Byte array length exceeds 4!";
+	static final String ERROR = "Byte array length exceeds 4!";
 	
 	@Test
 	public void testParseBytesint() {
@@ -22,7 +22,7 @@ public class ByteOperatorTest {
 				ByteOperator.parseBytesint(trueBytes), equalTo(16777472));
 		byte[] falseBytes = {1,0,1,0,1};
 		expectedEx.expect(ArrayIndexOutOfBoundsException.class);
-		expectedEx.expectMessage(error);
+		expectedEx.expectMessage(ERROR);
 		ByteOperator.parseBytesint(falseBytes);
 	}
 	
@@ -33,7 +33,7 @@ public class ByteOperatorTest {
 				ByteOperator.parseBytesbyte(trueBytes), equalTo((byte)127));
 		byte[] falseBytes = {127,0};
 		expectedEx.expect(ArrayIndexOutOfBoundsException.class);
-		expectedEx.expectMessage(error);
+		expectedEx.expectMessage(ERROR);
 		ByteOperator.parseBytesbyte(falseBytes);		
 	}
 	
@@ -44,7 +44,7 @@ public class ByteOperatorTest {
 				ByteOperator.parseBytesshort(trueBytes), equalTo((short)256));
 		byte[] falseBytes = {1,0,0};	
 		expectedEx.expect(ArrayIndexOutOfBoundsException.class);
-		expectedEx.expectMessage(error);
+		expectedEx.expectMessage(ERROR);
 		ByteOperator.parseBytesshort(falseBytes);
 	}
 	
