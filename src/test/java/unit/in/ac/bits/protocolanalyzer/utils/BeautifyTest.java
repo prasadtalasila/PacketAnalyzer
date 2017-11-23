@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 @SuppressWarnings("PMD.AvoidUsingHardCodedIP")
+@java.lang.SuppressWarnings("squid:S1313")
 public class BeautifyTest {	
 	
 	@Rule
