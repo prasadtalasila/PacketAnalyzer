@@ -20,8 +20,9 @@ public class BeautifyTest {
 		assertThat( "Validity check bypassed",
 				Beautify.beautify(bytes1, mode), equalTo("INVALID-ADDRESS"));
 		byte[] bytes2 = {-65 , 66 ,-67 , 68 };
+		String ip = "191.66.189.68";
 		assertThat( "IPv4 address beautification fails.",
-				Beautify.beautify(bytes2, mode), equalTo("191.66.189.68"));
+				Beautify.beautify(bytes2, mode), equalTo(ip));
 		mode = "hex";
 		assertThat("Hex address beautification fails.",
 				Beautify.beautify(bytes1, mode), equalTo("0010020f04"));
