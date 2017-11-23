@@ -1,13 +1,14 @@
 package unit.in.ac.bits.protocolanalyzer.utils;
 
+import in.ac.bits.protocolanalyzer.utils.ByteOperator;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import in.ac.bits.protocolanalyzer.utils.ByteOperator;
 
 public class ByteOperatorTest {
 	@Rule
@@ -15,41 +16,41 @@ public class ByteOperatorTest {
 	
 	@Test
 	public void testParseBytesint() {
-		byte bytes_T[] = {1,0,1,0};
-		byte bytes_F[] = {1,0,1,0,1};
-		assertThat(ByteOperator.parseBytesint(bytes_T), equalTo(16777472));
+		byte[] trueBytes = {1,0,1,0};
+		assertThat("Error in converting byte array to int",ByteOperator.parseBytesint(trueBytes), equalTo(16777472));
+		byte[] falseBytes = {1,0,1,0,1};
 		expectedEx.expect(ArrayIndexOutOfBoundsException.class);
 		expectedEx.expectMessage("Byte array length exceeds 4!");
-		ByteOperator.parseBytesint(bytes_F);
+		ByteOperator.parseBytesint(falseBytes);
 	}
 	
 	@Test
 	public void testParseBytesbyte() {
-		byte bytes_T[] = {127};
-		byte bytes_F[] = {127,0};
-		assertThat(ByteOperator.parseBytesbyte(bytes_T), equalTo((byte)127));
+		byte[] trueBytes = {127};
+		assertThat("Error in converting byte array to single byte",ByteOperator.parseBytesbyte(trueBytes), equalTo((byte)127));
+		byte[] falseBytes = {127,0};
 		expectedEx.expect(ArrayIndexOutOfBoundsException.class);
 		expectedEx.expectMessage("Byte array length exceeds 4!");
-		ByteOperator.parseBytesbyte(bytes_F);		
+		ByteOperator.parseBytesbyte(falseBytes);		
 	}
 	
 	@Test
 	public void testParseBytesshort() {
-		byte bytes_T[] = {1,0};
-		byte bytes_F[] = {1,0,0};	
-		assertThat(ByteOperator.parseBytesshort(bytes_T), equalTo((short)256));
+		byte[] trueBytes = {1,0};
+		assertThat("Error in converting byte array to short",ByteOperator.parseBytesshort(trueBytes), equalTo((short)256));
+		byte[] falseBytes = {1,0,0};	
 		expectedEx.expect(ArrayIndexOutOfBoundsException.class);
 		expectedEx.expectMessage("Byte array length exceeds 4!");
-		ByteOperator.parseBytesshort(bytes_F);
+		ByteOperator.parseBytesshort(falseBytes);
 	}
 	
 	@Test
 	public void testParseByteslong() {
-		byte bytes_T[] = {1,0,0,0,0,0,0,0};
-		byte bytes_F[] = {1,0,0,0,0,0,0,0,0};
-		assertThat(ByteOperator.parseByteslong(bytes_T), equalTo(72057594037927936l));
+		byte[] trueBytes = {1,0,0,0,0,0,0,0};
+		byte[] falseBytes = {1,0,0,0,0,0,0,0,0};
+		assertThat("Error in converting byte array to long",ByteOperator.parseByteslong(trueBytes), equalTo(72057594037927936l));
 		expectedEx.expect(ArrayIndexOutOfBoundsException.class);
-		ByteOperator.parseByteslong(bytes_F);
+		ByteOperator.parseByteslong(falseBytes);
 	}
 	
 }
