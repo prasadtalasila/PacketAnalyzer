@@ -17,15 +17,20 @@ public class BeautifyTest {
 	public void testBeautify() {
 		byte[] bytes1 = {0 , 16 , 2 , 15 , 4};
 		String mode = "ip4";
-		assertThat( "Validity check bypassed",Beautify.beautify(bytes1, mode), equalTo("INVALID-ADDRESS"));
-		byte[] bytes2 = {-65 , 66 , -67 , 68 };
-		assertThat( "IPv4 address beautification fails.",Beautify.beautify(bytes2, mode), equalTo("191.66.189.68"));
+		assertThat( "Validity check bypassed",
+				Beautify.beautify(bytes1, mode), equalTo("INVALID-ADDRESS"));
+		byte[] bytes2 = {-65 , 66 ,-67 , 68 };
+		assertThat( "IPv4 address beautification fails.",
+				Beautify.beautify(bytes2, mode), equalTo("191.66.189.68"));
 		mode = "hex";
-		assertThat("Hex address beautification fails.",Beautify.beautify(bytes1, mode), equalTo("0010020f04"));
+		assertThat("Hex address beautification fails.",
+				Beautify.beautify(bytes1, mode), equalTo("0010020f04"));
 		mode = "hex2";
-		assertThat("Hex2 address beautification fails.",Beautify.beautify(bytes1, mode), equalTo("00:10:02:0f:04"));
+		assertThat("Hex2 address beautification fails.",
+				Beautify.beautify(bytes1, mode), equalTo("00:10:02:0f:04"));
 		mode = "hex4";
-		assertThat("Hex4 address beautification fails.",Beautify.beautify(bytes2, mode), equalTo("bf42:bd44"));
+		assertThat("Hex4 address beautification fails.",
+				Beautify.beautify(bytes2, mode), equalTo("bf42:bd44"));
 	}
 	
 	@Test
