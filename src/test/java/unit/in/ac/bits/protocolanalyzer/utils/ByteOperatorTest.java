@@ -13,7 +13,8 @@ public class ByteOperatorTest {
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
 	
-	final String error = "Byte array length exceeds 4!";
+	static final String error = "Byte array length exceeds 4!";
+	
 	@Test
 	public void testParseBytesint() {
 		byte[] trueBytes = {1,0,1,0};
@@ -52,7 +53,8 @@ public class ByteOperatorTest {
 		byte[] trueBytes = {1,0,0,0,0,0,0,0};
 		byte[] falseBytes = {1,0,0,0,0,0,0,0,0};
 		assertThat("Error in converting byte array to long",
-				ByteOperator.parseByteslong(trueBytes), equalTo(72057594037927936l));
+				ByteOperator.parseByteslong(trueBytes), 
+				equalTo(72057594037927936l));
 		expectedEx.expect(ArrayIndexOutOfBoundsException.class);
 		ByteOperator.parseByteslong(falseBytes);
 	}

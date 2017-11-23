@@ -16,8 +16,10 @@ public class SecurityTest {
 	@Test
 	public void testCreateHash() {
 		assertThat("Error in hashing function",Security.createHash("BITS"),
-				equalTo("94383f71bb67e1abe7b5f06eab59a146924dea7bf9362394ef5fc528051d48d1"));
+				equalTo("94383f71bb67e1abe7b5f06eab5"
+						+ "9a146924dea7bf9362394ef5fc528051d48d1"));
 		assertThat("Error in hashing function",Security.createHash("darshini"),
-				equalTo("eb9d766276f1337f18e71b6a99704561005fc23a5a0300041813438cbaa2e792"));
+				equalTo("eb9d766276f1337f18e71"
+						+ "b6a99704561005fc23a5a0300041813438cbaa2e792"));
 	}
 }
