@@ -10,8 +10,12 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class BeautifyTest {	
+	@SuppressWarnings("PMD.AvoidUsingHardCodedIP")
+	@java.lang.SuppressWarnings("squid:S1313")
+		
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
+	
 	
 	@Test
 	public void testBeautify() {
@@ -20,9 +24,8 @@ public class BeautifyTest {
 		assertThat( "Validity check bypassed",
 				Beautify.beautify(bytes1, mode), equalTo("INVALID-ADDRESS"));
 		byte[] bytes2 = {-65 , 66 ,-67 , 68 };
-		String ip = "191.66.189.68";
 		assertThat( "IPv4 address beautification fails.",
-				Beautify.beautify(bytes2, mode), equalTo(ip));
+				Beautify.beautify(bytes2, mode), equalTo("191.66.189.68"));
 		mode = "hex";
 		assertThat("Hex address beautification fails.",
 				Beautify.beautify(bytes1, mode), equalTo("0010020f04"));
