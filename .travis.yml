@@ -8,7 +8,8 @@ before_script:
   - npm install --prefix ./ vnu-jar
 
 script:
-  - mvn test -B
+  - mvn '-Dtest=unit.in.ac.bits.protocolanalyzer/**/*Test.java' test
+  - mvn '-Dtest=integration.in.ac.bits.protocolanalyzer/**/*Test.java' test
   - csslint src/main/webapp/WEB-INF/css/main.css
   - java -jar node_modules/vnu-jar/build/dist/vnu.jar src/main/webapp/WEB-INF/view
 

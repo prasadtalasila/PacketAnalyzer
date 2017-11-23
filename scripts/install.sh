@@ -11,18 +11,30 @@ export PATH
 
 printf 'Y\n' | apt-get install -y maven
 printf 'Y\n' | apt-get install git
-printf 'Y\n' | apt-get install npm
 
-#adjust tomcat7 settings
+sudo apt-get install curl
+#adjust tomcat settings
 cp -rf conf/settings.xml /usr/share/maven/conf/settings.xml
-printf 'Y\n' | apt-get install -y tomcat7 tomcat7-admin tomcat7-common
-echo "export CATALINA_BASE=/var/lib/tomcat7" >> /usr/share/tomcat7/bin/setenv.sh
-echo "export  JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> /usr/share/tomcat7/bin/setenv.sh
-chmod +x /usr/share/tomcat7/bin/setenv.sh
-cp -rf conf/tomcat-users.xml /var/lib/tomcat7/conf/tomcat-users.xml
-sudo sed -i '/JAVA_OPTS="-Djava.awt.*/c\JAVA_OPTS="-Djava.awt.headless=true -Xmx1024m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:InitiatingHeapOccupancyPercent=0 -Dcom.sun.management.jmxremote.port=8086 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"' /etc/default/tomcat7
-echo "JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> /etc/default/tomcat7
-service tomcat7 restart
+#Create a user and group named tomcat
+groupadd tomcat
+useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+curl -O http://redrockdigimark.com/apachemirror/tomcat/tomcat-8/v8.5.23/bin/apache-tomcat-8.5.23.tar.gz
+mkdir /opt/tomcat
+tar xzvf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
+#Give the tomcat group ownership over the entire installation directory:
+sudo chgrp -R tomcat /opt/tomcat
+#give the tomcat group read access to the conf directory and all of its contents, and execute access to the directory itself
+sudo chmod -R g+r /opt/tomcat/conf
+sudo chmod g+x /opt/tomcat/conf
+sudo chown -R tomcat /opt/tomcat
+cp conf/tomcat.service /etc/systemd/system/
+cp -rf conf/tomcat-users.xml /opt/tomcat/conf/tomcat-users.xml
+
+#reload the systemd daemon so that it knows about our service file
+systemctl daemon-reload
+systemctl start tomcat
+
+
 
 #copy the correct property files and create the required directories
 cp -f conf/*.properties src/main/resources/META-INF/
@@ -32,9 +44,17 @@ mkdir -p /opt/darshini-es/logs
 chmod 777 /opt/darshini-es/logs
 mkdir -p /opt/darshini-logs
 chmod 777 /opt/darshini-logs
+touch /opt/darshini-logs/darshini
+chown tomcat7:tomcat7 /opt/darshini-logs/darshini
+chmod 777 /opt/darshini-logs/darshini
 
+#install nodejs
+curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt-get install -y nodejs
+sudo apt-get install build-essential
+rm nodesource_setup.sh
 
 #get the npm modules for js files of webpages
 mkdir -p src/main/webapp/WEB-INF/node_modules
-npm install --prefix ./src/main/webapp/WEB-INF
-
+npm install --prefix src/main/webapp/WEB-INF

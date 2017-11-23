@@ -2,7 +2,21 @@ package in.ac.bits.protocolanalyzer.utils;
 
 import org.apache.commons.codec.binary.Hex;
 
+/**
+ * This class converts the given address into string format.
+ * @author Shilpa Raju
+ * @author crygnus
+ * @version 21-Oct-2017
+ */
+
 public class Beautify {
+
+/**
+ * This method converts the array of bytes passed to it into string form. 
+ * @return The converted string.
+ * @param bytes This is the series of bytes which must be converted to a string.
+ * @param mode This is the mode of the address.
+ */
 
     public static String beautify(byte[] bytes, String mode)
             throws IllegalArgumentException {

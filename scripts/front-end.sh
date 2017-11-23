@@ -1,1 +1,1 @@
-sudo cp -rf src/main/webapp/WEB-INF/view /var/lib/tomcat7/webapps/protocolanalyzer/WEB-INF
+sudo cp -rf src/main/webapp/WEB-INF/view /opt/tomcat/webapps/protocolanalyzer/WEB-INF

@@ -162,7 +162,6 @@ public class AnalyzerCell implements Runnable {
 		this.packetProcessing.setPacketType(event.getNextPacketType());
 		this.packetProcessing.setStartByte(event.getStartByte());
 		this.packetProcessing.setEndByte(event.getEndByte());
-
 		sendPacket();
 	}
 

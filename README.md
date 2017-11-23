@@ -1,7 +1,7 @@
 
-javascript code review - [![Code Climate](https://codeclimate.com/github/prasadtalasila/BITS-Darshini/badges/gpa.svg)](https://codeclimate.com/github/prasadtalasila/BITS-Darshini), complete project code review - [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f21f85aec9c4467383229516883d15b7)](https://www.codacy.com/app/prasadtalasila/BITS-Darshini?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=prasadtalasila/BITS-Darshini&amp;utm_campaign=Badge_Grade) [![Dependency Status](https://www.versioneye.com/user/projects/58bef4c86d123b00303ce8a5/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58bef4c86d123b00303ce8a5)    
+[![Build Status](https://travis-ci.org/prasadtalasila/BITS-Darshini.svg?branch=master)](https://travis-ci.org/prasadtalasila/BITS-Darshini) [![Code Climate](https://codeclimate.com/github/prasadtalasila/BITS-Darshini/badges/gpa.svg)](https://codeclimate.com/github/prasadtalasila/BITS-Darshini) [![Dependency Status](https://www.versioneye.com/user/projects/58bef4c86d123b00303ce8a5/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58bef4c86d123b00303ce8a5)    
 
-BITS Darshini project is a web application that serves as a generic workbench for protocol analysis. Backend for the project is written in Java whereas front-end is developed with [Backbone.js](http://backbonejs.org/).
+BITS Darshini project is a web application that serves as a generic workbench for protocol analysis. Backend for the project is written in [Spring Java framework](https://projects.spring.io/spring-framework/) whereas front-end is developed with [Backbone.js](http://backbonejs.org/).
 
 ## Important links ##
 See [Installation instructions](https://github.com/prasadtalasila/PacketAnalyzer/wiki) for getting started with BITS Darshini software.    
