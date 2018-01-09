@@ -5,10 +5,10 @@ install:
   - npm install -g csslint
   - npm install --prefix ./ vnu-jar
 
-script: "mvn cobertura:cobertura"
+script: 
   - mvn '-Dtest=unit.in.ac.bits.protocolanalyzer/**/*Test.java' test
   - mvn '-Dtest=integration.in.ac.bits.protocolanalyzer/**/*Test.java' test
-
+  - mvn cobertura:cobertura -Dcobertura.report.format=xml
 after_success:
   #- mvn -DrepoToken=$COVERALLS_TOKEN clean test jacoco:report coveralls:report
   #- mvn pmd:pmd || echo "========PMD checks failed========"
