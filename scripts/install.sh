@@ -18,7 +18,7 @@ cp -rf conf/settings.xml /usr/share/maven/conf/settings.xml
 #Create a user and group named tomcat
 groupadd tomcat
 useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
-curl -O http://redrockdigimark.com/apachemirror/tomcat/tomcat-8/v8.5.23/bin/apache-tomcat-8.5.23.tar.gz
+curl -O https://www.redrockdigimark.com/apachemirror/tomcat/tomcat-8/v8.5.24/bin/apache-tomcat-8.5.24.tar.gz
 mkdir /opt/tomcat
 tar xzvf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
 #Give the tomcat group ownership over the entire installation directory:
