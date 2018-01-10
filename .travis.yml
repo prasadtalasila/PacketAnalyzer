@@ -5,17 +5,17 @@ install:
   - npm install -g csslint
   - npm install --prefix ./ vnu-jar
 
-script:
+script: 
   - mvn '-Dtest=unit.in.ac.bits.protocolanalyzer/**/*Test.java' test
   - mvn '-Dtest=integration.in.ac.bits.protocolanalyzer/**/*Test.java' test
-
+  - mvn cobertura:cobertura -Dcobertura.report.format=xml
 after_success:
-  #- mvn -DrepoToken=$COVERALLS_TOKEN clean test jacoco:report coveralls:report
   #- mvn pmd:pmd || echo "========PMD checks failed========"
   #- mvn checkstyle:checkstyle || echo "========CheckStyle checks failed========"
   #- mvn findbugs:findbugs || echo "========FindBugs checks failed========"
   #- csslint src/main/webapp/WEB-INF/css/main.css
   #- java -jar node_modules/vnu-jar/build/dist/vnu.jar src/main/webapp/WEB-INF/view
+  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   skip_cleanup: true
