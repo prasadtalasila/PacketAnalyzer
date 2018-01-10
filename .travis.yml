@@ -10,7 +10,6 @@ script:
   - mvn '-Dtest=integration.in.ac.bits.protocolanalyzer/**/*Test.java' test
   - mvn cobertura:cobertura -Dcobertura.report.format=xml
 after_success:
-  #- mvn -DrepoToken=$COVERALLS_TOKEN clean test jacoco:report coveralls:report
   #- mvn pmd:pmd || echo "========PMD checks failed========"
   #- mvn checkstyle:checkstyle || echo "========CheckStyle checks failed========"
   #- mvn findbugs:findbugs || echo "========FindBugs checks failed========"
