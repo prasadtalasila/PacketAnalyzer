@@ -26,4 +26,4 @@ comment:
   require_changes: no
 
 ignore:
-  - "BITS-Darshini/src/main/java/in/ac/bits/protocolanalyzer/persistence/entity/"
+  - "BITS-Darshini/src/main/java/in/ac/bits/protocolanalyzer/persistence/entity"
