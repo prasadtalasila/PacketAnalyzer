@@ -19,7 +19,8 @@ public class BitOperator {
      * @param b This is the byte from which a particular bit has to be extracted.
      * @param index This gives the index of the bit to be extracted. 
      * @return Bit 0 or 1 
-     * @throws ArrayIndexOutOfBoundsException if the index is not in the required range.
+     * @throws ArrayIndexOutOfBoundsException
+     *  if the index is not in the required range.
      */
     public static int getBit(byte b, int index)
             throws ArrayIndexOutOfBoundsException {
@@ -35,29 +36,30 @@ public class BitOperator {
      * Converts the given byte to an integer array, such that the least significant bit is bits[0].
      * If the input is b = 113, the returned integer array will be (1,0,0,0,1,1,1,0).
      * 
-     * @param b This is the byte to be converted.
+     * @param inputByte This is the byte to be converted.
      * @return Integer array representing the byte
      */
-    public static int[] getBits(byte b) {
+    public static int[] getBits(byte inputByte) {
         int[] bits = new int[8];
         for (int i = 0; i < 8; i++) {
-            bits[i] = getBit(b, i);
+            bits[i] = getBit(inputByte, i);
         }
         return bits;
     }
 
     /**
-     * Returns int equivalent of numberOfBits number of least significant bits, left shifted by the number given by startBit
+     * Returns int equivalent of numberOfBits number of least significant bits,
+     *  left shifted by the number given by startBit
      * if b = 113, startBit = 3 and numberOfBits = 2, 
-     * the returned value will be 8
+     * the returned value will be 8.
      * 
-     * @param b This is the byte from which values are obtained
+     * @param inputByte This is the byte from which values are obtained
      * @param startBit Start location
      * @param numberOfBits Length of bits required
      * @return integer equivalent of bit array
      * @throws ArrayIndexOutOfBoundsException if the bits specified are out of range
      */
-    public static int getValue(byte b, int startBit, int numberOfBits)
+    public static int getValue(byte inputByte, int startBit, int numberOfBits)
             throws ArrayIndexOutOfBoundsException {
 
         if (startBit + numberOfBits > 8) {
@@ -66,7 +68,7 @@ public class BitOperator {
         } else {
             int val = 0;
             for (int i = 0; i < numberOfBits; i++) {
-                val = val | (getBit(b, i) << i + startBit);
+                val = val | (getBit(inputByte, i) << i + startBit);
             }
             return val;
         }
@@ -74,20 +76,22 @@ public class BitOperator {
 
     /**
      * Returns integer equivalent of the nibble in byte b with given nibble
-     * index (either 0 or 1). If nibbleIndex is 0, lower nibble is returned. If it is 1, upper nibble.
-     * If b = 113, for nibbleIndex = 0, return value is 1. If nibbleIndex is 1, return value is 7.
+     * index (either 0 or 1). If nibbleIndex is 0,
+     *  lower nibble is returned. If it is 1, upper nibble.
+     * If b = 113, for nibbleIndex = 0, return value is 1.
+     *  If nibbleIndex is 1, return value is 7.
      * 
-     * @param b byte from which nibble is returned
+     * @param inputByte byte from which nibble is returned
      * @param nibbleIndex indicates which nibble is to be returned
      * @return integer equivalent of required nibble
      * @throws ArrayIndexOutOfBoundsException if nibbleIndex is anything but 0 or 1
      */
-    public static int getNibble(byte b, int nibbleIndex)
+    public static int getNibble(byte inputByte, int nibbleIndex)
             throws ArrayIndexOutOfBoundsException {
         if (nibbleIndex == 0) {
-            return b & 0xF;
+            return inputByte & 0xF;
         } else if (nibbleIndex == 1) {
-            return (b >> 4) & 0xF;
+            return (inputByte >> 4) & 0xF;
         } else {
             throw new ArrayIndexOutOfBoundsException(
                     "Nibble index can only be 0 or 1");
@@ -95,16 +99,21 @@ public class BitOperator {
     }
     
     /**
-     * This method takes in a byte array and returns a smaller byte array depending on the parameters. 
-     * It returns a subarray of the input which goes from the startBit specified to the endBit specified.
-     * For example, if b = (113,100,60,45,90), startBit = 8 and endBit = 35, the output would be 100 60 45 5 
-     * because three bytes would be returned as they are, as well as a small part of the next byte.
+     * This method takes in a byte array 
+     * and returns a smaller byte array depending on the parameters. 
+     * It returns a subarray of the input which 
+     * goes from the startBit specified to the endBit specified.
+     * For example, if b = (113,100,60,45,90),
+     *  startBit = 8 and endBit = 35, the output would be 100 60 45 5 
+     * because three bytes would be returned as
+     *  they are, as well as a small part of the next byte.
      *
      * @param header this is the byte array whose subarray is returned.
      * @param startBit This is the beginning of the smaller array returned.
      * @param endBit This is the end of the smaller array returned.
-     * @throws IllegalArgumentException if startBit and endBit aren't within the range of header.
      * @return A byte array which is from startBit to endBt of header.
+     * @throws IllegalArgumentException if startBit 
+     * and endBit aren't within the range of header.
      */    
     
 
@@ -128,7 +137,7 @@ public class BitOperator {
 
         if (sbBoundary && ebBoundary) {
             return Arrays.copyOfRange(header, startBit / 8, (endBit + 1) / 8);
-        } else if (sbBoundary && !ebBoundary) {
+        } else if ((sbBoundary) && !(ebBoundary)) {
             int fullByteStart = startBit / 8;
             int fullByteEnd = ((endBit + 1) - ((endBit + 1) % 8)) / 8;
             byte[] returnBytes = new byte[fullByteEnd - fullByteStart + 1];
@@ -140,7 +149,7 @@ public class BitOperator {
             returnBytes[returnBytes.length - 1] = bitToByte(header,
                     fullByteStart, fullByteEnd, (endBit + 1) % 8, false);
             return returnBytes;
-        } else if (!sbBoundary && ebBoundary) {
+        } else if (!(sbBoundary) && (ebBoundary)) {
             int fullByteEnd = (endBit + 1) / 8;
             int lowerBits = 8 - (startBit % 8);
             int fullByteStart = (startBit + lowerBits) / 8;
@@ -173,13 +182,18 @@ public class BitOperator {
     }
     
     /**
-     * This method returns a modified byte from the byte array entered, based on the input parameters. 
-     * If reverse is 0, the method returns the byte at index higher, right shifted by (8 - extraBits) number of bits.
-     * If reverse is 1, the method returns the byte index lower-1, after making the upper extraBits number of bits 0.
+     * This method returns a modified byte from
+     *  the byte array entered, based on the input parameters. 
+     * If reverse is 0, the method returns the byte at index higher,
+     *  right shifted by (8 - extraBits) number of bits.
+     * If reverse is 1, the method returns the byte index lower-1,
+     *  after making the upper extraBits number of bits 0.
      * 
      * @param original This is the array from which the byte is taken.
-     * @param lower This is one of the indices from which the byte is returned.
-     * @param higher This is another one of the indices for which byte is returned.
+     * @param lower This is one of the indices from 
+     * which the byte is returned.
+     * @param higher This is another one of the indices
+     *  for which byte is returned.
      * @param extraBits This specifies how the byte is manipulated.
      * @param reverse This also specifies how the byte is manipulated. 
      * @return the manipulated byte value.
@@ -189,14 +203,14 @@ public class BitOperator {
             int extraBits, boolean reverse) {
         if (!reverse) {
             // extra bits after higher boundary
-            byte[] b = Arrays.copyOfRange(original, higher, higher + 1);
-            int val = b[0];
+            byte[] tempBytes = Arrays.copyOfRange(original, higher, higher + 1);
+            int val = tempBytes[0];
             val = val >> (8 - extraBits);
             return (byte) val;
         } else {
             // extra bits before lower boundary
-            byte[] b = Arrays.copyOfRange(original, lower - 1, lower);
-            int val = b[0];
+            byte[] tempBytes = Arrays.copyOfRange(original, lower - 1, lower);
+            int val = tempBytes[0];
             val = val << (extraBits) & 0xFF;
             val = val >> (extraBits);
             return (byte) val;
@@ -204,7 +218,7 @@ public class BitOperator {
     }
     
     /**
-     * Checks if the target lies between the lowerLimit and UpperLimit
+     * Checks if the target lies between the lowerLimit and UpperLimit.
      * 
      * @param target This is the value that must lie between the given values
      * @param lowerLimit target must be above this.

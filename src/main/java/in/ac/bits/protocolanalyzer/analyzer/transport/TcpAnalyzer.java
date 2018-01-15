@@ -34,6 +34,12 @@ public class TcpAnalyzer implements CustomAnalyzer {
 
   private EventBus eventBus;
 
+  /**
+   * Configures the instance according to the parameters.
+   * @param {eventBus}
+   * @param {repository}
+   * @param {sessionName}
+   */
   public void configure(EventBus eventBus, AnalysisRepository repository, String sessionName) {
     this.eventBus = eventBus;
     this.eventBus.register(this);
@@ -43,9 +49,10 @@ public class TcpAnalyzer implements CustomAnalyzer {
 
   private void setTcpHeader(PacketWrapper packetWrapper) {
     Packet packet = packetWrapper.getPacket();
-    int startByte = packetWrapper.getStartByte();
+    int tempStartByte = packetWrapper.getStartByte();
     byte[] rawPacket = packet.getRawData();
-    this.tcpHeader = Arrays.copyOfRange(rawPacket, startByte, startByte + TcpHeader.TOTAL_HEADER_LENGTH);
+    this.tcpHeader = Arrays
+    		.copyOfRange(rawPacket, tempStartByte, tempStartByte + TcpHeader.TOTAL_HEADER_LENGTH);
   }
 
   public void setStartByte(PacketWrapper packetWrapper) {
@@ -57,66 +64,100 @@ public class TcpAnalyzer implements CustomAnalyzer {
   }
 
   public void publishTypeDetectionEvent(String nextPacketType, int startByte, int endByte) {
-    this.eventBus.post(new PacketTypeDetectionEvent(nextPacketType, startByte, endByte));
+    this.eventBus
+    .post(new PacketTypeDetectionEvent(nextPacketType, startByte, endByte));
   }
 
+  /**
+   * Analyze the given TCP-Header and return its SRCPort as int.                           //TOMODIFY
+   * @param {tcpHeader}
+   */
   public int getSrcPort(byte[] tcpHeader) {
-    byte[] srcport = BitOperator.parse(tcpHeader, TcpHeader.SRCPORT_START_BIT, TcpHeader.SRCPORT_END_BIT);
-    int returnVar = ByteOperator.parseBytesint(srcport);
-    return returnVar;
+    byte[] srcport = BitOperator
+    		.parse(tcpHeader, TcpHeader.SRCPORT_START_BIT, TcpHeader.SRCPORT_END_BIT);
+    return ByteOperator.parseBytesint(srcport);
   }
 
+  /**
+   * Analyze the given TCP-Header and return its DSTPort as int.                           //TOMODIFY
+   * @param {tcpHeader}
+   */
   public int getDstPort(byte[] tcpHeader) {
-    byte[] dstport = BitOperator.parse(tcpHeader, TcpHeader.DSTPORT_START_BIT, TcpHeader.DSTPORT_END_BIT);
-    int returnVar = ByteOperator.parseBytesint(dstport);
-    return returnVar;
+    byte[] dstport = BitOperator
+    		.parse(tcpHeader, TcpHeader.DSTPORT_START_BIT, TcpHeader.DSTPORT_END_BIT);
+    return ByteOperator.parseBytesint(dstport);
   }
 
+  /**
+   * Analyze the given TCP-Header and return its SeqNo as long.                           //TOMODIFY
+   * @param {tcpHeader}
+   */
   public long getSeqNo(byte[] tcpHeader) {
-    byte[] seqno = BitOperator.parse(tcpHeader, TcpHeader.SEQNO_START_BIT, TcpHeader.SEQNO_END_BIT);
-    long returnVar = ByteOperator.parseByteslong(seqno);
-    return returnVar;
+    byte[] seqno = BitOperator
+    		.parse(tcpHeader, TcpHeader.SEQNO_START_BIT, TcpHeader.SEQNO_END_BIT);
+    return ByteOperator.parseByteslong(seqno);
   }
 
+  /**
+   * Analyze the given TCP-Header and return its AckNo as long.                           //TOMODIFY
+   * @param {tcpHeader}
+   */
   public long getAckNo(byte[] tcpHeader) {
-    byte[] ackno = BitOperator.parse(tcpHeader, TcpHeader.ACKNO_START_BIT, TcpHeader.ACKNO_END_BIT);
-    long returnVar = ByteOperator.parseByteslong(ackno);
-    return returnVar;
+    byte[] ackno = BitOperator
+    		.parse(tcpHeader, TcpHeader.ACKNO_START_BIT, TcpHeader.ACKNO_END_BIT);
+    return ByteOperator.parseByteslong(ackno);
   }
 
+  /**
+   * Analyze the given TCP-Header and return its data offset as byte.
+   * @param {tcpHeader}
+   */
   public byte getDataOffset(byte[] tcpHeader) {
-    byte[] dataoffset = BitOperator.parse(tcpHeader, TcpHeader.DATAOFFSET_START_BIT, TcpHeader.DATAOFFSET_END_BIT);
-    byte returnVar = ByteOperator.parseBytesbyte(dataoffset);
-    return returnVar;
+    byte[] dataoffset = BitOperator
+    		.parse(tcpHeader, TcpHeader.DATAOFFSET_START_BIT, TcpHeader.DATAOFFSET_END_BIT);
+    return ByteOperator.parseBytesbyte(dataoffset);
   }
 
+  /**
+   * Analyze the given TCP-Header and return its res as byte.                   //TOMODIFY
+   * @param {tcpHeader}
+   */
   public byte getRes(byte[] tcpHeader) {
-    byte[] res = BitOperator.parse(tcpHeader, TcpHeader.RES_START_BIT, TcpHeader.RES_END_BIT);
-    byte returnVar = ByteOperator.parseBytesbyte(res);
-    return returnVar;
+    byte[] res = BitOperator
+    		.parse(tcpHeader, TcpHeader.RES_START_BIT, TcpHeader.RES_END_BIT);
+    return ByteOperator.parseBytesbyte(res);
   }
 
+  /**
+   * Analyze the given TCP-Header and return its flag as short.
+   * @param {tcpHeader}
+   */
   public short getFlags(byte[] tcpHeader) {
-    byte[] flags = BitOperator.parse(tcpHeader, TcpHeader.FLAGS_START_BIT, TcpHeader.FLAGS_END_BIT);
-    short returnVar = ByteOperator.parseBytesshort(flags);
-    return returnVar;
+    byte[] flags = BitOperator
+    		.parse(tcpHeader, TcpHeader.FLAGS_START_BIT, TcpHeader.FLAGS_END_BIT);
+    return ByteOperator.parseBytesshort(flags);
   }
 
+  /**
+   * Analyze the given TCP-Header and return its window as int.
+   * @param {tcpHeader}
+   */
   public int getWindow(byte[] tcpHeader) {
-    byte[] window = BitOperator.parse(tcpHeader, TcpHeader.WINDOW_START_BIT, TcpHeader.WINDOW_END_BIT);
-    int returnVar = ByteOperator.parseBytesint(window);
-    return returnVar;
+    byte[] window = BitOperator
+    		.parse(tcpHeader, TcpHeader.WINDOW_START_BIT, TcpHeader.WINDOW_END_BIT);
+    return ByteOperator.parseBytesint(window);
   }
 
   public String getChecksum(byte[] tcpHeader) {
-    byte[] checksum = BitOperator.parse(tcpHeader, TcpHeader.CHECKSUM_START_BIT, TcpHeader.CHECKSUM_END_BIT);
+    byte[] checksum = BitOperator
+    		.parse(tcpHeader, TcpHeader.CHECKSUM_START_BIT, TcpHeader.CHECKSUM_END_BIT);
     return Beautify.beautify(checksum, "hex");
   }
 
   public int getUrgentPtr(byte[] tcpHeader) {
-    byte[] urgentptr = BitOperator.parse(tcpHeader, TcpHeader.URGENTPTR_START_BIT, TcpHeader.URGENTPTR_END_BIT);
-    int returnVar = ByteOperator.parseBytesint(urgentptr);
-    return returnVar;
+    byte[] urgentptr = BitOperator
+    		.parse(tcpHeader, TcpHeader.URGENTPTR_START_BIT, TcpHeader.URGENTPTR_END_BIT);
+    return ByteOperator.parseBytesint(urgentptr);
   }
 
   @Subscribe
@@ -140,15 +181,20 @@ public class TcpAnalyzer implements CustomAnalyzer {
       entity.setFlags(getFlags(tcpHeader));
       entity.setDataOffset(getDataOffset(tcpHeader));
       IndexQueryBuilder builder = new IndexQueryBuilder();
-      IndexQuery query = builder.withIndexName(this.indexName).withType("tcp").withId(String.valueOf(packetWrapper.getPacketId())).withObject(entity).build();
+      IndexQuery query = builder
+    		  .withIndexName(this.indexName)
+    		  .withType("tcp")
+    		  .withId(String.valueOf(packetWrapper.getPacketId()))
+    		  .withObject(entity).build();
       repository.save(query);
     }
   }
 
+  /**
+   * returns the next header-type as string.
+   */ 
   public String setNextProtocolType() {
     String nextHeaderType = "NO_CONDITIONAL_HEADER_FIELD";
-    switch(nextHeaderType) {
-      default: return Protocol.get("END_PROTOCOL");
-    }
+    return Protocol.get("END_PROTOCOL");
   }
 }
