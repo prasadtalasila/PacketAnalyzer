@@ -1,5 +1,9 @@
 package in.ac.bits.protocolanalyzer.persistence.repository;
 
+import com.google.common.eventbus.EventBus;
+
+import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
+
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Timer;
@@ -8,6 +12,10 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import lombok.extern.log4j.Log4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +23,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Component;
 
-import com.google.common.eventbus.EventBus;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
-import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
 
 @Component
 @Scope("prototype")
@@ -44,6 +45,10 @@ public class AnalysisRepository {
 
 	private int highWaterMark;
 
+	/**
+	   * Configures the instance according to the parameters.
+	   * @param {eventBus}
+	   */
 	public void configure(EventBus eventBus) {
 		this.queries = new ArrayBlockingQueue<>(100000);
 		executorService = Executors.newFixedThreadPool(2);
@@ -70,6 +75,9 @@ public class AnalysisRepository {
 		queries.add(query);
 	}
 
+	/**
+	*	Starts the analysis repository. 
+	*/
 	public void start() {
 		log.info("Starting analysis repository...");
 		TimerTask pull = new TimerTask() {
@@ -81,13 +89,15 @@ public class AnalysisRepository {
 					// log.info(">> AnalysisRepository: " +
 					// System.currentTimeMillis() + " SIZE: " + size);
 					if (size < bucketCapacity) {
-						while (!queries.isEmpty() && size < bucketCapacity) {
+						while (!queries.isEmpty()
+								&& size < bucketCapacity) {
 							currentBucket.add(queries.poll());
 							size++;
 						}
 					} else {
 						saveRepo.setBucket(currentBucket);
-						log.info(">> Saving bucket in SaveRepository at " + System.currentTimeMillis());
+						log.info(">> Saving bucket in SaveRepository at " 
+						+ System.currentTimeMillis());
 						if (!saveRepo.isRunning()) {
 							executorService.execute(saveRepo);
 						}
@@ -110,8 +120,10 @@ public class AnalysisRepository {
 	}
 
 	/**
-	*	AnalysisRepo repeatedly checks the size of the Queue in SaveRepo everytime a bucket is filled.
-	*	If the number of buckets is more than high water-mark. Analysis stops.
+	*	AnalysisRepo repeatedly checks the size 
+	*   of the Queue in SaveRepo everytime a bucket is filled.
+	*	If the number of buckets is more
+	*   than high water-mark. Analysis stops.
 	*/
 	private void checkBucketLevel() {
 		// log.info("BUCKET SIZE: " + saveRepo.getBucketSize() + " ||

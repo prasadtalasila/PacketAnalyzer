@@ -34,6 +34,12 @@ public class IcmpAnalyzer implements CustomAnalyzer {
 
   private EventBus eventBus;
 
+  /**
+   * Configures the instance according to the parameters.
+   * @param {eventBus}
+   * @param {repository}
+   * @param {sessionName}
+   */
   public void configure(EventBus eventBus, AnalysisRepository repository, String sessionName) {
     this.eventBus = eventBus;
     this.eventBus.register(this);
@@ -45,7 +51,8 @@ public class IcmpAnalyzer implements CustomAnalyzer {
     Packet packet = packetWrapper.getPacket();
     int startByte = packetWrapper.getStartByte();
     byte[] rawPacket = packet.getRawData();
-    this.icmpHeader = Arrays.copyOfRange(rawPacket, startByte, startByte + IcmpHeader.TOTAL_HEADER_LENGTH);
+    this.icmpHeader = Arrays
+    		.copyOfRange(rawPacket, startByte, startByte + IcmpHeader.TOTAL_HEADER_LENGTH);
   }
 
   public void setStartByte(PacketWrapper packetWrapper) {
@@ -57,26 +64,40 @@ public class IcmpAnalyzer implements CustomAnalyzer {
   }
 
   public void publishTypeDetectionEvent(String nextPacketType, int startByte, int endByte) {
-    this.eventBus.post(new PacketTypeDetectionEvent(nextPacketType, startByte, endByte));
+    this.eventBus
+    .post(new PacketTypeDetectionEvent(nextPacketType, startByte, endByte));
   }
 
-  public short getType_(byte[] icmpHeader) {
-    byte[] type_ = BitOperator.parse(icmpHeader, IcmpHeader.TYPE__START_BIT, IcmpHeader.TYPE__END_BIT);
-    short returnVar = ByteOperator.parseBytesshort(type_);
-    return returnVar;
+  /**
+   * Analyze the given ICMP-Header and return its type as short.
+   * @param {icmpHeader}
+   */
+  public short getType(byte[] icmpHeader) {
+    byte[] type = BitOperator
+    		.parse(icmpHeader, IcmpHeader.TYPE__START_BIT, IcmpHeader.TYPE__END_BIT);
+    return  ByteOperator.parseBytesshort(type);
   }
 
+  /**
+   * Analyze the given ICMP-Header and return its code as short.
+   * @param {icmpHeader}
+   */
   public short getCode(byte[] icmpHeader) {
-    byte[] code = BitOperator.parse(icmpHeader, IcmpHeader.CODE_START_BIT, IcmpHeader.CODE_END_BIT);
-    short returnVar = ByteOperator.parseBytesshort(code);
-    return returnVar;
+    byte[] code = BitOperator
+    		.parse(icmpHeader, IcmpHeader.CODE_START_BIT, IcmpHeader.CODE_END_BIT);
+   return ByteOperator.parseBytesshort(code);
   }
 
   public String getHdrChecksum(byte[] icmpHeader) {
-    byte[] hdrchecksum = BitOperator.parse(icmpHeader, IcmpHeader.HDRCHECKSUM_START_BIT, IcmpHeader.HDRCHECKSUM_END_BIT);
+    byte[] hdrchecksum = BitOperator
+    		.parse(icmpHeader, IcmpHeader.HDRCHECKSUM_START_BIT, IcmpHeader.HDRCHECKSUM_END_BIT);
     return Beautify.beautify(hdrchecksum, "hex");
   }
 
+  /**
+   * Analyze the given PacketWrapper object and save it in repository
+   * @param {packetWrapper}
+   */
   @Subscribe
   public void analyze(PacketWrapper packetWrapper) {
     if (Protocol.get("ICMP").equalsIgnoreCase(packetWrapper.getPacketType())) {
@@ -88,18 +109,23 @@ public class IcmpAnalyzer implements CustomAnalyzer {
       IcmpEntity entity = new IcmpEntity();
       entity.setPacketId(packetWrapper.getPacketId());
       entity.setHdrChecksum(getHdrChecksum(icmpHeader));
-      entity.setType_(getType_(icmpHeader));
+      entity.setType_(getType(icmpHeader));
       entity.setCode(getCode(icmpHeader));
       IndexQueryBuilder builder = new IndexQueryBuilder();
-      IndexQuery query = builder.withIndexName(this.indexName).withType("icmp").withId(String.valueOf(packetWrapper.getPacketId())).withObject(entity).build();
+      IndexQuery query = builder
+    		  .withIndexName(this.indexName)
+    		  .withType("icmp")
+    		  .withId(String.valueOf(packetWrapper.getPacketId()))
+    		  .withObject(entity).build();
       repository.save(query);
     }
   }
 
+  /**
+   * returns the next header-type as string.
+   */ 
   public String setNextProtocolType() {
     String nextHeaderType = "NO_CONDITIONAL_HEADER_FIELD";
-    switch(nextHeaderType) {
-      default: return Protocol.get("END_PROTOCOL");
-    }
+    return Protocol.get("END_PROTOCOL");
   }
 }
