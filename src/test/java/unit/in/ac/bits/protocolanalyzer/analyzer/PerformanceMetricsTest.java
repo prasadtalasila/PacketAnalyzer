@@ -32,8 +32,6 @@ public class PerformanceMetricsTest {
 	@Test
 	public void testGetterSetter() {
 
-		long linkStart = System.currentTimeMillis();
-		long linkEnd = System.currentTimeMillis() + 5000;
 		
 		String sessionName = "session_1234";
 		assertEquals(null, metrics.getSessionName());
@@ -50,9 +48,11 @@ public class PerformanceMetricsTest {
 		metrics.setPcapSize(pcapSize);
 		assertThat(metrics.getPcapSize(), is(pcapSize));
 
+		long linkStart = System.currentTimeMillis();
 		metrics.setLinkStart(linkStart);
 		assertThat(metrics.getLinkStart(), is(linkStart));
 
+		long linkEnd = System.currentTimeMillis() + 5000;
 		metrics.setLinkEnd(linkEnd);
 		assertThat(metrics.getLinkEnd(), is(linkEnd));
 
