@@ -1,9 +1,11 @@
 package integration.in.ac.bits.protocolanalyzer.mvc.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import in.ac.bits.protocolanalyzer.mvc.model.Experiment;
+import integration.config.in.ac.bits.protocolanalyzer.mvc.model.ExperimentTestConfig;
 
 import org.json.JSONObject;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +18,10 @@ import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.context.WebApplicationContext;
 
-import in.ac.bits.protocolanalyzer.mvc.model.Experiment;
-import integration.config.in.ac.bits.protocolanalyzer.mvc.model.ExperimentTestConfig;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = ExperimentTestConfig.class, loader = AnnotationConfigWebContextLoader.class)
+@ContextConfiguration(classes = ExperimentTestConfig.class,
+					  loader = AnnotationConfigWebContextLoader.class)
 public class ExperimentTest{
 	@Autowired
 	private WebApplicationContext context;
@@ -43,7 +43,8 @@ public class ExperimentTest{
 	@Test
 	public void testExperiment() throws Exception {
 		String protocolGraphPath = System.getProperty("user.dir") + "/data/graph.p4";
-		String pcapPath = System.getProperty("user.dir") + "/data/packet/DNS_Traffic000.pcap";
+		String pcapPath = System.getProperty("user.dir") 
+				+ "/data/packet/DNS_Traffic000.pcap";
 		experiment.init(pcapPath  , protocolGraphPath);
 		String experimentResults = experiment.analyze();
 	    JSONObject jsonObj = new JSONObject(experimentResults);

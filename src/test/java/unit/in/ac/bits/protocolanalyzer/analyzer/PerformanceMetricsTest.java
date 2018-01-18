@@ -1,4 +1,7 @@
 package unit.in.ac.bits.protocolanalyzer.analyzer;
+
+import in.ac.bits.protocolanalyzer.analyzer.PerformanceMetrics;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -11,11 +14,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import in.ac.bits.protocolanalyzer.analyzer.PerformanceMetrics;
 import unit.config.in.ac.bits.protocolanalyzer.analyzer.PerformanceMetricsConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = PerformanceMetricsConfig.class, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = PerformanceMetricsConfig.class,
+					  loader = AnnotationConfigContextLoader.class)
 public class PerformanceMetricsTest {
 
 	@Autowired
@@ -29,31 +32,20 @@ public class PerformanceMetricsTest {
 	@Test
 	public void testGetterSetter() {
 
-		String sessionName = "session_1234";
-		String pcapPath = "path/to/pcap/file.pcap";
-		double pcapSize = 123456789.1234;
-
 		long linkStart = System.currentTimeMillis();
 		long linkEnd = System.currentTimeMillis() + 5000;
-
-		long networkStart = linkStart;
-		long networkEnd = linkEnd;
-
-		long transportStart = linkStart;
-		long transportEnd = linkEnd + 1;
-
-		long endTime = linkEnd + 5000;
-
-		long packetCount = 20123;
-
+		
+		String sessionName = "session_1234";
 		assertEquals(null, metrics.getSessionName());
 		metrics.setSessionName(sessionName);
 		assertEquals(sessionName, metrics.getSessionName());
 
+		String pcapPath = "path/to/pcap/file.pcap";
 		assertEquals(null, metrics.getPcapPath());
 		metrics.setPcapPath(pcapPath);
 		assertEquals(pcapPath, metrics.getPcapPath());
 
+		double pcapSize = 123456789.1234;
 		assertThat(metrics.getPcapSize(), is(0D));
 		metrics.setPcapSize(pcapSize);
 		assertThat(metrics.getPcapSize(), is(pcapSize));
@@ -64,26 +56,32 @@ public class PerformanceMetricsTest {
 		metrics.setLinkEnd(linkEnd);
 		assertThat(metrics.getLinkEnd(), is(linkEnd));
 
+		long networkStart = linkStart;
 		assertThat(metrics.getNetworkStart(), is(0L));
 		metrics.setNetworkStart(networkStart);
 		assertThat(metrics.getNetworkStart(), is(networkStart));
 
+		long networkEnd = linkEnd;
 		assertThat(metrics.getNetworkEnd(), is(0L));
 		metrics.setNetworkEnd(networkEnd);
 		assertThat(metrics.getNetworkEnd(), is(networkEnd));
 
+		long transportStart = linkStart;
 		assertThat(metrics.getTransportStart(), is(0L));
 		metrics.setTransportStart(transportStart);
 		assertThat(metrics.getTransportStart(), is(transportStart));
 
+		long transportEnd = linkEnd + 1;
 		assertThat(metrics.getTransportEnd(), is(0L));
 		metrics.setTransportEnd(transportEnd);
 		assertThat(metrics.getTransportEnd(), is(transportEnd));
 
+		long endTime = linkEnd + 5000;
 		assertThat(metrics.getEndTime(), is(0L));
 		metrics.setEndTime(endTime);
 		assertThat(metrics.getEndTime(), is(endTime));
 
+		long packetCount = 20123;
 		assertThat(metrics.getPacketCount(), is(0L));
 		metrics.setPacketCount(packetCount);
 		assertThat(metrics.getPacketCount(), is(packetCount));

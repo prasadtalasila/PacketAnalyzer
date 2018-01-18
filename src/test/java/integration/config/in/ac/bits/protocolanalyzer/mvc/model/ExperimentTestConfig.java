@@ -1,11 +1,7 @@
 package integration.config.in.ac.bits.protocolanalyzer.mvc.model;
 
-import org.mockito.Mock;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-
 import in.ac.bits.protocolanalyzer.analyzer.AnalyzerCell;
+import in.ac.bits.protocolanalyzer.analyzer.EventBusFactory;
 import in.ac.bits.protocolanalyzer.analyzer.PcapAnalyzer;
 import in.ac.bits.protocolanalyzer.analyzer.PerformanceMetrics;
 import in.ac.bits.protocolanalyzer.analyzer.Session;
@@ -25,7 +21,11 @@ import in.ac.bits.protocolanalyzer.protocol.Protocol;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolChecker;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolGraph;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolGraphParser;
-import in.ac.bits.protocolanalyzer.analyzer.EventBusFactory;
+
+import org.mockito.Mock;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 
 @Configuration
 public class ExperimentTestConfig {
