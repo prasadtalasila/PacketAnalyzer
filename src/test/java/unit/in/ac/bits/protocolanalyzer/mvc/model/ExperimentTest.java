@@ -90,30 +90,17 @@ public class ExperimentTest {
 	    	String pcapPath = System.getProperty(CURRENT_DIRECTORY)
 	    			+ "/data/packet/DNS_Traffic000.pcap";
 	    	
-	    	String protocolGraphStr = "graph start {\n" 
-	    			+"\n" 
- 					+"	ethernet;\n" 
- 					+"\n" 
- 					+"}\n" 
- 					+"\n" 
+	    	String protocolGraphStr = "graph start {\n" +"\n" 
+ 					+"	ethernet;\n" +"\n" +"}\n" +"\n" 
  					+"graph ethernet {\n" 
  					+"	switch(ethertype) {\n" 
- 					+"		case 0800:			 ipv4;\n" 
- 					+"	}\n" 
- 					+"}\n" 
+ 					+"		case 0800:			 ipv4;\n" +"	}\n" +"}\n" 
  					+"graph ipv4 {\n" 
  					+"	switch(protocol) {\n" 
  					+"		case 06: tcp;\n" 
- 					+"	}\n" 
- 					+"}\n" 
- 					+"\n" 
- 					+"\n" 
- 					+"graph tcp {\n" 
- 					+"\n" 
- 					+"}\n" 
- 					+"\n" 
- 					+"graph end {\n" 
- 					+"}";
+ 					+"	}\n" +"}\n" +"\n" +"\n" 
+ 					+"graph tcp {\n" +"\n" +"}\n" +"\n" 
+ 					+"graph end {\n" +"}";
 			experiment.initWithPcapFileCheck(pcapPath, protocolGraphStr);
 			assertEquals(pcapPath,experiment.getPcapPath());
 			assertEquals(protocolGraphStr,experiment.getProtocolGraphStr());

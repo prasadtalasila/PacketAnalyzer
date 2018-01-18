@@ -30,7 +30,7 @@ public class PerformanceMetricsTest {
 	}
 
 	@Test
-	public void testGetterSetter() {
+	public void testGetterSetter_A() {
 
 		
 		String sessionName = "session_1234";
@@ -47,19 +47,29 @@ public class PerformanceMetricsTest {
 		assertThat(metrics.getPcapSize(), is(0D));
 		metrics.setPcapSize(pcapSize);
 		assertThat(metrics.getPcapSize(), is(pcapSize));
-
+		
+		long packetCount = 20123;
+		assertThat(metrics.getPacketCount(), is(0L));
+		metrics.setPacketCount(packetCount);
+		assertThat(metrics.getPacketCount(), is(packetCount));
+		
 		long linkStart = System.currentTimeMillis();
-		metrics.setLinkStart(linkStart);
-		assertThat(metrics.getLinkStart(), is(linkStart));
-
-		long linkEnd = System.currentTimeMillis() + 5000;
-		metrics.setLinkEnd(linkEnd);
-		assertThat(metrics.getLinkEnd(), is(linkEnd));
-
 		long networkStart = linkStart;
 		assertThat(metrics.getNetworkStart(), is(0L));
 		metrics.setNetworkStart(networkStart);
 		assertThat(metrics.getNetworkStart(), is(networkStart));
+	}
+
+	@Test
+	public void testGetterSetter_B() {
+
+		long linkStart = System.currentTimeMillis();
+		metrics.setLinkStart(linkStart);
+		assertThat(metrics.getLinkStart(), is(linkStart));
+		
+		long linkEnd = System.currentTimeMillis() + 5000;
+		metrics.setLinkEnd(linkEnd);
+		assertThat(metrics.getLinkEnd(), is(linkEnd));
 
 		long networkEnd = linkEnd;
 		assertThat(metrics.getNetworkEnd(), is(0L));
@@ -81,12 +91,8 @@ public class PerformanceMetricsTest {
 		metrics.setEndTime(endTime);
 		assertThat(metrics.getEndTime(), is(endTime));
 
-		long packetCount = 20123;
-		assertThat(metrics.getPacketCount(), is(0L));
-		metrics.setPacketCount(packetCount);
-		assertThat(metrics.getPacketCount(), is(packetCount));
 	}
-
+	
 	@Test
 	public void testDuration() {
 		long linkStart = System.currentTimeMillis();
