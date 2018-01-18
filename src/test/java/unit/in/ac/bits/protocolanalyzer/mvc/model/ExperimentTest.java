@@ -21,7 +21,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.context.WebApplicationContext;
 
 public class ExperimentTest {
-	private static final String CURRENT_DIRECTORY = "CURRENT_DIRECTORY";
+	private static final String CURRENT_DIRECTORY = "user.dir";
 	@InjectMocks
 	private Experiment experiment;
 	
@@ -63,13 +63,13 @@ public class ExperimentTest {
 	public void testCheckFileAccessOnEmptyFile() throws Exception {
     	expectedEx.expect(Exception.class);
         expectedEx.expectMessage("Error in reading file(s) : Empty file(s)");
-    	experiment.checkFileAccess(System.getProperty("CURRENT_DIRECTORY")
+    	experiment.checkFileAccess(System.getProperty(CURRENT_DIRECTORY)
     			+ "/data/packet/test_files/empty_test_file.pcap");  
     } 
     @Test
 	public void testCheckFileAccessOnNonExistentFile() throws Exception {
         expectedEx.expectMessage("Error in reading file(s) : No such file(s) found");
-    	experiment.checkFileAccess(System.getProperty("CURRENT_DIRECTORY")
+    	experiment.checkFileAccess(System.getProperty(CURRENT_DIRECTORY)
     			+ "/data/packet/test_files/non_existent_file.pcap");   
     }
 
@@ -77,7 +77,7 @@ public class ExperimentTest {
     @Test
 	public void testCheckFileAccessOnLockedFile() throws Exception {
         expectedEx.expectMessage("Error in reading file(s) : Access denied to file(s)");
-    	experiment.checkFileAccess(System.getProperty("CURRENT_DIRECTORY")
+    	experiment.checkFileAccess(System.getProperty(CURRENT_DIRECTORY)
     			+ "/data/packet/test_files/locked_test_file.pcap");    	
     }
     
@@ -85,7 +85,7 @@ public class ExperimentTest {
     public void testInitWithPcapFileCheck() throws Exception {
     	try {
 	    	when(context.getBean(Session.class)).thenReturn(session);
-	    	String pcapPath = System.getProperty("CURRENT_DIRECTORY")
+	    	String pcapPath = System.getProperty(CURRENT_DIRECTORY)
 	    			+ "/data/packet/DNS_Traffic000.pcap";
 	    	
 	    	String protocolGraphStr = "graph start {\n" 
