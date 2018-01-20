@@ -1,18 +1,19 @@
 #!/bin/bash
-printf 'Y\n' | add-apt-repository -y ppa:webupd8team/java
-apt-get update
-echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
-apt-get install -y oracle-java8-installer
-printf 'Y\n' | apt-get install -y oracle-java8-set-default
-JAVA_HOME=/usr/lib/jvm/java-8-oracle
-export JAVA_HOME
-PATH=${JAVA_HOME}/bin:$PATH
-export PATH
 
-printf 'Y\n' | apt-get install -y maven
-printf 'Y\n' | apt-get install git
+#install java
+sudo bash scripts/java_install.sh
 
-sudo apt-get install curl
+yes | sudo apt-get -y --force-yes install curl
+yes | apt-get -y --force-yes install git
+
+#install maven
+#curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
+#sudo tar -xvzf apache-maven-3.5.2-bin.tar.gz
+#sudo mv apache-maven-3.5.2 /opt/maven 
+#export M2_HOME=/opt/maven
+#export PATH=${M2_HOME}/bin:${PATH}
+
+
 #adjust tomcat settings
 cp -rf conf/settings.xml /usr/share/maven/conf/settings.xml
 #Create a user and group named tomcat
@@ -45,16 +46,16 @@ chmod 777 /opt/darshini-es/logs
 mkdir -p /opt/darshini-logs
 chmod 777 /opt/darshini-logs
 touch /opt/darshini-logs/darshini
-chown tomcat7:tomcat7 /opt/darshini-logs/darshini
+chown tomcat:tomcat /opt/darshini-logs/darshini
 chmod 777 /opt/darshini-logs/darshini
 
 #install nodejs
 curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
 sudo bash nodesource_setup.sh
-sudo apt-get install -y nodejs
-sudo apt-get install build-essential
+yes | sudo apt-get -y --force-yes install -y nodejs
+yes | sudo apt-get -y --force-yes install build-essential
 rm nodesource_setup.sh
 
-#get the npm modules for js files of webpages
 mkdir -p src/main/webapp/WEB-INF/node_modules
-npm install --prefix src/main/webapp/WEB-INF
+#get the npm modules for js files of webpages
+yes | npm install --prefix src/main/webapp/WEB-INF
