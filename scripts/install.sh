@@ -13,6 +13,15 @@ yes | apt-get -y --force-yes install git
 #export M2_HOME=/opt/maven
 #export PATH=${M2_HOME}/bin:${PATH}
 
+#check fo installation of java, exit if not present
+JAVA_VER=$(java -version 2>&1 | grep -i version | sed 's/.*version ".*\.\(.*\)\..*"/\1/; 1q')
+if [ $JAVA_VER -ge 7 ]
+then
+	echo JAVA installed.
+else
+	echo JAVA NOT installed.
+	exit 1
+fi
 
 #adjust tomcat settings
 cp -rf conf/settings.xml /usr/share/maven/conf/settings.xml
