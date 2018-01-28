@@ -5,7 +5,6 @@ import in.ac.bits.protocolanalyzer.mvc.model.Experiment;
 import in.ac.bits.protocolanalyzer.protocol.Protocol;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolChecker;
 
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -19,9 +18,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.when;
+
+import org.mockito.MockitoAnnotations;
 
 import org.springframework.web.context.WebApplicationContext;
 
