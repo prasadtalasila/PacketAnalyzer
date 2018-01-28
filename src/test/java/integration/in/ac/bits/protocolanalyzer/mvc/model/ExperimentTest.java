@@ -3,10 +3,13 @@ package integration.in.ac.bits.protocolanalyzer.mvc.model;
 import in.ac.bits.protocolanalyzer.mvc.model.Experiment;
 import integration.config.in.ac.bits.protocolanalyzer.mvc.model.ExperimentTestConfig;
 
-import org.json.JSONObject;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.json.JSONObject;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +42,7 @@ public class ExperimentTest{
 	
 	@Test
 	public void autowiringTest() {
-		assertNotNull(experiment);
+		assertThat(experiment,is(notNullValue()));
 	}
 	
 	@Test
@@ -50,7 +53,7 @@ public class ExperimentTest{
 		experiment.init(pcapPath  , protocolGraphPath);
 		String experimentResults = experiment.analyze();
 	    JSONObject jsonObj = new JSONObject(experimentResults);
-	    assertEquals(100, jsonObj.get("packetCount"));
-	    assertEquals("success", jsonObj.get("status"));
+	    assertThat(100, equalTo(jsonObj.get("packetCount")));
+	    assertThat("success", equalTo(jsonObj.get("status")));
 	}
 }

@@ -2,10 +2,10 @@ package unit.in.ac.bits.protocolanalyzer.analyzer;
 
 import in.ac.bits.protocolanalyzer.analyzer.PerformanceMetrics;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,7 @@ public class PerformanceMetricsTest {
 
 	@Test
 	public void autowiringTest() {
-		assertNotNull(metrics);
+		assertThat(metrics,is(notNullValue()));
 	}
 
 	@Test
@@ -34,14 +34,14 @@ public class PerformanceMetricsTest {
 
 		
 		String sessionName = "session_1234";
-		assertEquals(null, metrics.getSessionName());
+		assertThat(null, equalTo(metrics.getSessionName()));
 		metrics.setSessionName(sessionName);
-		assertEquals(sessionName, metrics.getSessionName());
+		assertThat(sessionName, equalTo(metrics.getSessionName()));
 
 		String pcapPath = "path/to/pcap/file.pcap";
-		assertEquals(null, metrics.getPcapPath());
+		assertThat(null, equalTo(metrics.getPcapPath()));
 		metrics.setPcapPath(pcapPath);
-		assertEquals(pcapPath, metrics.getPcapPath());
+		assertThat(pcapPath, equalTo(metrics.getPcapPath()));
 
 		double pcapSize = 123456789.1234;
 		assertThat(metrics.getPcapSize(), is(0D));

@@ -5,8 +5,11 @@ import in.ac.bits.protocolanalyzer.mvc.model.Experiment;
 import in.ac.bits.protocolanalyzer.protocol.Protocol;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolChecker;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
@@ -16,10 +19,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.when;
 
-import org.mockito.MockitoAnnotations;
 import org.springframework.web.context.WebApplicationContext;
 
 public class ExperimentTest {
@@ -43,7 +46,7 @@ public class ExperimentTest {
 	
 	@Test
 	public void autowiringTest() {
-		assertNotNull(experiment);
+		assertThat(experiment, is(notNullValue()));
 	}
 	
 	@Rule
@@ -103,8 +106,8 @@ public class ExperimentTest {
  					+"graph tcp {\n" +"\n" +"}\n" +"\n" 
  					+"graph end {\n" +"}";
 			experiment.initWithPcapFileCheck(pcapPath, protocolGraphStr);
-			assertEquals(pcapPath,experiment.getPcapPath());
-			assertEquals(protocolGraphStr,experiment.getProtocolGraphStr());
+			assertThat(pcapPath,equalTo(experiment.getPcapPath()));
+			assertThat(protocolGraphStr,equalTo(experiment.getProtocolGraphStr()));
     	}
     	catch(Exception e){
     	      fail("Should not have thrown any exception,"

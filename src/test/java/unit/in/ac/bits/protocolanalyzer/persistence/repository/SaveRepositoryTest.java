@@ -1,10 +1,11 @@
 package unit.in.ac.bits.protocolanalyzer.persistence.repository;
 
-import static org.junit.Assert.assertEquals;
-
-import static org.junit.Assert.assertNotNull;
-
 import java.util.ArrayList;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,16 +44,16 @@ public class SaveRepositoryTest {
 
 	@Test
 	public void wiringTest() {
-		assertNotNull(saveRepo);
+		assertThat(saveRepo,is(notNullValue()));
 	}
 
 	@Test
 	public void testConfiguration() {
-		assertEquals(0, saveRepo.getBucketSize());
+		assertThat(0, equalTo(saveRepo.getBucketSize()));
 		ArrayList<IndexQuery> l = new ArrayList<IndexQuery>();
 		saveRepo.setBucket(l);
-		assertEquals(1, saveRepo.getBucketSize());
+		assertThat(1,equalTo(saveRepo.getBucketSize()));
 		saveRepo.setBucket(l);
-		assertEquals(2, saveRepo.getBucketSize());
+		assertThat(2,equalTo(saveRepo.getBucketSize()));
 	}
 }
