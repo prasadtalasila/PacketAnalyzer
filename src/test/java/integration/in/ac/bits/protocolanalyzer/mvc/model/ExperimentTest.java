@@ -3,7 +3,6 @@ package integration.in.ac.bits.protocolanalyzer.mvc.model;
 import in.ac.bits.protocolanalyzer.mvc.model.Experiment;
 import integration.config.in.ac.bits.protocolanalyzer.mvc.model.ExperimentTestConfig;
 
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
