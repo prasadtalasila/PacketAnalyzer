@@ -15,6 +15,10 @@ export M2_HOME=/opt/maven
 export M2=$M2_HOME/bin
 export MAVEN_OPTS=-Xms256m -Xmx512m
 export PATH=${M2}:${PATH}
+echo 'export M2_HOME=/opt/maven' >> /home/vagrant/.bashrc
+echo 'export M2=$M2_HOME/bin' >> /home/vagrant/.bashrc
+echo 'export MAVEN_OPTS=-Xms256m -Xmx512m' >> /home/vagrant/.bashrc
+echo 'export PATH=${M2}:${PATH}' >> /home/vagrant/.bashrc
 
 #check for installation of java, exit if not present
 JAVA_VER=$(java -version 2>&1 | grep -i version | sed 's/.*version ".*\.\(.*\)\..*"/\1/; 1q')
