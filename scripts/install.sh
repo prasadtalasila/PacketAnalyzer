@@ -6,14 +6,17 @@ sudo bash scripts/java_install.sh
 yes | sudo apt-get -y --force-yes install curl
 yes | apt-get -y --force-yes install git
 
-#install maven
-#curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
-#sudo tar -xvzf apache-maven-3.5.2-bin.tar.gz
-#sudo mv apache-maven-3.5.2 /opt/maven 
-#export M2_HOME=/opt/maven
-#export PATH=${M2_HOME}/bin:${PATH}
 
-#check fo installation of java, exit if not present
+#install maven
+curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
+sudo tar -xvzf apache-maven-3.5.2-bin.tar.gz
+sudo mv apache-maven-3.5.2 /opt/maven 
+export M2_HOME=/opt/maven
+export M2=$M2_HOME/bin
+export MAVEN_OPTS=-Xms256m -Xmx512m
+export PATH=${M2}:${PATH}
+
+#check for installation of java, exit if not present
 JAVA_VER=$(java -version 2>&1 | grep -i version | sed 's/.*version ".*\.\(.*\)\..*"/\1/; 1q')
 if [ $JAVA_VER -ge 7 ]
 then
@@ -44,8 +47,6 @@ cp -rf conf/tomcat-users.xml /opt/tomcat/conf/tomcat-users.xml
 systemctl daemon-reload
 systemctl start tomcat
 
-
-
 #copy the correct property files and create the required directories
 cp -f conf/*.properties src/main/resources/META-INF/
 mkdir -p /opt/darshini-es/data
@@ -61,10 +62,10 @@ chmod 777 /opt/darshini-logs/darshini
 #install nodejs
 curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
 sudo bash nodesource_setup.sh
-yes | sudo apt-get -y --force-yes install -y nodejs
-yes | sudo apt-get -y --force-yes install build-essential
+sudo apt-get -y install -y nodejs
+sudo apt-get -y install build-essential
 rm nodesource_setup.sh
 
 mkdir -p src/main/webapp/WEB-INF/node_modules
 #get the npm modules for js files of webpages
-yes | npm install --prefix src/main/webapp/WEB-INF
+yes | npm install --no-bin-links src/main/webapp/WEB-INF
