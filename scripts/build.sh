@@ -5,7 +5,8 @@ mvn package
 echo "] Packaging complete."
 echo ""
 echo "] Restarting tomcat ..."
-sudo service tomcat restart
+sudo bash /opt/tomcat/bin/shutdown.sh 
+sudo bash /opt/tomcat/bin/startup.sh
 sleep 5
 echo "] Restart complete."
 echo ""
