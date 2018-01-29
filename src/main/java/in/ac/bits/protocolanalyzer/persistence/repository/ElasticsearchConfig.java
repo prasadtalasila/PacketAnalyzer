@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.node.NodeBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -20,6 +21,9 @@ public class ElasticsearchConfig {
     @Resource
     private Environment environment;
 
+    @Autowired
+    ESFactory esFactoryImpl;
+    
     @Bean
     public ElasticsearchOperations elasticsearchTemplate() {
         String clusterName = environment
@@ -37,7 +41,7 @@ public class ElasticsearchConfig {
 		.getProperty("elasticsearch.path.data");
 	String logPath = environment
 		.getProperty("elasticsearch.path.logs");
-        ImmutableSettings.Builder settingsBuilder = ImmutableSettings
+      /*  ImmutableSettings.Builder settingsBuilder = ImmutableSettings
                 .settingsBuilder().put("cluster.name", clusterName)
                 .put("node.name", nodeName).put("node.data", true)
 		.put("path.data", dataPath).put("path.logs", logPath)
@@ -49,7 +53,19 @@ public class ElasticsearchConfig {
                 .put("http.cors.allow-methods", allowMethods)
                 .put("http.cors.allow-headers", allowHeaders);
         NodeBuilder builder = NodeBuilder.nodeBuilder().local(true)
-                .settings(settingsBuilder.build());
+                .settings(settingsBuilder.build());*/
+	ImmutableSettings.Builder settingsBuilder = esFactoryImpl.settingsBuilder().put("cluster.name", clusterName)
+            .put("node.name", nodeName).put("node.data", true)
+	.put("path.data", dataPath).put("path.logs", logPath)
+            .put("index.number_of_shards", 1)
+            .put("index.number_of_replicas", 0)
+            .put("http.cors.enabled",
+                    Boolean.valueOf(corsEnabled).booleanValue())
+            .put("http.cors.allow-origin", allowOrigin)
+            .put("http.cors.allow-methods", allowMethods)
+            .put("http.cors.allow-headers", allowHeaders);
+	NodeBuilder builder = esFactoryImpl.nodeBuilder().local(true)
+			.settings(settingsBuilder.build());
         return new ElasticsearchTemplate(builder.node().client());
     }
 
