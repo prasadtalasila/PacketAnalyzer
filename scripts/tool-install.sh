@@ -39,7 +39,8 @@ make
 sudo make install
 echo "export PATH=$PATH:/usr/local/bro/bin">>/etc/profile.d/3rd-party.sh
 source /etc/profile.d/3rd-party.sh
-echo "export PATH=$PATH:/usr/local/bro/bin">> /home/ubuntu/.bashrc
+echo "export PATH=$PATH:/usr/local/bro/bin" | sudo tee -a /etc/environment >/dev/null 2>&1
+source /etc/environment
 
 #Visit the link below for more details on installing and configuring bro.
 #https://www.digitalocean.com/community/tutorials/how-to-install-bro-on-ubuntu-16-04
