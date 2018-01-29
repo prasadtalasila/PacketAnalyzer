@@ -36,7 +36,7 @@ public class ElasticsearchConfigTest{
 		public ElasticsearchConfig elasticSearchConfig;
 
 
-		@Resource
+		@Mock
 	    private Environment environment;
 		
 		@Mock
@@ -57,14 +57,14 @@ public class ElasticsearchConfigTest{
 
 		@Test
 		public void testElasticsearchTemplate() {
-	        /*when(this.environment.getProperty("elasticsearch.cluster.name")).thenReturn("testClusterName");
+	        when(this.environment.getProperty("elasticsearch.cluster.name")).thenReturn("testClusterName");
 	        when(this.environment.getProperty("elasticsearch.node.name")).thenReturn("testNodeName");
 	        when(this.environment.getProperty("elasticsearch.http.cors.enabled")).thenReturn("testCorsEnabled");
 	        when(this.environment.getProperty("elasticsearch.http.cors.allow-origin")).thenReturn("testCorsAllowOrigin");
 	        when(this.environment.getProperty("elasticsearch.http.cors.allow-methods")).thenReturn("testCorsAllowMethods");
 	        when(this.environment.getProperty("elasticsearch.http.cors.allow-headers")).thenReturn("testCorsAllowHeaders");
 	        when(this.environment.getProperty("elasticsearch.path.data")).thenReturn("testPathData");
-	        when(this.environment.getProperty("elasticsearch.path.logs")).thenReturn("testPathLogs");*/
+	        when(this.environment.getProperty("elasticsearch.path.logs")).thenReturn("testPathLogs");
 	        ElasticsearchOperations testTemplate = elasticSearchConfig.elasticsearchTemplate();
 		}
 }
