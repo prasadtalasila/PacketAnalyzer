@@ -1,7 +1,17 @@
 # install java via wget site oficial oracle
 
-#JAVA_FILE_TAR, JAVA_URL_DOWNLOAD and JAVA_DIR can be entered according to your preference
+#check for installation of java, exit if present
+JAVA_VER=$(java -version 2>&1 | grep -i version | sed 's/.*version ".*\.\(.*\)\..*"/\1/; 1q')
+if [ $JAVA_VER -ge 7 ]
+then
+        echo "JAVA already installed. Aborting the installation of Java"
+	exit 0
+else
+        echo "JAVA NOT installed. Installating Java"
+fi
 
+
+#JAVA_FILE_TAR, JAVA_URL_DOWNLOAD and JAVA_DIR can be entered according to your preference
 JAVA_FILE_TAR="jdk-8u161-linux-x64.tar.gz"
 JAVA_URL_DOWNLOAD="http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/${JAVA_FILE_TAR}"
 JAVA_DIR="jdk1.8.0_161"

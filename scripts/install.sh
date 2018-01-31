@@ -46,6 +46,7 @@ sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
 
 #download and install tomcat
 curl -O http://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.27/bin/apache-tomcat-8.5.27.tar.gz
+sudo mkdir /opt/tomcat
 sudo tar xzf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
 
 #Give the tomcat user ownership over the entire installation directory:
