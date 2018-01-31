@@ -18,9 +18,9 @@ sudo mv apache-maven-3.5.2 /opt/maven
 #set shell environment variables for maven
 {
     echo 'export MAVEN_HOME=/opt/maven'
-    echo 'export MAVEN="$MAVEN_HOME/bin"'
+    echo 'export MAVEN=/opt/maven/bin'
     echo "export MAVEN_OPTS='-Xms256m -Xmx512m'"
-    echo 'export PATH="${MAVEN_HOME}:${PATH}"'
+    echo 'export PATH=/opt/maven:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/opt/jdk1.8.0_161/bin:/opt/jdk1.8.0_161/jre/bin:/opt/jdk1.8.0_161/bin:/opt/jdk1.8.0_161/jre/bin'
 } | sudo tee -a /etc/environment >/dev/null 2>&1
 
 
