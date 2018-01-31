@@ -7,8 +7,19 @@
 # Output: results in "darshini-test.log"
 ######################
 
-LOGFILE="data/log/darshini-test.log"
-WEBAPPLOG="/opt/darshini-logs/darshini"
+#print a shell command before its execution
+set -xv
+
+CONFIG=./scripts/measurements/setup.conf
+if [[ -f $CONFIG ]]
+then
+  # shellcheck disable=SC1090
+  . "$CONFIG"
+else
+  echo "The config file could not be located at ./setup.conf. Exiting."
+  exit
+fi
+
 truncate -s 0 "$LOGFILE"
 
 

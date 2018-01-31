@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#print a shell command before its execution
+set -xv
+
 echo "] Packaging the app ..."
 mvn package
 echo "] Packaging complete."

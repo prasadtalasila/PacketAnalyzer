@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#print a shell command before its execution
+set -xv
+
 echo ">> REDEPLOYING APPLICATION"
 echo ""
 echo "] Removing the war file ..."

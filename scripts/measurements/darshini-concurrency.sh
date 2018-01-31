@@ -9,9 +9,19 @@
 # Output: results in "darshini-concurrency.log", "darshini-concurrency-summary.log"
 ######################
 
-LOGFILE="data/log/darshini-test.log"
-CONCURRENCYLOG="data/log/darshini-concurrency.log"
-CONCURRENCYSUMMARY="data/log/darshini-concurrency-summary.log"
+#print a shell command before its execution
+set -xv
+
+CONFIG=./scripts/measurements/setup.conf
+if [[ -f $CONFIG ]]
+then
+  # shellcheck disable=SC1090
+  . "$CONFIG"
+else
+  echo "The config file could not be located at ./setup.conf. Exiting."
+  exit
+fi
+
 
 truncate -s 0 "$CONCURRENCYLOG"
 
@@ -78,5 +88,5 @@ sleep 10
 cat "$LOGFILE" >>  "$CONCURRENCYLOG"
 
 #summarize results into another log file
-grep -f ./scripts	/measurements/darshini-concurrency.grep "$CONCURRENCYLOG" \
+grep -f ./scripts/measurements/darshini-concurrency.grep "$CONCURRENCYLOG" \
   > "$CONCURRENCYSUMMARY"

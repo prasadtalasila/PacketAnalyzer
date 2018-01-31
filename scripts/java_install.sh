@@ -1,8 +1,14 @@
+#!/bin/bash
+
+
 # install java via wget site oficial oracle
+
+#print a shell command before its execution
+set -xv
 
 #check for installation of java, exit if present
 JAVA_VER=$(java -version 2>&1 | grep -i version | sed 's/.*version ".*\.\(.*\)\..*"/\1/; 1q')
-if [ $JAVA_VER -ge 7 ]
+if [[ $JAVA_VER -ge 7 ]]
 then
         echo "JAVA already installed. Aborting the installation of Java"
 	exit 0

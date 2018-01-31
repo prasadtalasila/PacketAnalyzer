@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#print a shell command before its execution
+set -xv
+
 #install java
 sudo bash scripts/java_install.sh
 
@@ -20,7 +23,7 @@ sudo mv apache-maven-3.5.2 /opt/maven
     echo 'export MAVEN_HOME=/opt/maven'
     echo 'export MAVEN=/opt/maven/bin'
     echo "export MAVEN_OPTS='-Xms256m -Xmx512m'"
-    echo 'export PATH=/opt/maven:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/opt/jdk1.8.0_161/bin:/opt/jdk1.8.0_161/jre/bin:/opt/jdk1.8.0_161/bin:/opt/jdk1.8.0_161/jre/bin'
+    echo 'export PATH=/opt/maven/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/opt/jdk1.8.0_161/bin:/opt/jdk1.8.0_161/jre/bin:/opt/jdk1.8.0_161/bin:/opt/jdk1.8.0_161/jre/bin'
 } | sudo tee -a /etc/environment >/dev/null 2>&1
 
 
