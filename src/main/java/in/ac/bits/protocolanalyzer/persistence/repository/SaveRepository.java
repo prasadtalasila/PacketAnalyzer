@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
@@ -21,6 +22,7 @@ import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
 import in.ac.bits.protocolanalyzer.analyzer.event.SaveRepoEndEvent;
 
 @Component
+@ComponentScan("config.in.ac.bits.protocolanalyzer.persistence.repository")
 @Scope("prototype")
 @Log4j
 public class SaveRepository implements Runnable {
@@ -29,6 +31,7 @@ public class SaveRepository implements Runnable {
 	private ElasticsearchTemplate template;
 	
 	private ConcurrentLinkedQueue<ArrayList<IndexQuery>> buckets;
+	
 	
 	private boolean isRunning = false;
 
@@ -44,7 +47,7 @@ public class SaveRepository implements Runnable {
 		return isRunning;
 	}
 	
-	//eventBus is getting initialized below through a sort of setter-method. Hence, DI is managed/
+	//eventBus, getting initialized through a setter-method, DI is managed/
 	public void configure(EventBus eventBus) {
 		setBuckets(new ConcurrentLinkedQueue<ArrayList<IndexQuery>>());
 		this.eventBus = eventBus;
@@ -102,8 +105,7 @@ public class SaveRepository implements Runnable {
             log.info("Used memory is bytes: " + memory);
             log.info(System.currentTimeMillis() + " Used memory is megabytes: "+ bytesToMegabytes(memory));
 
-			log.info(
-					"SaveRepository started at " + System.currentTimeMillis() + " with bucket size: " + getBuckets().size());
+			log.info("SaveRepository started at " + System.currentTimeMillis() + " with bucket size: " + getBuckets().size());
 
 			if ( isAnalysisOnly() ) {
 				log.info("Not saving ... but polling");
