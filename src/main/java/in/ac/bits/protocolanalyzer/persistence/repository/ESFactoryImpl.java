@@ -1,40 +1,32 @@
 package in.ac.bits.protocolanalyzer.persistence.repository;
 
-import javax.annotation.Resource;
 
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.springframework.core.env.Environment;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.elasticsearch.node.NodeBuilder;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Component
-@Scope("prototype")
-@EnableElasticsearchRepositories(basePackages = "in.ac.bits.protocolanalyzer.persistence.repository")
-@PropertySource(value = "classpath:META-INF/elasticsearch.properties")
 public class ESFactoryImpl implements ESFactory {
 
-	@Resource
-    private Environment environment;
+	@Autowired
+	private Environment environment;
 	
 	@Override
-	public ImmutableSettings.Builder settingsBuilder() {
-		String clusterName = environment
+	public ImmutableSettings.Builder settingsBuilder(Environment env) {
+		String clusterName = env
                 .getProperty("elasticsearch.cluster.name");
-        String nodeName = environment.getProperty("elasticsearch.node.name");
+        String nodeName = env.getProperty("elasticsearch.node.name");
         String corsEnabled = environment
                 .getProperty("elasticsearch.http.cors.enabled");
-        String allowOrigin = environment
+        String allowOrigin = env
                 .getProperty("elasticsearch.http.cors.allow-origin");
-        String allowMethods = environment
+        String allowMethods = env
                 .getProperty("elasticsearch.http.cors.allow-methods");
-        String allowHeaders = environment
+        String allowHeaders = env
                 .getProperty("elasticsearch.http.cors.allow-headers");
-	String dataPath = environment
+	String dataPath = env
 		.getProperty("elasticsearch.path.data");
-	String logPath = environment
+	String logPath = env
 		.getProperty("elasticsearch.path.logs");
 		ImmutableSettings.Builder settingBuilder = ImmutableSettings
                 .settingsBuilder().put("cluster.name",clusterName)
@@ -56,6 +48,4 @@ public class ESFactoryImpl implements ESFactory {
 				.settings(settingsBuilder.build());
 		return nodebuilder;
 	}
-
-
 }
