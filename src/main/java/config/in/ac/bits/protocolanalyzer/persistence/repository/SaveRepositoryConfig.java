@@ -13,6 +13,7 @@ import org.springframework.data.elasticsearch.core.query.IndexQuery;
 
 @Configuration
 public class SaveRepositoryConfig {
+	
 	@Bean
 	public Context ctx(){
 		try {

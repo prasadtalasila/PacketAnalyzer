@@ -38,7 +38,6 @@ import org.springframework.data.elasticsearch.core.query.IndexQuery;
 @Configuration
 public class ExperimentTestConfig {
 	
-	
 	@Mock
 	public ElasticsearchTemplate template;
 	
