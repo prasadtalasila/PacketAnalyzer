@@ -32,7 +32,7 @@ public class ElasticSearchConfigTest{
 		public ElasticSearchConfig elasticSearchConfig;
 		
 		@Before
-		public void setup() throws Exception {
+		public void setup(){
 			MockitoAnnotations.initMocks(this);
 		}
 

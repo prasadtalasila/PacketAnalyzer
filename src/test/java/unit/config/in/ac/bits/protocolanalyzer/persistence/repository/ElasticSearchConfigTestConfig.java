@@ -1,9 +1,9 @@
 package unit.config.in.ac.bits.protocolanalyzer.persistence.repository;
 
 
+import in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchConfig;
 import in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchFactory;
 import in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchFactoryImpl;
-import in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;

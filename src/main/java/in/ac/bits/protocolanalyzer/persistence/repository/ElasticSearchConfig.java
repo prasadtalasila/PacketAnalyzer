@@ -18,8 +18,10 @@ public class ElasticSearchConfig {
 	@Autowired
     ElasticSearchFactory esFactoryImpl;
     
-	/*
+	/**
 	 * Returns ElasticsearchTemplate made using the elasticsearch.properties file.
+	 * 
+	 * @param Environment object
 	 */
     @Bean
     public ElasticsearchOperations elasticsearchTemplate(Environment env) {
