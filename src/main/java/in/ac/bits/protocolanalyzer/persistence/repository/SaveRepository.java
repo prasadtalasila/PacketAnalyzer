@@ -14,7 +14,6 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
@@ -30,8 +29,11 @@ public class SaveRepository implements Runnable {
 	@Autowired
 	private ElasticsearchTemplate template;
 	
+	@Autowired
 	private ConcurrentLinkedQueue<ArrayList<IndexQuery>> buckets;
 	
+	@Autowired
+	private Context ctx;
 	
 	private boolean isRunning = false;
 
@@ -47,13 +49,11 @@ public class SaveRepository implements Runnable {
 		return isRunning;
 	}
 	
-	//eventBus, getting initialized through a setter-method, DI is managed/
 	public void configure(EventBus eventBus) {
-		setBuckets(new ConcurrentLinkedQueue<ArrayList<IndexQuery>>());
 		this.eventBus = eventBus;
 		this.eventBus.register(this);
 		try {
-			Context ctx = new InitialContext();
+			//Context ctx = new InitialContext();
 			Context env = (Context) ctx.lookup("java:comp/env");
 			setLowWaterMark(Integer.parseInt((String) env.lookup("lowWaterMark")));
 			log.info("LOW WATER MARK READ FROM FILE IS: " + getLowWaterMark());
@@ -63,7 +63,7 @@ public class SaveRepository implements Runnable {
 		}
 		//Set the value of the analysisOnly
 		try {
-			Context ctx = new InitialContext();
+			//Context ctx = new InitialContext();
 			Context env = (Context) ctx.lookup("java:comp/env");
 			if (((String) env.lookup("analysisOnly")).equals("true")) {
 				setAnalysisOnly(true);
@@ -105,7 +105,8 @@ public class SaveRepository implements Runnable {
             log.info("Used memory is bytes: " + memory);
             log.info(System.currentTimeMillis() + " Used memory is megabytes: "+ bytesToMegabytes(memory));
 
-			log.info("SaveRepository started at " + System.currentTimeMillis() + " with bucket size: " + getBuckets().size());
+			log.info("SaveRepository started at " + System.currentTimeMillis() + 
+					" with bucket size: " + getBuckets().size());
 
 			if ( isAnalysisOnly() ) {
 				log.info("Not saving ... but polling");
