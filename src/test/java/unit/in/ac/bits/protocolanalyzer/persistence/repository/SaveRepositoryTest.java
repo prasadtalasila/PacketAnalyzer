@@ -3,7 +3,6 @@ package unit.in.ac.bits.protocolanalyzer.persistence.repository;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
@@ -20,8 +19,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
-import org.springframework.test.context.ContextConfiguration;
 import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import in.ac.bits.protocolanalyzer.persistence.repository.SaveRepository;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;

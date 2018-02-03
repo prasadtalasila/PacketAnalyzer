@@ -105,8 +105,8 @@ public class SaveRepository implements Runnable {
             log.info("Used memory is bytes: " + memory);
             log.info(System.currentTimeMillis() + " Used memory is megabytes: "+ bytesToMegabytes(memory));
 
-			log.info("SaveRepository started at " + System.currentTimeMillis() + 
-					" with bucket size: " + getBuckets().size());
+			log.info("SaveRepository started at " + System.currentTimeMillis() 
+			+ " with bucket size: " + getBuckets().size());
 
 			if ( isAnalysisOnly() ) {
 				log.info("Not saving ... but polling");

@@ -1,6 +1,5 @@
 package config.in.ac.bits.protocolanalyzer.persistence.repository;
 
-
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -14,13 +13,11 @@ import org.springframework.data.elasticsearch.core.query.IndexQuery;
 
 @Configuration
 public class SaveRepositoryConfig {
-	
 	@Bean
 	public Context ctx(){
 		try {
 			return new InitialContext();
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
