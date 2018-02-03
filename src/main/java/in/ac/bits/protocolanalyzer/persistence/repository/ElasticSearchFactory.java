@@ -5,7 +5,9 @@ import org.elasticsearch.node.NodeBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface ESFactory {
+public interface ElasticSearchFactory {
+	
 	public NodeBuilder nodeBuilder(Builder settingsBuilder);
-	Builder settingsBuilder(org.springframework.core.env.Environment env);
+	
+	public Builder settingsBuilder(org.springframework.core.env.Environment env);
 }

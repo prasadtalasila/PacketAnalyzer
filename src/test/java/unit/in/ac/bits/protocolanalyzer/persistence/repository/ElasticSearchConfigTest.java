@@ -1,9 +1,9 @@
 package unit.in.ac.bits.protocolanalyzer.persistence.repository;
 
+import in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchConfig;
+
 import static org.hamcrest.CoreMatchers.is;
-
 import static org.hamcrest.CoreMatchers.notNullValue;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Before;
@@ -17,12 +17,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchConfig;
 import unit.config.in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchConfigTestConfig;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ElasticSearchConfigTestConfig.class, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = ElasticSearchConfigTestConfig.class,
+	loader = AnnotationConfigContextLoader.class)
 public class ElasticSearchConfigTest{
 
 		@Autowired 
@@ -33,7 +33,8 @@ public class ElasticSearchConfigTest{
 		
 		@Before
 		public void setup() throws Exception {
-			MockitoAnnotations.initMocks(this);}
+			MockitoAnnotations.initMocks(this);
+		}
 
 		@Test
 		public void wiringTest() {
@@ -42,7 +43,8 @@ public class ElasticSearchConfigTest{
 
 		@Test
 		public void testElasticsearchTemplate() {
-			ElasticsearchOperations e = elasticSearchConfig.elasticsearchTemplate(env);	
-			assertThat(e, is(notNullValue()));
+			ElasticsearchOperations testTemplate = elasticSearchConfig
+					.elasticsearchTemplate(env);	
+			assertThat(testTemplate, is(notNullValue()));
 		}
 }

@@ -1,6 +1,5 @@
 package in.ac.bits.protocolanalyzer.persistence.repository;
 
-
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.node.NodeBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +11,16 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "in.ac.bits.protocolanalyzer.persistence.repository")
+@EnableElasticsearchRepositories(basePackages = 
+		"in.ac.bits.protocolanalyzer.persistence.repository")
 public class ElasticSearchConfig {
     
 	@Autowired
-    ESFactory esFactoryImpl;
+    ElasticSearchFactory esFactoryImpl;
     
+	/*
+	 * Returns ElasticsearchTemplate made using the elasticsearch.properties file.
+	 */
     @Bean
     public ElasticsearchOperations elasticsearchTemplate(Environment env) {
 		ImmutableSettings.Builder settingsBuilder = esFactoryImpl.settingsBuilder(env);
