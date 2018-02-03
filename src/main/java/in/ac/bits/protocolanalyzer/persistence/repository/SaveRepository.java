@@ -55,25 +55,25 @@ public class SaveRepository implements Runnable {
 		try {
 			//Context ctx = new InitialContext();
 			Context env = (Context) ctx.lookup("java:comp/env");
-			setLowWaterMark(Integer.parseInt((String) env.lookup("lowWaterMark")));
+			lowWaterMark = Integer.parseInt((String) env.lookup("lowWaterMark"));
 			log.info("LOW WATER MARK READ FROM FILE IS: " + getLowWaterMark());
 		} catch (NamingException e) {
 			log.info("EXCEPTION IN READING FROM CONFIG FILE");
-			setLowWaterMark(3);
+			lowWaterMark = 3;
 		}
 		//Set the value of the analysisOnly
 		try {
 			//Context ctx = new InitialContext();
 			Context env = (Context) ctx.lookup("java:comp/env");
 			if (((String) env.lookup("analysisOnly")).equals("true")) {
-				setAnalysisOnly(true);
+				analysisOnly = true;
 			} else {
-				setAnalysisOnly(false);
+				analysisOnly = false;
 			}
 			log.info("Perform only analysis: " + isAnalysisOnly());
 		} catch (NamingException e) {
 			log.info("EXCEPTION IN READING FROM CONFIG FILE FOR analysisOnly .. setting false by default");
-			setAnalysisOnly(false);
+			analysisOnly = false;
 		}
 	}
 
@@ -139,7 +139,7 @@ public class SaveRepository implements Runnable {
 	@Subscribe
 	public void end(EndAnalysisEvent event) {
 		//log.info("Save repo received signal that analysis has ended");
-		setAnalysisRunning(false);
+		analysisRunning = false;
 	}
 
 	private void publishEndOfSave(long time) {
