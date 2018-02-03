@@ -21,7 +21,7 @@ public class ElasticSearchConfig {
 	/**
 	 * Returns ElasticsearchTemplate made using the elasticsearch.properties file.
 	 * 
-	 * @param Environment object
+	 * @param  env
 	 */
     @Bean
     public ElasticsearchOperations elasticsearchTemplate(Environment env) {

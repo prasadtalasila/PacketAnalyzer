@@ -1,6 +1,5 @@
 package unit.config.in.ac.bits.protocolanalyzer.persistence.repository;
 
-
 import in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchConfig;
 import in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchFactory;
 import in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchFactoryImpl;
