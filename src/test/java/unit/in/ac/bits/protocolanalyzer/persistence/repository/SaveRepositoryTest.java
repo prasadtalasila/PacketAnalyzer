@@ -1,19 +1,17 @@
 package unit.in.ac.bits.protocolanalyzer.persistence.repository;
 
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-
-
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,8 +21,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import in.ac.bits.protocolanalyzer.persistence.repository.SaveRepository;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
@@ -56,7 +54,6 @@ public class SaveRepositoryTest {
 		saveRepo.configure(bus);
 		assertThat(saveRepo.getLowWaterMark(), is(notNullValue(Integer.class)));
 		assertThat(saveRepo.getLowWaterMark(), isA(Integer.class));
-		
 	}
 
 	@Test
@@ -89,12 +86,9 @@ public class SaveRepositoryTest {
 		assertThat(saveRepo.getBuckets(), is(notNullValue(ConcurrentLinkedQueue.class)));
 		assertThat(saveRepo.getBuckets(), isA(ConcurrentLinkedQueue.class));
 	
-		saveRepo.setAnalysisOnly(false);
-		
 		saveRepo.setAnalysisOnly(true);
 		saveRepo.run();
 		assertEquals(false, saveRepo.isRunning());
-		
 	}
 	
 	@Test
