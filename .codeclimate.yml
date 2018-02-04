@@ -16,10 +16,17 @@ engines:
     enabled: true
   fixme:
     enabled: true
-  radon:
+  pmd:
     enabled: true
-  rubocop:
+    config:
+      rules:
+        - "java-basic"
+        - "java-design"
+  sonar-java:
     enabled: true
+    channel: "beta"
+    config:
+      sonar.java.source: 7
 ratings:
   paths:
   - "**.java"
@@ -27,12 +34,7 @@ ratings:
   - "**.inc"
   - "**.js"
   - "**.jsx"
-  - "**.module"
-  - "**.php"
-  - "**.py"
-  - "**.rb"
 exclude_paths:
 - src/main/webapp/WEB-INF/js/materialize/
 - src/main/webapp/WEB-INF/js/src-noconflict/
 - src/main/webapp/WEB-INF/css/materialize/
-- src/main/java/in/ac/bits/protocolanalyzer/

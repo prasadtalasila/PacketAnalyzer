@@ -108,6 +108,8 @@ public class AnalyzerCell implements Runnable {
 	 */
 	public boolean takePacket(PacketWrapper packet) {
 		try {
+			//System.out.println("Packet offered to " +
+			//"the queue by takePacket() in AnalyzerCell = " + packet );
 			return this.inputQueue.offer(packet, 1, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -134,9 +136,15 @@ public class AnalyzerCell implements Runnable {
 	public void run() {
 		while (isRunning) {
 			if (!isProcessing) {
-				if (!inputQueue.isEmpty()) {
+				PacketWrapper temp = inputQueue.poll();
+				// The following if() check is temporary patch
+				//and is just to prevent NullPointerException 
+				//addressed in issue#138.
+				if (!inputQueue.isEmpty() && temp != null) {
 					isProcessing = true;
-					process(inputQueue.poll());
+					//System.out.println("Packet passed to" + 
+					//"process() method by run() of AnalyzerCell  = " + temp);
+					process(temp);
 				}
 			}
 		}
@@ -162,7 +170,6 @@ public class AnalyzerCell implements Runnable {
 		this.packetProcessing.setPacketType(event.getNextPacketType());
 		this.packetProcessing.setStartByte(event.getStartByte());
 		this.packetProcessing.setEndByte(event.getEndByte());
-
 		sendPacket();
 	}
 
@@ -192,3 +199,4 @@ public class AnalyzerCell implements Runnable {
 	}
 
 }
+

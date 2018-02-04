@@ -1,11 +1,14 @@
 package in.ac.bits.protocolanalyzer.analyzer;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -95,7 +98,16 @@ public class Session {
 	}
 
 	public long startExperiment() {
-		executorService = Executors.newFixedThreadPool(5);
+		/*
+		 Thread name mapping : 
+		 0 -- linkCell
+		 1 -- networkCell
+		 2 -- transportCell
+		 */
+		ThreadFactory threadFactory = new ThreadFactoryBuilder()
+		        .setNameFormat("DarshiniThread-%d")
+		        .build();
+		executorService = Executors.newFixedThreadPool(5,threadFactory);
 		long time = System.currentTimeMillis();
 		log.info("Session " + this.sessionName + "::Starting linkcell at: " + time);
 		this.metrics.setLinkStart(time);
@@ -178,3 +190,4 @@ public class Session {
 	}
 
 }
+
