@@ -15,19 +15,18 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 		"in.ac.bits.protocolanalyzer.persistence.repository")
 public class ElasticSearchConfig {
     
-	@Autowired
+    @Autowired
     ElasticSearchFactory esFactoryImpl;
     
-	/**
-	 * Returns ElasticsearchTemplate made using the elasticsearch.properties file.
-	 * 
-	 * @param  env Environment object to be passed in as parameter to the method.
-	 */
+    /**
+    * Returns ElasticsearchTemplate made using the elasticsearch.properties file.
+    * 
+    * @param  env Environment object to be passed in as parameter to the method.
+    */
     @Bean
     public ElasticsearchOperations elasticsearchTemplate(Environment env) {
-		ImmutableSettings.Builder settingsBuilder = esFactoryImpl.settingsBuilder(env);
-		NodeBuilder builder = esFactoryImpl.nodeBuilder(settingsBuilder);
-	    return new ElasticsearchTemplate(builder.node().client());
+	ImmutableSettings.Builder settingsBuilder = esFactoryImpl.settingsBuilder(env);
+	NodeBuilder builder = esFactoryImpl.nodeBuilder(settingsBuilder);
+	return new ElasticsearchTemplate(builder.node().client());
     }
-
 }
