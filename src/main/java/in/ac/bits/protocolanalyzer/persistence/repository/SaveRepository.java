@@ -3,22 +3,23 @@ package in.ac.bits.protocolanalyzer.persistence.repository;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import lombok.extern.log4j.Log4j;
+import javax.naming.Context;
+import javax.naming.NamingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Component;
+
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-
-import javax.naming.Context;
-import javax.naming.NamingException;
 
 import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
 import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
 import in.ac.bits.protocolanalyzer.analyzer.event.SaveRepoEndEvent;
+import lombok.extern.log4j.Log4j;
 
 @Component
 @ComponentScan("config.in.ac.bits.protocolanalyzer.persistence.repository")
@@ -37,7 +38,7 @@ public class SaveRepository implements Runnable {
 	
 	private boolean isRunning = false;
 
-	private boolean analysisRunning = true;
+	public boolean analysisRunning = true;
 
 	private EventBus eventBus;
 
@@ -53,7 +54,6 @@ public class SaveRepository implements Runnable {
 		this.eventBus = eventBus;
 		this.eventBus.register(this);
 		try {
-			//Context ctx = new InitialContext();
 			Context env = (Context) ctx.lookup("java:comp/env");
 			lowWaterMark = Integer.parseInt((String) env.lookup("lowWaterMark"));
 			log.info("LOW WATER MARK READ FROM FILE IS: " + getLowWaterMark());
@@ -63,7 +63,6 @@ public class SaveRepository implements Runnable {
 		}
 		//Set the value of the analysisOnly
 		try {
-			//Context ctx = new InitialContext();
 			Context env = (Context) ctx.lookup("java:comp/env");
 			if (((String) env.lookup("analysisOnly")).equals("true")) {
 				analysisOnly = true;
@@ -78,11 +77,11 @@ public class SaveRepository implements Runnable {
 	}
 
 	public void setBucket(ArrayList<IndexQuery> bucket) {
-		getBuckets().add(bucket);
+		buckets.add(bucket);
 	}
 
 	public int getBucketSize() {
-		return this.getBuckets().size();
+		return this.buckets.size();
 	}
 
 	private static final long MEGABYTE = 1024L * 1024L;
@@ -94,7 +93,7 @@ public class SaveRepository implements Runnable {
 	@Override
 	public void run() {
 		this.isRunning = true;
-		while (!getBuckets().isEmpty()) {
+		while (!buckets.isEmpty()) {
 
 			// Get the Java runtime
             Runtime runtime = Runtime.getRuntime();
@@ -106,21 +105,21 @@ public class SaveRepository implements Runnable {
             log.info(System.currentTimeMillis() + " Used memory is megabytes: "+ bytesToMegabytes(memory));
 
 			log.info("SaveRepository started at " + System.currentTimeMillis() 
-			+ " with bucket size: " + getBuckets().size());
+			+ " with bucket size: " + buckets.size());
 
 			if ( isAnalysisOnly() ) {
 				log.info("Not saving ... but polling");
-				getBuckets().poll();
+				buckets.poll();
 			} else {
-				template.bulkIndex(getBuckets().poll()); // blocking call
+				template.bulkIndex(buckets.poll()); // blocking call
 			}
 			log.info("SaveRepository finished at " + System.currentTimeMillis());
 
-			if ( getBuckets().size() == 0 && !isAnalysisRunning() ) {
+			if ( buckets.size() == 0 && !analysisRunning ) {
 				this.publishEndOfSave(System.currentTimeMillis());
 			}
 
-			if (getBuckets().size() <= getLowWaterMark()) {
+			if (buckets.size() <= getLowWaterMark()) {
 				this.publishLow();
 			}
 		}
@@ -169,10 +168,6 @@ public class SaveRepository implements Runnable {
 
 	public void setBuckets(ConcurrentLinkedQueue<ArrayList<IndexQuery>> buckets) {
 		this.buckets = buckets;
-	}
-
-	public boolean isAnalysisRunning() {
-		return analysisRunning;
 	}
 
 	public void setAnalysisRunning(boolean analysisRunning) {
