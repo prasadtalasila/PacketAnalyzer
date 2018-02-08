@@ -1,16 +1,15 @@
 package unit.in.ac.bits.protocolanalyzer.persistence.repository;
 
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,14 +18,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
-import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import in.ac.bits.protocolanalyzer.persistence.repository.SaveRepository;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import com.google.common.eventbus.EventBus;
 
+import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
+import in.ac.bits.protocolanalyzer.persistence.repository.SaveRepository;
 import unit.config.in.ac.bits.protocolanalyzer.persistence.repository.SaveRepositoryTestConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -43,7 +42,6 @@ public class SaveRepositoryTest {
 	
 	@Mock
 	public EndAnalysisEvent event;
-	
 	
 	public long bytes = 123312312122L;
 
@@ -93,7 +91,7 @@ public class SaveRepositoryTest {
 	@Test
 	public void endTest() {
 		saveRepo.end(event);
-		assertThat(saveRepo.isAnalysisRunning(), equalTo(false));
+		assertThat(saveRepo.analysisRunning, equalTo(false));
 	}
 	
 }
