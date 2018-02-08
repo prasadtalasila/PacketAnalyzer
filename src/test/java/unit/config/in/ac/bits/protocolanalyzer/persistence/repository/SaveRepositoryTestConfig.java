@@ -1,25 +1,17 @@
 package unit.config.in.ac.bits.protocolanalyzer.persistence.repository;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
 import in.ac.bits.protocolanalyzer.persistence.repository.SaveRepository;
 
-import org.mockito.Mock;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-
 @Configuration
+@ComponentScan("in.ac.bits.protocolanalyzer.persistence.repository")
 public class SaveRepositoryTestConfig {
-	@Mock
-	public ElasticsearchTemplate template;
-
 	@Bean
 	public SaveRepository saveRepo() {
 		return new SaveRepository();
 	}
-
-	@Bean
-	public ElasticsearchTemplate template() {
-		return template;
-	}
-
+	
 }
