@@ -10,10 +10,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.json.JSONObject;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,11 +31,6 @@ public class ExperimentTest{
 	@Autowired
 	@Qualifier("Experiment")
 	private Experiment experiment;
-	
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
 	
 	@Test
 	public void autowiringTest() {
