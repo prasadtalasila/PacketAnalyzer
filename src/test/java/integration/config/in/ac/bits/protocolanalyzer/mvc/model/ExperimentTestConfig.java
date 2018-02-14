@@ -16,23 +16,37 @@ import in.ac.bits.protocolanalyzer.analyzer.transport.TransportAnalyzer;
 import in.ac.bits.protocolanalyzer.analyzer.transport.UdpAnalyzer;
 import in.ac.bits.protocolanalyzer.mvc.model.Experiment;
 import in.ac.bits.protocolanalyzer.persistence.repository.AnalysisRepository;
+import in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchConfig;
+import in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchFactoryImpl;
 import in.ac.bits.protocolanalyzer.persistence.repository.SaveRepository;
 import in.ac.bits.protocolanalyzer.protocol.Protocol;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolChecker;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolGraph;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolGraphParser;
 
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 
 @Configuration
+@PropertySource("classpath:META-INF/elasticsearch.properties")
 public class ExperimentTestConfig {
 	
+	@Autowired 
+	Environment env;
 	
-	@Mock
-	public ElasticsearchTemplate template;
+	@Bean
+	public ElasticSearchFactoryImpl getElasticSearchFactoryImpl() {
+		return new ElasticSearchFactoryImpl();
+	}
+
+	@Bean
+	public ElasticSearchConfig getElasticSearchConfig() {
+		return new ElasticSearchConfig();
+	}
 	
 	@Bean
 	public Experiment getSampleExperiment() {
@@ -96,7 +110,7 @@ public class ExperimentTestConfig {
 	
 	@Bean
 	public ElasticsearchTemplate getSampleElasticsearchTemplate() {
-		return template;
+		return (ElasticsearchTemplate) getElasticSearchConfig().elasticsearchTemplate(env);
 	}
 	
 	@Bean
