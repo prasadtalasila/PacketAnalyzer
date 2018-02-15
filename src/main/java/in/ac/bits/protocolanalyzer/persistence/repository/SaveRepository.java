@@ -3,9 +3,11 @@ package in.ac.bits.protocolanalyzer.persistence.repository;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import lombok.extern.log4j.Log4j;
+import javax.naming.Context;
+import javax.naming.NamingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
@@ -14,44 +16,49 @@ import org.springframework.stereotype.Component;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
 import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
 import in.ac.bits.protocolanalyzer.analyzer.event.SaveRepoEndEvent;
+import lombok.extern.log4j.Log4j;
 
 @Component
+@ComponentScan("config.in.ac.bits.protocolanalyzer.persistence.repository")
 @Scope("prototype")
 @Log4j
 public class SaveRepository implements Runnable {
 
 	@Autowired
 	private ElasticsearchTemplate template;
-
+	
+	@Autowired
 	private ConcurrentLinkedQueue<ArrayList<IndexQuery>> buckets;
-
+	
+	@Autowired
+	private Context ctx;
+	
+	@Autowired
+	private Runtime runtime;
+	
+	public long memory;
+	
 	private boolean isRunning = false;
 
-	private boolean analysisRunning = true;
+	public boolean analysisRunning = true;
 
 	private EventBus eventBus;
 
 	private int lowWaterMark;
 
 	private boolean analysisOnly;
-
+	
 	public boolean isRunning() {
 		return isRunning;
 	}
-
+	
 	public void configure(EventBus eventBus) {
-		buckets = new ConcurrentLinkedQueue<ArrayList<IndexQuery>>();
 		this.eventBus = eventBus;
 		this.eventBus.register(this);
 		try {
-			Context ctx = new InitialContext();
 			Context env = (Context) ctx.lookup("java:comp/env");
 			lowWaterMark = Integer.parseInt((String) env.lookup("lowWaterMark"));
 			log.info("LOW WATER MARK READ FROM FILE IS: " + lowWaterMark);
@@ -61,14 +68,13 @@ public class SaveRepository implements Runnable {
 		}
 		//Set the value of the analysisOnly
 		try {
-			Context ctx = new InitialContext();
 			Context env = (Context) ctx.lookup("java:comp/env");
 			if (((String) env.lookup("analysisOnly")).equals("true")) {
 				analysisOnly = true;
 			} else {
 				analysisOnly = false;
 			}
-			log.info("Perform only analysis: " + analysisOnly);
+			log.info("Perform only analysis: " + isAnalysisOnly());
 		} catch (NamingException e) {
 			log.info("EXCEPTION IN READING FROM CONFIG FILE FOR analysisOnly .. setting false by default");
 			analysisOnly = false;
@@ -95,18 +101,18 @@ public class SaveRepository implements Runnable {
 		while (!buckets.isEmpty()) {
 
 			// Get the Java runtime
-            Runtime runtime = Runtime.getRuntime();
+            //runtime = Runtime.getRuntime();
             // Run the garbage collector
             //runtime.gc();
             // Calculate the used memory
-            long memory = runtime.totalMemory() - runtime.freeMemory();
+            memory = runtime.totalMemory() - runtime.freeMemory();
             log.info("Used memory is bytes: " + memory);
             log.info(System.currentTimeMillis() + " Used memory is megabytes: "+ bytesToMegabytes(memory));
 
-			log.info(
-					"SaveRepository started at " + System.currentTimeMillis() + " with bucket size: " + buckets.size());
+			log.info("SaveRepository started at " + System.currentTimeMillis() 
+			+ " with bucket size: " + buckets.size());
 
-			if ( analysisOnly ) {
+			if ( isAnalysisOnly() ) {
 				log.info("Not saving ... but polling");
 				buckets.poll();
 			} else {
@@ -143,5 +149,21 @@ public class SaveRepository implements Runnable {
 	private void publishEndOfSave(long time) {
 		//log.info("Publishing end of Save Repository");
 		eventBus.post(new SaveRepoEndEvent(time));
+	}
+
+	public int getLowWaterMark() {
+		return lowWaterMark;
+	}
+
+	public void setLowWaterMark(int lowWaterMark) {
+		this.lowWaterMark = lowWaterMark;
+	}
+
+	public boolean isAnalysisOnly() {
+		return analysisOnly;
+	}
+
+	public void setAnalysisOnly(boolean analysisOnly) {
+		this.analysisOnly = analysisOnly;
 	}
 }

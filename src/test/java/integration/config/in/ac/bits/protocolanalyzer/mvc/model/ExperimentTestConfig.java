@@ -24,12 +24,20 @@ import in.ac.bits.protocolanalyzer.protocol.ProtocolChecker;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolGraph;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolGraphParser;
 
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.IndexQuery;
 
 @Configuration
 @PropertySource("classpath:META-INF/elasticsearch.properties")
@@ -156,5 +164,25 @@ public class ExperimentTestConfig {
 	@Bean
 	public ProtocolGraph getSampleProtocolGraph() {
 		return new ProtocolGraph();
+	}
+	
+	@Bean
+	public Context ctx(){
+		try {
+			return new InitialContext();
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Bean
+	public ConcurrentLinkedQueue<ArrayList<IndexQuery>> buckets(){
+		return new ConcurrentLinkedQueue<ArrayList<IndexQuery>>();
+	}
+	
+	@Bean
+	public Runtime runtime(){
+		return Runtime.getRuntime();
 	}
 }
