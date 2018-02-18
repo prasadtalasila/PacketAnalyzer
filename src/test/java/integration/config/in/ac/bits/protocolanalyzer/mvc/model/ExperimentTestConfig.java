@@ -25,6 +25,7 @@ import in.ac.bits.protocolanalyzer.protocol.ProtocolGraph;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolGraphParser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.naming.Context;
@@ -167,16 +168,6 @@ public class ExperimentTestConfig {
 	}
 	
 	@Bean
-	public Context ctx(){
-		try {
-			return new InitialContext();
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	@Bean
 	public ConcurrentLinkedQueue<ArrayList<IndexQuery>> buckets(){
 		return new ConcurrentLinkedQueue<ArrayList<IndexQuery>>();
 	}
@@ -184,5 +175,14 @@ public class ExperimentTestConfig {
 	@Bean
 	public Runtime runtime(){
 		return Runtime.getRuntime();
+	}
+	
+	@Bean
+	public HashMap<String,String> envProperties(){
+		HashMap<String,String> envProperties = new HashMap<>();
+		envProperties.put("lowWaterMark", "2");
+		envProperties.put("analysisOnly","true");
+		envProperties.put("Error", "false");
+		return envProperties;
 	}
 }
