@@ -1,8 +1,18 @@
 package in.ac.bits.protocolanalyzer.persistence.repository;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+
+import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
+import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
+import in.ac.bits.protocolanalyzer.analyzer.event.SaveRepoEndEvent;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import lombok.Data;
+import lombok.extern.log4j.Log4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,15 +20,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Component;
-
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
-
-import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
-import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
-import in.ac.bits.protocolanalyzer.analyzer.event.SaveRepoEndEvent;
-import lombok.Data;
-import lombok.extern.log4j.Log4j;
 
 @Component
 @ComponentScan("config.in.ac.bits.protocolanalyzer.persistence.repository")
@@ -34,13 +35,14 @@ public class SaveRepository implements Runnable {
 	private ConcurrentLinkedQueue<ArrayList<IndexQuery>> buckets;
 	
 	@Autowired
-	private HashMap<String,String> envProperties;
+	private Runtime runtime;
+	
+	@Autowired
+	HashMap<String,String> envProperties;
 	
 	private int lowWaterMark;
 	
 	private boolean analysisOnly;
-	
-	private Runtime runtime;
 	
 	private long memory;
 	
@@ -53,7 +55,6 @@ public class SaveRepository implements Runnable {
 	public void configure(EventBus eventBus) {
 		this.eventBus = eventBus;
 		this.eventBus.register(this);
-		
 		if(!Boolean.parseBoolean(envProperties.get("Error"))) {
 			lowWaterMark = Integer.parseInt(envProperties.get("lowWaterMark"));
 			log.info("LOW WATER MARK READ FROM FILE IS: " + lowWaterMark);
@@ -66,7 +67,6 @@ public class SaveRepository implements Runnable {
 			analysisOnly = Boolean.parseBoolean(envProperties.get("analysisOnly"));
 			log.info("EXCEPTION IN READING FROM CONFIG FILE FOR analysisOnly .. setting false by default");
 		}
-		
 	}
 
 	public void setBucket(ArrayList<IndexQuery> bucket) {

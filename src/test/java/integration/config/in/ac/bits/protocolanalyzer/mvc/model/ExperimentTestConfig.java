@@ -28,10 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -181,7 +177,7 @@ public class ExperimentTestConfig {
 	public HashMap<String,String> envProperties(){
 		HashMap<String,String> envProperties = new HashMap<>();
 		envProperties.put("lowWaterMark", "2");
-		envProperties.put("analysisOnly","true");
+		envProperties.put("analysisOnly", "true");
 		envProperties.put("Error", "false");
 		return envProperties;
 	}

@@ -8,6 +8,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.common.eventbus.EventBus;
+
+import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
+import in.ac.bits.protocolanalyzer.persistence.repository.SaveRepository;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -27,14 +32,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 
-import com.google.common.eventbus.EventBus;
-
-import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
-import in.ac.bits.protocolanalyzer.persistence.repository.SaveRepository;
-
 @RunWith(MockitoJUnitRunner.class)
 public class SaveRepositoryTest {
-	
 	
 	@Mock
 	public ElasticsearchTemplate template;
@@ -70,24 +69,28 @@ public class SaveRepositoryTest {
 	@Test
 	public void wiringTest() {
 		assertThat(saveRepo, notNullValue());
+		assertThat(saveRepo.getTemplate(), notNullValue());
+		assertThat(saveRepo.getBuckets(), notNullValue());
+		assertThat(saveRepo.getRuntime(), notNullValue());
+		assertThat(saveRepo.getEnvProperties(), notNullValue());
 	}
 	
 	@Test
 	public void configureTest() {
 		doNothing().when(bus).register(saveRepo);
+		when(envProperties.get("Error")).thenReturn("false");
 		when(envProperties.get("lowWaterMark")).thenReturn("2");
 		when(envProperties.get("analysisOnly")).thenReturn("true");
-		when(envProperties.get("Error")).thenReturn("false");
 		
 		saveRepo.configure(bus);
 		
 		verify(bus).register(saveRepo);
+		verify(envProperties).get("Error");
 		verify(envProperties).get("lowWaterMark");
 		verify(envProperties).get("analysisOnly");
-		verify(envProperties).get("Error");
-		
 		assertThat(saveRepo.getLowWaterMark(), equalTo(2));
 		assertThat(saveRepo.isAnalysisOnly(), equalTo(true));
+		
 	}
 	
 	@Test
