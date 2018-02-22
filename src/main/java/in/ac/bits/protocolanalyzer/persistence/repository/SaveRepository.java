@@ -55,7 +55,7 @@ public class SaveRepository implements Runnable {
 	public void configure(EventBus eventBus) {
 		this.eventBus = eventBus;
 		this.eventBus.register(this);
-		if(!Boolean.parseBoolean(envProperties.get("Error"))) {
+		if(Boolean.parseBoolean(envProperties.get("noError"))) {
 			lowWaterMark = Integer.parseInt(envProperties.get("lowWaterMark"));
 			log.info("LOW WATER MARK READ FROM FILE IS: " + lowWaterMark);
 			analysisOnly = Boolean.parseBoolean(envProperties.get("analysisOnly"));

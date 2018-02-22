@@ -1,13 +1,5 @@
 package unit.in.ac.bits.protocolanalyzer.persistence.repository;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.google.common.eventbus.EventBus;
 
 import in.ac.bits.protocolanalyzer.analyzer.event.EndAnalysisEvent;
@@ -21,11 +13,22 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -78,14 +81,14 @@ public class SaveRepositoryTest {
 	@Test
 	public void configureTest() {
 		doNothing().when(bus).register(saveRepo);
-		when(envProperties.get("Error")).thenReturn("false");
+		when(envProperties.get("noError")).thenReturn("true");
 		when(envProperties.get("lowWaterMark")).thenReturn("2");
 		when(envProperties.get("analysisOnly")).thenReturn("true");
 		
 		saveRepo.configure(bus);
 		
 		verify(bus).register(saveRepo);
-		verify(envProperties).get("Error");
+		verify(envProperties).get("noError");
 		verify(envProperties).get("lowWaterMark");
 		verify(envProperties).get("analysisOnly");
 		assertThat(saveRepo.getLowWaterMark(), equalTo(2));

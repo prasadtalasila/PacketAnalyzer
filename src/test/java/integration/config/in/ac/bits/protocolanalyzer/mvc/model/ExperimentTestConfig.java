@@ -173,12 +173,17 @@ public class ExperimentTestConfig {
 		return Runtime.getRuntime();
 	}
 	
+	/**
+	* Returns a HashMap containing values about lowWaterMark, analysisOnly that are read from the Java Environment 
+	* and also a flag to check if there was an error while reading these values from the environment
+	*
+	*/
 	@Bean
 	public HashMap<String,String> envProperties(){
 		HashMap<String,String> envProperties = new HashMap<>();
 		envProperties.put("lowWaterMark", "2");
 		envProperties.put("analysisOnly", "true");
-		envProperties.put("Error", "false");
+		envProperties.put("noError", "true");
 		return envProperties;
 	}
 }
