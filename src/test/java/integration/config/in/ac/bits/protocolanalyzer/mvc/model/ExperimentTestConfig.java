@@ -174,9 +174,9 @@ public class ExperimentTestConfig {
 	}
 	
 	/**
-	* Returns a HashMap containing values about lowWaterMark, analysisOnly that are read from the Java Environment 
-	* and also a flag to check if there was an error while reading these values from the environment
-	*
+	*	Returns a HashMap. It contains values about lowWaterMark, analysisOnly that are read 
+	*	from the Java Environment and also a flag to check if there was an error while 
+	*	reading these values from the environment.
 	*/
 	@Bean
 	public HashMap<String,String> envProperties(){
