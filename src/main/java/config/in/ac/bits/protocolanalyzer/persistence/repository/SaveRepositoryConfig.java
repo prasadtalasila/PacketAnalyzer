@@ -47,7 +47,8 @@ public class SaveRepositoryConfig {
 			envProperties.put(LWM, "3");
 			envProperties.put(AO, "true");
 			log.info("Have not received the config values;"
-					+ "Using the default values of analysisOnly = true and lowWaterMark = 3");
+					+ "Using the default values of"
+					+ " analysisOnly = true and lowWaterMark = 3");
 		}
 		return envProperties;
 	}

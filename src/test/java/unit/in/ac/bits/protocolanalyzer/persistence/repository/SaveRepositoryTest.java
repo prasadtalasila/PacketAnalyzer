@@ -96,7 +96,7 @@ public class SaveRepositoryTest {
 
 	@Test
 	public void memSizeConversionCheck() {
-		assertThat(SaveRepository.bytesToMegabytes(bytes), equalTo(bytes / (1024L * 1024L)));
+		assertThat(SaveRepository.bytesToMegabytes(bytes),equalTo(bytes / (1024L * 1024L)));
 	}
 
 	@Test
