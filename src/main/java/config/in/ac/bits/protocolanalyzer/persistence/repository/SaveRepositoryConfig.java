@@ -19,40 +19,37 @@ import org.springframework.data.elasticsearch.core.query.IndexQuery;
 public class SaveRepositoryConfig {
 	private static final String LWM = "lowWaterMark";
 	private static final String AO = "analysisOnly";
-	
+
 	@Bean
-	public ConcurrentLinkedQueue<ArrayList<IndexQuery>> buckets(){
+	public ConcurrentLinkedQueue<ArrayList<IndexQuery>> buckets() {
 		return new ConcurrentLinkedQueue<ArrayList<IndexQuery>>();
 	}
-	
+
 	@Bean
-	public Runtime runtime(){
+	public Runtime runtime() {
 		return Runtime.getRuntime();
 	}
-	
-    /**
-	*	Returns a HashMap. It contains values about lowWaterMark, analysisOnly that are
-	*	read from the Java Environment and also a flag to check if there was an error
-	* 	while reading these values from the environment.
-	*/
+
+	/**
+	 * Returns a HashMap. It contains values about lowWaterMark, analysisOnly that
+	 * are read from the Java Environment and also a flag to check if there was an
+	 * error while reading these values from the environment.
+	 */
 	@Bean
-	public HashMap<String,String> envProperties(){
-		HashMap<String,String> envProperties = new HashMap<>();
+	public HashMap<String, String> envProperties() {
+		HashMap<String, String> envProperties = new HashMap<>();
 		try {
 			Context ctx = new InitialContext();
 			Context env = (Context) ctx.lookup("java:comp/env");
 			envProperties.put(LWM, (String) env.lookup(LWM));
 			envProperties.put(AO, (String) env.lookup(AO));
-			envProperties.put("noError", "true");
 		} catch (NamingException e) {
 			envProperties.put(LWM, "3");
 			envProperties.put(AO, "true");
-			envProperties.put("noError", "false");
-			log.info("EXCEPTION IN READING FROM CONFIG FILE");
-			e.printStackTrace();
+			log.info("Have not received the config values;"
+					+ "Using the default values of analysisOnly = true and lowWaterMark = 3");
 		}
 		return envProperties;
 	}
-	
-	
+
 }

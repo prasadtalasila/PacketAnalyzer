@@ -183,7 +183,6 @@ public class ExperimentTestConfig {
 		HashMap<String,String> envProperties = new HashMap<>();
 		envProperties.put("lowWaterMark", "2");
 		envProperties.put("analysisOnly", "true");
-		envProperties.put("noError", "true");
 		return envProperties;
 	}
 }

@@ -37,38 +37,38 @@ import org.springframework.data.elasticsearch.core.query.IndexQuery;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SaveRepositoryTest {
-	
+
 	@Mock
 	public ElasticsearchTemplate template;
-	
+
 	@Spy
 	public ConcurrentLinkedQueue<ArrayList<IndexQuery>> buckets;
-	
+
 	@Mock
 	public Runtime runtime;
-	
+
 	@Mock
-	public HashMap<String,String> envProperties;
-	
+	public HashMap<String, String> envProperties;
+
 	@InjectMocks
 	public SaveRepository saveRepo;
 
 	@Mock
 	public EventBus bus;
-	
+
 	@Mock
 	public ArrayList<IndexQuery> listIndexQuery;
-	
+
 	@Mock
 	public EndAnalysisEvent event;
-	
+
 	public long bytes = 123312312122L;
-	
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
 	@Test
 	public void saveRepoAutoWiringCheck() {
 		assertThat(saveRepo, notNullValue());
@@ -77,31 +77,28 @@ public class SaveRepositoryTest {
 		assertThat(saveRepo.getRuntime(), notNullValue());
 		assertThat(saveRepo.getEnvProperties(), notNullValue());
 	}
-	
+
 	@Test
 	public void saveRepoConfigurationCheck() {
 		doNothing().when(bus).register(saveRepo);
-		when(envProperties.get("noError")).thenReturn("true");
 		when(envProperties.get("lowWaterMark")).thenReturn("2");
 		when(envProperties.get("analysisOnly")).thenReturn("true");
-		
+
 		saveRepo.configure(bus);
-		
+
 		verify(bus).register(saveRepo);
-		verify(envProperties).get("noError");
 		verify(envProperties).get("lowWaterMark");
 		verify(envProperties).get("analysisOnly");
 		assertThat(saveRepo.getLowWaterMark(), equalTo(2));
 		assertThat(saveRepo.isAnalysisOnly(), equalTo(true));
-		
+
 	}
-	
+
 	@Test
 	public void memSizeConversionCheck() {
-		assertThat(SaveRepository.bytesToMegabytes(bytes), equalTo(bytes/(1024L*1024L)));
+		assertThat(SaveRepository.bytesToMegabytes(bytes), equalTo(bytes / (1024L * 1024L)));
 	}
-	
-	
+
 	@Test
 	public void runTest() {
 		saveRepo.setBucket(listIndexQuery);
@@ -110,45 +107,45 @@ public class SaveRepositoryTest {
 		saveRepo.setAnalysisOnly(true);
 		saveRepo.setAnalysisRunning(false);
 		saveRepo.setLowWaterMark(2);
-		
+
 		when(runtime.totalMemory()).thenReturn(10L);
 		when(runtime.freeMemory()).thenReturn(1L);
-		
+
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		Future<?> future = executorService.submit(saveRepo);
 		try {
-			//Ensuring that saveRepo.run has ended
-			if(future.get()==null) {
-				verify(buckets,times(4)).isEmpty();
-				verify(runtime,times(3)).totalMemory();
-				verify(runtime,times(3)).freeMemory();
-				verify(buckets,times(3)).poll();
-				verify(buckets,times(9)).size();
-				
+			// Ensuring that saveRepo.run has ended
+			if (future.get() == null) {
+				verify(buckets, times(4)).isEmpty();
+				verify(runtime, times(3)).totalMemory();
+				verify(runtime, times(3)).freeMemory();
+				verify(buckets, times(3)).poll();
+				verify(buckets, times(9)).size();
+
 				assertThat(saveRepo.getMemory(), equalTo(9L));
 				assertThat(saveRepo.isRunning(), equalTo(false));
-				
+
 			}
 		} catch (InterruptedException | ExecutionException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
-		
+
 		executorService.shutdown();
 	}
-	
+
 	@Test
 	public void terminateSaveTest() {
 		saveRepo.end(event);
 		assertThat(saveRepo.isRunning(), equalTo(false));
 	}
-	
+
 	@Test
 	public void accessBucketSizeTest() {
 		saveRepo.setBucket(listIndexQuery);
 		saveRepo.setBucket(listIndexQuery);
 		saveRepo.setBucket(listIndexQuery);
-		
+
 		assertThat(saveRepo.getBucketSize(), equalTo(3));
 	}
-	
+
 }
