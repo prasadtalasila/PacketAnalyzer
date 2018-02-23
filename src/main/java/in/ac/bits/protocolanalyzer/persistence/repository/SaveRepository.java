@@ -38,7 +38,7 @@ public class SaveRepository implements Runnable {
 	private Runtime runtime;
 	
 	@Autowired
-	HashMap<String,String> envProperties;
+	private HashMap<String,String> envProperties;
 	
 	private int lowWaterMark;
 	
@@ -52,6 +52,8 @@ public class SaveRepository implements Runnable {
 
 	private EventBus eventBus;
 	
+	private static final long MEGABYTE = 1024L * 1024L;
+	
 	public void configure(EventBus eventBus) {
 		this.eventBus = eventBus;
 		this.eventBus.register(this);
@@ -63,9 +65,8 @@ public class SaveRepository implements Runnable {
 		}
 		else {
 			lowWaterMark = Integer.parseInt(envProperties.get("lowWaterMark"));
-			log.info("EXCEPTION IN READING FROM CONFIG FILE");
 			analysisOnly = Boolean.parseBoolean(envProperties.get("analysisOnly"));
-			log.info("EXCEPTION IN READING FROM CONFIG FILE FOR analysisOnly .. setting false by default");
+			log.info("Have not received the config values; Using the default values of analysisOnly = true and lowWaterMark = 3");
 		}
 	}
 
@@ -77,8 +78,6 @@ public class SaveRepository implements Runnable {
 		return this.buckets.size();
 	}
 
-	private static final long MEGABYTE = 1024L * 1024L;
-
 	public static long bytesToMegabytes(long bytes) {
         return bytes / MEGABYTE;
 	}
@@ -87,18 +86,13 @@ public class SaveRepository implements Runnable {
 	public void run() {
 		this.isRunning = true;
 		while (!buckets.isEmpty()) {
-			// Get the Java runtime
-            // Run the garbage collector
-            //runtime.gc();
-            // Calculate the used memory
-            memory = runtime.totalMemory() - runtime.freeMemory();
+			memory = runtime.totalMemory() - runtime.freeMemory();
             log.info("Used memory is bytes: " + memory);
             log.info(System.currentTimeMillis() + " Used memory is megabytes: "+ bytesToMegabytes(memory));
-            log.info(
-            		"SaveRepository started at " + System.currentTimeMillis() 
+            log.info("SaveRepository started at " + System.currentTimeMillis() 
             		+ " with bucket size: " + buckets.size());
 
-			if ( isAnalysisOnly() ) {
+			if ( analysisOnly ) {
 				log.info("Not saving ... but polling");
 				buckets.poll();
 			} else {

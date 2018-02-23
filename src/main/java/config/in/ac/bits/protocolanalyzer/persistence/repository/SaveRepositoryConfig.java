@@ -8,11 +8,14 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import lombok.extern.log4j.Log4j;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 
 @Configuration
+@Log4j
 public class SaveRepositoryConfig {
 	private static final String LWM = "lowWaterMark";
 	private static final String AO = "analysisOnly";
@@ -28,9 +31,9 @@ public class SaveRepositoryConfig {
 	}
 	
     /**
-	*	Returns a HashMap containing values about lowWaterMark, analysisOnly that are read 
-	*	from the Java Environment and also a flag to check if there was an error while 
-	*	reading these values from the environment.
+	*	Returns a HashMap. It contains values about lowWaterMark, analysisOnly that are
+	*	read from the Java Environment and also a flag to check if there was an error
+	* 	while reading these values from the environment.
 	*/
 	@Bean
 	public HashMap<String,String> envProperties(){
@@ -43,8 +46,9 @@ public class SaveRepositoryConfig {
 			envProperties.put("noError", "true");
 		} catch (NamingException e) {
 			envProperties.put(LWM, "3");
-			envProperties.put(AO, "false");
+			envProperties.put(AO, "true");
 			envProperties.put("noError", "false");
+			log.info("EXCEPTION IN READING FROM CONFIG FILE");
 			e.printStackTrace();
 		}
 		return envProperties;

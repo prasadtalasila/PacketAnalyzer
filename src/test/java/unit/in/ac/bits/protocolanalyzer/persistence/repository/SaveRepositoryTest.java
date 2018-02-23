@@ -65,12 +65,12 @@ public class SaveRepositoryTest {
 	public long bytes = 123312312122L;
 	
 	@Before
-	public void setup() {
+	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 	}
 	
 	@Test
-	public void wiringTest() {
+	public void saveRepoAutoWiringCheck() {
 		assertThat(saveRepo, notNullValue());
 		assertThat(saveRepo.getTemplate(), notNullValue());
 		assertThat(saveRepo.getBuckets(), notNullValue());
@@ -79,7 +79,7 @@ public class SaveRepositoryTest {
 	}
 	
 	@Test
-	public void configureTest() {
+	public void saveRepoConfigurationCheck() {
 		doNothing().when(bus).register(saveRepo);
 		when(envProperties.get("noError")).thenReturn("true");
 		when(envProperties.get("lowWaterMark")).thenReturn("2");
@@ -97,7 +97,7 @@ public class SaveRepositoryTest {
 	}
 	
 	@Test
-	public void bytesToMegabytesTest() {
+	public void memSizeConversionCheck() {
 		assertThat(SaveRepository.bytesToMegabytes(bytes), equalTo(bytes/(1024L*1024L)));
 	}
 	
@@ -137,13 +137,13 @@ public class SaveRepositoryTest {
 	}
 	
 	@Test
-	public void endTest() {
+	public void terminateSaveTest() {
 		saveRepo.end(event);
 		assertThat(saveRepo.isRunning(), equalTo(false));
 	}
 	
 	@Test
-	public void getBucketsSize() {
+	public void accessBucketSizeTest() {
 		saveRepo.setBucket(listIndexQuery);
 		saveRepo.setBucket(listIndexQuery);
 		saveRepo.setBucket(listIndexQuery);
