@@ -66,7 +66,8 @@ public class SaveRepository implements Runnable {
 		else {
 			lowWaterMark = Integer.parseInt(envProperties.get("lowWaterMark"));
 			analysisOnly = Boolean.parseBoolean(envProperties.get("analysisOnly"));
-			log.info("Have not received the config values; Using the default values of analysisOnly = true and lowWaterMark = 3");
+			log.info("Have not received the config values;"
+					+ "Using the default values of analysisOnly = true and lowWaterMark = 3");
 		}
 	}
 
@@ -88,7 +89,8 @@ public class SaveRepository implements Runnable {
 		while (!buckets.isEmpty()) {
 			memory = runtime.totalMemory() - runtime.freeMemory();
             log.info("Used memory is bytes: " + memory);
-            log.info(System.currentTimeMillis() + " Used memory is megabytes: "+ bytesToMegabytes(memory));
+            log.info(System.currentTimeMillis() + " Used memory is megabytes: "
+            		+ bytesToMegabytes(memory));
             log.info("SaveRepository started at " + System.currentTimeMillis() 
             		+ " with bucket size: " + buckets.size());
 
@@ -113,8 +115,8 @@ public class SaveRepository implements Runnable {
 	}
 
 	/**
-	*	Since AnalysisRepository is blocked when SaveRepository is running, this thread itself ensures that
-	*	analysis will resume when low water-mark is reached.
+	*	Since AnalysisRepository is blocked when SaveRepository is running,
+	*	this thread itself ensures that analysis will resume when low water-mark is reached.
 	*/
 	private void publishLow() {
 		log.info(System.currentTimeMillis());
