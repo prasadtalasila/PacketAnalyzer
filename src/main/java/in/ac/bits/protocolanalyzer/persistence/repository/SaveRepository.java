@@ -67,7 +67,8 @@ public class SaveRepository implements Runnable {
 			lowWaterMark = Integer.parseInt(envProperties.get("lowWaterMark"));
 			analysisOnly = Boolean.parseBoolean(envProperties.get("analysisOnly"));
 			log.info("Have not received the config values;"
-					+ "Using the default values of analysisOnly = true and lowWaterMark = 3");
+					+ "Using the default values of "
+					+ "analysisOnly = true and lowWaterMark = 3");
 		}
 	}
 
