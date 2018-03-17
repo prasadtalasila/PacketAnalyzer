@@ -6,10 +6,6 @@ set -xv
 #load environment variables set by java_install.sh script
 #source /etc/environment
 
-#adjust tomcat settings of maven
-sudo mv /opt/maven/conf/settings.xml /opt/maven/conf/settings.xml.bkp
-sudo cp conf/settings.xml /opt/maven/conf/settings.xml
-
 #Create a user and group named tomcat
 sudo groupadd tomcat
 sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
@@ -28,9 +24,8 @@ sudo chown -R tomcat:tomcat /opt/tomcat
 sudo cp conf/tomcat-users.xml /opt/tomcat/conf/tomcat-users.xml
 sudo chown tomcat:tomcat /opt/tomcat/conf/tomcat-users.xml
 
-#reload the systemd daemon so that it knows about our service file
-sudo systemctl daemon-reload
-sudo systemctl start tomcat
+#start tomcat
+bash /opt/tomcat/bin/startup.sh
 
 #copy the correct property files
 cp -f conf/*.properties src/main/resources/META-INF/
@@ -50,4 +45,11 @@ sudo chown -R tomcat:tomcat /opt/darshini-logs
 mkdir -p src/main/webapp/WEB-INF/node_modules
 npm install --prefix src/main/webapp/WEB-INF
 
-sudo systemctl status tomcat
+#know about tomcat process
+ps -efaux | grep tomcat | grep java
+
+bash scripts/travis-deploy.sh
+
+curl http://localhost:8080
+curl http://localhost:8080/protocolanalyzer
+
