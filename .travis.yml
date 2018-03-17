@@ -15,6 +15,7 @@ after_success:
   #- mvn findbugs:findbugs || echo "========FindBugs checks failed========"
   #- csslint src/main/webapp/WEB-INF/css/main.css
   #- java -jar node_modules/vnu-jar/build/dist/vnu.jar src/main/webapp/WEB-INF/view
+  - bash script/travis.sh
   - bash <(curl -s https://codecov.io/bash)
 
 deploy:
