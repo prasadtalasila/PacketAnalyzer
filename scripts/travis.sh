@@ -25,7 +25,7 @@ sudo cp conf/tomcat-users.xml /opt/tomcat/conf/tomcat-users.xml
 sudo chown tomcat:tomcat /opt/tomcat/conf/tomcat-users.xml
 
 #start tomcat
-bash /opt/tomcat/bin/startup.sh
+sudo -H -u tomcat bash -c '/opt/tomcat/bin/startup.sh'
 
 #copy the correct property files
 cp -f conf/*.properties src/main/resources/META-INF/
