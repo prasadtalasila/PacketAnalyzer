@@ -49,9 +49,18 @@ npm install --prefix src/main/webapp/WEB-INF
 ps -efaux | grep tomcat | grep java
 
 bash scripts/travis-deploy.sh
+bash scripts/travis-deploy.sh
+sudo ls -l /opt/tomcat/webapps
 
 curl http://localhost:8080
-curl http://localhost:8080/protocolanalyzer
+#curl http://localhost:8080/protocolanalyzer
+curl -H "Content-Type: application/json" -d '{"email": "abc", "password": "abc"}' http://localhost:8080/protocolanalyzer/signup
 curl -H "Content-Type: application/json" -d '{"email": "abc", "password": "abc"}' http://localhost:8080/protocolanalyzer/signin
 
-sudo ls -l /opt/tomcat/webapps
+dir=$(pwd)
+pcapFile="$dir/data/packet/packet_data.pcap"
+protocolGraphPath="$dir/data/graph.p4"
+
+curl -X GET -H "Content-Type: application/json" http://localhost:8080/protocolanalyzer/test?pcapPath="$pcapFile"\&protocolGraphPath="$protocolGra
+phPath"
+
