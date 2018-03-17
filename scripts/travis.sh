@@ -61,6 +61,8 @@ dir=$(pwd)
 pcapFile="$dir/data/packet/packet_data.pcap"
 protocolGraphPath="$dir/data/graph.p4"
 
-curl -X GET -H "Content-Type: application/json" http://localhost:8080/protocolanalyzer/test?pcapPath="$pcapFile"\&protocolGraphPath="$protocolGra
-phPath"
+curl -X GET -H "Content-Type: application/json" http://localhost:8080/protocolanalyzer/test?pcapPath="$pcapFile"\&protocolGraphPath="$protocolGraphPath"
+
+ls -lR /opt/darshini-es
+cat /opt/darshini-logs/darshini
 
