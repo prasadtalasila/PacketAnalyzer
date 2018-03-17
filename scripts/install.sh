@@ -14,7 +14,7 @@ yes | sudo apt-get -y --force-yes install git
 
 
 #install maven
-curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
+#curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
 tar -xzf apache-maven-3.5.2-bin.tar.gz
 sudo mv apache-maven-3.5.2 /opt/maven 
 
@@ -48,7 +48,7 @@ sudo groupadd tomcat
 sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
 
 #download and install tomcat
-curl -O http://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.27/bin/apache-tomcat-8.5.27.tar.gz
+#curl -O http://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.27/bin/apache-tomcat-8.5.27.tar.gz
 sudo mkdir /opt/tomcat
 sudo tar xzf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
 
@@ -63,17 +63,22 @@ sudo cp conf/tomcat-users.xml /opt/tomcat/conf/tomcat-users.xml
 sudo systemctl daemon-reload
 sudo systemctl start tomcat
 
-#copy the correct property files and create the required directories
+#copy the correct property files
 cp -f conf/*.properties src/main/resources/META-INF/
+
+#create directories for storing elastic search data and logs
 sudo mkdir -p /opt/darshini-es/data
-sudo chmod 777 /opt/darshini-es/data
 sudo mkdir -p /opt/darshini-es/logs
-sudo chmod 777 /opt/darshini-es/logs
+#sudo chmod 777 /opt/darshini-es/data
+#sudo chmod 777 /opt/darshini-es/logs
+sudo chown -R tomcat:tomcat /opt/darshini-es
+
+#create log file for darshini
 sudo mkdir -p /opt/darshini-logs
-sudo chmod 777 /opt/darshini-logs
+#sudo chmod 777 /opt/darshini-logs
 sudo touch /opt/darshini-logs/darshini
-sudo chown tomcat:tomcat /opt/darshini-logs/darshini
-sudo chmod 777 /opt/darshini-logs/darshini
+#sudo chmod 777 /opt/darshini-logs/darshini
+sudo chown -R tomcat:tomcat /opt/darshini-logs
 
 #install nodejs and npm
 curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
