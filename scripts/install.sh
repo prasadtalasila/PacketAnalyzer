@@ -79,6 +79,7 @@ cp -f conf/*.properties src/main/resources/META-INF/
 sudo mkdir -p /opt/darshini-es/data
 sudo mkdir -p /opt/darshini-es/logs
 sudo chown -R tomcat:tomcat /opt/darshini-es
+sudo chmod -R 777 /opt/darshini-es
 
 #create log file for darshini
 sudo mkdir -p /opt/darshini-logs
