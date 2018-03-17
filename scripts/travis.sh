@@ -52,4 +52,6 @@ bash scripts/travis-deploy.sh
 
 curl http://localhost:8080
 curl http://localhost:8080/protocolanalyzer
+curl -H "Content-Type: application/json" -d '{"email": "abc", "password": "abc"}' http://localhost:8080/protocolanalyzer/signin
 
+sudo ls -l /opt/tomcat/webapps
