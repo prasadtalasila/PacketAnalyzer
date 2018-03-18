@@ -24,12 +24,17 @@ import in.ac.bits.protocolanalyzer.protocol.ProtocolChecker;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolGraph;
 import in.ac.bits.protocolanalyzer.protocol.ProtocolGraphParser;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.IndexQuery;
 
 @Configuration
 @PropertySource("classpath:META-INF/elasticsearch.properties")
@@ -156,5 +161,28 @@ public class ExperimentTestConfig {
 	@Bean
 	public ProtocolGraph getSampleProtocolGraph() {
 		return new ProtocolGraph();
+	}
+	
+	@Bean
+	public ConcurrentLinkedQueue<ArrayList<IndexQuery>> buckets(){
+		return new ConcurrentLinkedQueue<ArrayList<IndexQuery>>();
+	}
+	
+	@Bean
+	public Runtime runtime(){
+		return Runtime.getRuntime();
+	}
+	
+	/**
+	*	Returns a HashMap. It contains values about lowWaterMark, analysisOnly that are
+	*	read from the Java Environment and also a flag to check if there was an error
+	* 	while reading these values from the environment.
+	*/
+	@Bean
+	public HashMap<String,String> envProperties(){
+		HashMap<String,String> envProperties = new HashMap<>();
+		envProperties.put("lowWaterMark", "2");
+		envProperties.put("analysisOnly", "true");
+		return envProperties;
 	}
 }

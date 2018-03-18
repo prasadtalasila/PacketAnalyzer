@@ -19,7 +19,6 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import unit.config.in.ac.bits.protocolanalyzer.persistence.repository.ElasticSearchConfigTestConfig;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ElasticSearchConfigTestConfig.class,
 	loader = AnnotationConfigContextLoader.class)
