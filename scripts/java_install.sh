@@ -24,7 +24,9 @@ JAVA_DIR="jdk1.8.0_161"
 
 # download and extract tar
 
-wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" ${JAVA_URL_DOWNLOAD}
+if [ ! -f jdk-8u161-linux-x64.tar.gz ]; then
+    wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" ${JAVA_URL_DOWNLOAD}
+fi
 tar zxvf ${JAVA_FILE_TAR} 
 mv ${JAVA_DIR} /opt
 
