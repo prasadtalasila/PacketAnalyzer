@@ -26,7 +26,11 @@ import in.ac.bits.protocolanalyzer.protocol.ProtocolGraphParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -174,8 +178,9 @@ public class ExperimentTestConfig {
 	}
 	
 	/**
-	*	Returns a HashMap. It contains values about lowWaterMark, analysisOnly that are
-	*	read from the Java Environment and also a flag to check if there was an error
+	*	Returns a HashMap. It contains values about lowWaterMark, analysisOnly
+	*	and highWaterMark that are read from the Java Environment 
+	*	and also a flag to check if there was an error
 	* 	while reading these values from the environment.
 	*/
 	@Bean
@@ -183,6 +188,27 @@ public class ExperimentTestConfig {
 		HashMap<String,String> envProperties = new HashMap<>();
 		envProperties.put("lowWaterMark", "2");
 		envProperties.put("analysisOnly", "true");
+		envProperties.put("highWaterMark", "6");
 		return envProperties;
+	}
+	
+	@Bean
+	public ExecutorService executorService() {
+		return Executors.newFixedThreadPool(2);
+	}
+	
+	@Bean
+	public ArrayBlockingQueue<IndexQuery> queries(){
+		return new ArrayBlockingQueue<IndexQuery>(100000);
+	}
+	
+	@Bean
+	public Timer pullTimer() {
+		return new Timer("pullTimer");
+	}
+	
+	@Bean
+	public ArrayList<IndexQuery> currentBucket() {
+		return new ArrayList<IndexQuery>();
 	}
 }

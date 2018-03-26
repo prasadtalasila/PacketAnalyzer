@@ -1,43 +1,54 @@
 package in.ac.bits.protocolanalyzer.persistence.repository;
 
+import com.google.common.eventbus.EventBus;
+
+import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
+
 import java.util.ArrayList;
-import java.util.Queue;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.stereotype.Component;
 
-import com.google.common.eventbus.EventBus;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
-import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
-
 @Component
+@ComponentScan("config.in.ac.bits.protocolanalyzer.persistence.repository")
 @Scope("prototype")
 @Log4j
+@Getter
+@Setter
 public class AnalysisRepository {
 
 	@Autowired
 	private SaveRepository saveRepo;
 
+	@Autowired
 	private ExecutorService executorService;
-	private Queue<IndexQuery> queries;
-
+	
+	@Autowired
+	private ArrayBlockingQueue<IndexQuery> queries;
+	
+	@Autowired
 	private Timer pullTimer;
+	
+	@Autowired
+	private ArrayList<IndexQuery> currentBucket;
+	
+	@Autowired
+	private HashMap<String, String> envProperties;
+	
 	private boolean isFinished = false;
 
-	private ArrayList<IndexQuery> currentBucket;
 	private int bucketCapacity = 20000;
 
 	private EventBus eventBus;
@@ -45,13 +56,13 @@ public class AnalysisRepository {
 	private int highWaterMark;
 
 	public void configure(EventBus eventBus) {
-		this.queries = new ArrayBlockingQueue<>(100000);
-		executorService = Executors.newFixedThreadPool(2);
-		currentBucket = new ArrayList<IndexQuery>();
-		pullTimer = new Timer("pullTimer");
+		//this.queries = new ArrayBlockingQueue<>(100000);
+		//executorService = Executors.newFixedThreadPool(2);
+		//currentBucket = new ArrayList<IndexQuery>();
+		//pullTimer = new Timer("pullTimer");
 		this.eventBus = eventBus;
 		saveRepo.configure(eventBus);
-		try {
+		/*try {
 			Context ctx = new InitialContext();
 			Context env = (Context) ctx.lookup("java:comp/env");
 			highWaterMark = Integer.parseInt((String) env.lookup("highWaterMark"));
@@ -59,7 +70,9 @@ public class AnalysisRepository {
 		} catch (NamingException e) {
 			log.info("EXCEPTION IN READING FROM CONFIG FILE");
 			highWaterMark = 5;
-		}
+		}*/
+		highWaterMark = Integer.parseInt(envProperties.get("highWaterMark"));
+		log.info("HIGH WATER MARK READ FROM FILE IS: " + highWaterMark);
 	}
 
 	public void isFinished() {
