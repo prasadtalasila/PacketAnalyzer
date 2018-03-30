@@ -48,7 +48,7 @@ public class AnalysisRepository {
 	private HashMap<String, String> envProperties;
 	
 	private boolean isFinished = false;
-
+	
 	private int bucketCapacity = 20000;
 
 	private EventBus eventBus;
@@ -56,21 +56,8 @@ public class AnalysisRepository {
 	private int highWaterMark;
 
 	public void configure(EventBus eventBus) {
-		//this.queries = new ArrayBlockingQueue<>(100000);
-		//executorService = Executors.newFixedThreadPool(2);
-		//currentBucket = new ArrayList<IndexQuery>();
-		//pullTimer = new Timer("pullTimer");
 		this.eventBus = eventBus;
 		saveRepo.configure(eventBus);
-		/*try {
-			Context ctx = new InitialContext();
-			Context env = (Context) ctx.lookup("java:comp/env");
-			highWaterMark = Integer.parseInt((String) env.lookup("highWaterMark"));
-			log.info("HIGH WATER MARK READ FROM FILE IS: " + highWaterMark);
-		} catch (NamingException e) {
-			log.info("EXCEPTION IN READING FROM CONFIG FILE");
-			highWaterMark = 5;
-		}*/
 		highWaterMark = Integer.parseInt(envProperties.get("highWaterMark"));
 		log.info("HIGH WATER MARK READ FROM FILE IS: " + highWaterMark);
 	}
@@ -86,7 +73,7 @@ public class AnalysisRepository {
 	public void start() {
 		log.info("Starting analysis repository...");
 		TimerTask pull = new TimerTask() {
-
+			
 			@Override
 			public void run() {
 				while (!queries.isEmpty()) {
@@ -120,6 +107,7 @@ public class AnalysisRepository {
 			}
 		};
 		pullTimer.schedule(pull, 0, 10);
+		
 	}
 
 	/**
@@ -138,5 +126,13 @@ public class AnalysisRepository {
 		// log.info("Publishing STOP");
 		log.info(System.currentTimeMillis());
 		eventBus.post(new BucketLimitEvent("STOP"));
+	}
+	
+	public boolean getIsFinished() {
+		return isFinished;
+	}
+	
+	public void setIsFinished(boolean answer) {
+		isFinished = answer;
 	}
 }
