@@ -178,7 +178,7 @@ public class Session {
 		executorService.shutdown();
 		/* repository.terminate(); */
 		log.info("Session ended!");
-		repository.isFinished();
+		repository.setFinished(true);
 	}
 
 	public String getSessionName() {

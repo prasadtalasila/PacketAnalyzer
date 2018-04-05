@@ -47,7 +47,7 @@ public class AnalysisRepository {
 	@Autowired
 	private HashMap<String, String> envProperties;
 	
-	private boolean isFinished = false;
+	private boolean finished = false;
 	
 	private int bucketCapacity = 20000;
 
@@ -60,10 +60,6 @@ public class AnalysisRepository {
 		saveRepo.configure(eventBus);
 		highWaterMark = Integer.parseInt(envProperties.get("highWaterMark"));
 		log.info("HIGH WATER MARK READ FROM FILE IS: " + highWaterMark);
-	}
-
-	public void isFinished() {
-		this.isFinished = true;
 	}
 
 	public void save(IndexQuery query) {
@@ -95,13 +91,13 @@ public class AnalysisRepository {
 						checkBucketLevel();
 					}
 				}
-				if (isFinished) {
+				if (finished) {
 					saveRepo.setBucket(currentBucket);
 					log.info(">> Saving bucket in SaveRepository at " + System.currentTimeMillis());
 					if (!saveRepo.isRunning()) {
 						executorService.execute(saveRepo);
 					}
-					isFinished = false;
+					finished = false;
 					checkBucketLevel();
 				}
 			}
@@ -126,13 +122,5 @@ public class AnalysisRepository {
 		// log.info("Publishing STOP");
 		log.info(System.currentTimeMillis());
 		eventBus.post(new BucketLimitEvent("STOP"));
-	}
-	
-	public boolean getIsFinished() {
-		return isFinished;
-	}
-	
-	public void setIsFinished(boolean answer) {
-		isFinished = answer;
 	}
 }

@@ -1,12 +1,11 @@
 package unit.in.ac.bits.protocolanalyzer.persistence.repository;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+
+import com.google.common.eventbus.EventBus;
+
+import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
+import in.ac.bits.protocolanalyzer.persistence.repository.AnalysisRepository;
+import in.ac.bits.protocolanalyzer.persistence.repository.SaveRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,21 +13,26 @@ import java.util.Timer;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
-
-import com.google.common.eventbus.EventBus;
-
-import in.ac.bits.protocolanalyzer.analyzer.event.BucketLimitEvent;
-import in.ac.bits.protocolanalyzer.persistence.repository.AnalysisRepository;
-import in.ac.bits.protocolanalyzer.persistence.repository.SaveRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AnalysisRepositoryTest {
@@ -88,18 +92,10 @@ public class AnalysisRepositoryTest {
 	}
 	
 	@Test
-	public void isFinishedTest() {
-		analRepo.isFinished();
-		
-		assertThat(analRepo.getIsFinished(), equalTo(true));
-	}
-	
-	@Test
 	public void saveQueryTest() {
 		analRepo.save(query);
 		
 		assertThat(analRepo.getQueries().peek(), equalTo(query));
-		
 	}
 	
 	@Test
@@ -112,30 +108,28 @@ public class AnalysisRepositoryTest {
 		analRepo.save(query);
 		analRepo.setBucketCapacity(5);
 		analRepo.setHighWaterMark(2);
-		analRepo.setIsFinished(false);
+		analRepo.setFinished(false);
 		
 		analRepo.start();
 		// Ensuring that pull.run has ended
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Thread.currentThread().interrupt();
 		}
 		
 		assertThat(analRepo.getQueries().size(), equalTo(0));
 		assertThat(analRepo.getCurrentBucket().size(), equalTo(2));
 		verify(saveRepo, times(0)).setBucket(currentBucket);
-		assertThat(analRepo.getIsFinished(), equalTo(false));
+		assertThat(analRepo.isFinished(), equalTo(false));
 		
-		
 		analRepo.save(query);
 		analRepo.save(query);
 		analRepo.save(query);
 		analRepo.save(query);
-		analRepo.setIsFinished(true);
-		
-		assertThat(analRepo.getIsFinished(), equalTo(true));
+		analRepo.setFinished(true);
+		assertThat(analRepo.isFinished(), equalTo(true));
 		assertThat(analRepo.getQueries().size(), equalTo(4));
 		assertThat(analRepo.getCurrentBucket().size(), equalTo(2));
 		
@@ -144,15 +138,14 @@ public class AnalysisRepositoryTest {
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Thread.currentThread().interrupt();
 		}
 		
 		assertThat(analRepo.getQueries().size(), equalTo(0));
 		assertThat(analRepo.getCurrentBucket().size(), equalTo(1));
 		verify(saveRepo, times(1)).setBucket(currentBucket);
 		verify(saveRepo, times(1)).setBucket(analRepo.getCurrentBucket());
-		
 	}
 	
 }
