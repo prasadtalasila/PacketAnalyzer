@@ -91,13 +91,13 @@ public class AnalysisRepository {
 						checkBucketLevel();
 					}
 				}
-				if (finished) {
+				if (isFinished()) {
 					saveRepo.setBucket(currentBucket);
 					log.info(">> Saving bucket in SaveRepository at " + System.currentTimeMillis());
 					if (!saveRepo.isRunning()) {
 						executorService.execute(saveRepo);
 					}
-					finished = false;
+					setFinished(false);
 					checkBucketLevel();
 				}
 			}
