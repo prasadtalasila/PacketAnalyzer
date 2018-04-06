@@ -98,15 +98,10 @@ public class AnalysisRepositoryTest {
 	}
 	
 	@Test
-	public void startAnalysisTest() {
-		doNothing().when(saveRepo).setBucket(currentBucket);
-		when(saveRepo.getBucketSize()).thenReturn(3);
-		doNothing().when(bus).post(new BucketLimitEvent("STOP"));
-		
+	public void startAnalysisTestWithoutOverFlowWithoutFinished() {
 		analRepo.save(query);
 		analRepo.save(query);
 		analRepo.setBucketCapacity(5);
-		analRepo.setHighWaterMark(2);
 		analRepo.setFinished(false);
 		
 		analRepo.start();
@@ -119,18 +114,27 @@ public class AnalysisRepositoryTest {
 		}
 		
 		assertThat(analRepo.getQueries().size(), equalTo(0));
+		//Checks for the successful transfer of queries from the queue to the bucket
 		assertThat(analRepo.getCurrentBucket().size(), equalTo(2));
+		//Checks for finished=false condition
 		verify(saveRepo, times(0)).setBucket(currentBucket);
-		assertThat(analRepo.isFinished(), equalTo(false));
+	}
+	
+	@Test
+	public void startAnalysisTestWithOverFlowWIthFinished() {
+		doNothing().when(saveRepo).setBucket(currentBucket);
+		when(saveRepo.getBucketSize()).thenReturn(3);
+		doNothing().when(bus).post(new BucketLimitEvent("STOP"));
 		
 		analRepo.save(query);
 		analRepo.save(query);
 		analRepo.save(query);
 		analRepo.save(query);
+		analRepo.save(query);
+		analRepo.save(query);
+		analRepo.setBucketCapacity(5);
+		analRepo.setHighWaterMark(2);
 		analRepo.setFinished(true);
-		assertThat(analRepo.isFinished(), equalTo(true));
-		assertThat(analRepo.getQueries().size(), equalTo(4));
-		assertThat(analRepo.getCurrentBucket().size(), equalTo(2));
 		
 		analRepo.start();
 		// Ensuring that pull.run has ended
@@ -142,8 +146,11 @@ public class AnalysisRepositoryTest {
 		}
 		
 		assertThat(analRepo.getQueries().size(), equalTo(0));
+		//Checks if overflow condition with the Bucket's size was taken care of
 		assertThat(analRepo.getCurrentBucket().size(), equalTo(1));
+		//Checks if the completely filled bucket was passed on to saveRepo
 		verify(saveRepo, times(1)).setBucket(currentBucket);
+		//Checks if the second bucket was passed on to saveRepo or not
 		verify(saveRepo, times(1)).setBucket(analRepo.getCurrentBucket());
 	}
 	
