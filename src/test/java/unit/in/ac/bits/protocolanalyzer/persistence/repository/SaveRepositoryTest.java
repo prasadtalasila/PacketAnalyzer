@@ -85,7 +85,7 @@ public class SaveRepositoryTest {
 		when(envProperties.get("analysisOnly")).thenReturn("true");
 
 		saveRepo.configure(bus);
-
+		
 		verify(bus).register(saveRepo);
 		verify(envProperties).get("lowWaterMark");
 		verify(envProperties).get("analysisOnly");
