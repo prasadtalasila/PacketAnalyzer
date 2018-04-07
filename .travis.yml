@@ -1,20 +1,20 @@
 language: java
 jdk: oraclejdk8
-
-install: true
-
-before_script:
-  - npm install -g csslint
-  - npm install --prefix ./ vnu-jar
+sudo: required
+dist: trusty
 
 script:
-  - mvn test -B
-  - csslint src/main/webapp/WEB-INF/css/main.css
-  - java -jar node_modules/vnu-jar/build/dist/vnu.jar src/main/webapp/WEB-INF/view
+  #Runs unit and integration tests along with generation of coverage reports
+  - bash scripts/travis_script.sh
+  #Runs deployment tests along with upload of coverage reports
+  - bash scripts/travis.sh
 
 after_success:
-  - mvn clean test jacoco:report coveralls:report || echo "========Tests failed========"
-  - mvn pmd:pmd || echo "========PMD checks failed========"
-  - mvn checkstyle:checkstyle || echo "========CheckStyle checks failed========"
-  - mvn findbugs:findbugs || echo "========FindBugs checks failed========"
-  - mvn site
+  - bash <(curl -s https://codecov.io/bash)
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: bash scripts/deploy_docs.sh
+  on:
+    branch: dev

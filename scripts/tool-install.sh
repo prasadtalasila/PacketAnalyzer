@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#print a shell command before its execution
+set -ex
+
 #install ntop
 sudo wget http://apt-stable.ntop.org/16.04/all/apt-ntop-stable.deb
 sudo dpkg -i apt-ntop-stable.deb
@@ -39,7 +42,8 @@ make
 sudo make install
 echo "export PATH=$PATH:/usr/local/bro/bin">>/etc/profile.d/3rd-party.sh
 source /etc/profile.d/3rd-party.sh
-echo "export PATH=$PATH:/usr/local/bro/bin">> /home/ubuntu/.bashrc
+echo "export PATH=/opt/maven/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/opt/jdk1.8.0_161/bin:/opt/jdk1.8.0_161/jre/bin:/opt/jdk1.8.0_161/bin:/opt/jdk1.8.0_161/jre/bin:/usr/local/bro/bin" | sudo tee -a /etc/environment >/dev/null 2>&1
+source /etc/environment
 
 #Visit the link below for more details on installing and configuring bro.
 #https://www.digitalocean.com/community/tutorials/how-to-install-bro-on-ubuntu-16-04

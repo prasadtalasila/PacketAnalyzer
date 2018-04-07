@@ -1,50 +1,97 @@
 #!/bin/bash
-printf 'Y\n' | add-apt-repository -y ppa:webupd8team/java
-apt-get update
-echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
-apt-get install -y oracle-java8-installer
-printf 'Y\n' | apt-get install -y oracle-java8-set-default
-JAVA_HOME=/usr/lib/jvm/java-8-oracle
-export JAVA_HOME
-PATH=${JAVA_HOME}/bin:$PATH
-export PATH
 
-printf 'Y\n' | apt-get install -y maven
-printf 'Y\n' | apt-get install git
+#print a shell command before its execution
+set -ex
 
-#adjust tomcat7 settings
-cp -rf conf/settings.xml /usr/share/maven/conf/settings.xml
-printf 'Y\n' | apt-get install -y tomcat7 tomcat7-admin tomcat7-common
-echo "export CATALINA_BASE=/var/lib/tomcat7" >> /usr/share/tomcat7/bin/setenv.sh
-echo "export  JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> /usr/share/tomcat7/bin/setenv.sh
-chmod +x /usr/share/tomcat7/bin/setenv.sh
-cp -rf conf/tomcat-users.xml /var/lib/tomcat7/conf/tomcat-users.xml
-sudo sed -i '/JAVA_OPTS="-Djava.awt.*/c\JAVA_OPTS="-Djava.awt.headless=true -Xmx1024m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:InitiatingHeapOccupancyPercent=0 -Dcom.sun.management.jmxremote.port=8086 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"' /etc/default/tomcat7
-echo "JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> /etc/default/tomcat7
+#install java
+sudo bash scripts/java_install.sh
 
-#Tomcat classpath error fix
-sudo wget https://archive.apache.org/dist/logging/log4j/2.8.2/apache-log4j-2.8.2-bin.tar.gz
-sudo tar -xvzf apache-log4j-2.8.2-bin.tar.gz -C /usr/share/tomcat7/lib/
-rm apache-log4j-2.8.2-bin.tar.gz
-echo "CLASSPATH=/usr/share/tomcat7/lib/apache-log4j-2.8.2-bin/">>/usr/share/tomcat7/bin/setenv.sh
-service tomcat7 restart
+#load environment variables set by java_install.sh script
+source /etc/environment
 
-#copy the correct property files and create the required directories
+yes | sudo apt-get -y --force-yes install curl
+yes | sudo apt-get -y --force-yes install git
+
+
+#install maven
+if [ ! -f apache-maven-3.5.2-bin.tar.gz ]; then
+    curl -O http://www-us.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
+fi
+tar -xzf apache-maven-3.5.2-bin.tar.gz
+sudo mv apache-maven-3.5.2 /opt/maven 
+
+#set shell environment variables for maven
+{
+    echo 'export MAVEN_HOME=/opt/maven'
+    echo 'export MAVEN=/opt/maven/bin'
+    echo "export MAVEN_OPTS='-Xms256m -Xmx512m'"
+    echo 'export PATH=/opt/maven/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/opt/jdk1.8.0_161/bin:/opt/jdk1.8.0_161/jre/bin:/opt/jdk1.8.0_161/bin:/opt/jdk1.8.0_161/jre/bin'
+} | sudo tee -a /etc/environment >/dev/null 2>&1
+
+
+#adjust tomcat settings of maven
+sudo mv /opt/maven/conf/settings.xml /opt/maven/conf/settings.xml.bkp
+sudo cp conf/settings.xml /opt/maven/conf/settings.xml
+#cp -rf conf/settings.xml /usr/share/maven/conf/settings.xml
+
+
+#check for installation of java, exit if not present
+JAVA_VER=$(java -version 2>&1 | grep -i version | sed 's/.*version ".*\.\(.*\)\..*"/\1/; 1q')
+if [ $JAVA_VER -ge 7 ]
+then
+	echo "JAVA installed. Proceeding with the installation of Tomcat 8.5"
+else
+	echo "JAVA NOT installed. Aborting the installation"
+	exit 1
+fi
+
+#Create a user and group named tomcat
+sudo groupadd tomcat
+sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+
+#download and install tomcat
+if [ ! -f apache-tomcat-8.5.29.tar.gz ]; then
+    curl -O http://redrockdigimark.com/apachemirror/tomcat/tomcat-8/v8.5.29/bin/apache-tomcat-8.5.29.tar.gz
+fi
+sudo mkdir /opt/tomcat
+sudo tar xzf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
+
+#Give the tomcat user ownership over the entire installation directory:
+sudo chown -R tomcat:tomcat /opt/tomcat
+
+#give the tomcat group read access to the conf directory and all of its contents, and execute access to the directory itself
+sudo cp conf/tomcat.service /etc/systemd/system/
+sudo cp conf/tomcat-users.xml /opt/tomcat/conf/tomcat-users.xml
+sudo chown tomcat:tomcat /opt/tomcat/conf/tomcat-users.xml
+
+#make tomcat a part of start-up scripts
+sudo update-rc.d tomcat defaults
+sudo update-rc.d tomcat enable
+
+#reload the systemd daemon so that it knows about our service file
+sudo systemctl daemon-reload
+sudo systemctl start tomcat
+
+#copy the correct property files
 cp -f conf/*.properties src/main/resources/META-INF/
-mkdir -p /opt/darshini-es/data
-chmod 777 /opt/darshini-es/data
-mkdir -p /opt/darshini-es/logs
-chmod 777 /opt/darshini-es/logs
-mkdir -p /opt/darshini-logs
-chmod 777 /opt/darshini-logs
 
-#install nodejs
-curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
+#create directories for storing elastic search data and logs
+sudo mkdir -p /opt/darshini-es/data
+sudo mkdir -p /opt/darshini-es/logs
+sudo chown -R tomcat:tomcat /opt/darshini-es
+sudo chmod -R 777 /opt/darshini-es
+
+#create log file for darshini
+sudo mkdir -p /opt/darshini-logs
+sudo touch /opt/darshini-logs/darshini
+sudo chown -R tomcat:tomcat /opt/darshini-logs
+
+#install nodejs and npm
+curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
 sudo bash nodesource_setup.sh
-sudo apt-get install -y nodejs
-sudo apt-get install build-essential
+sudo apt-get update && sudo apt-get install --force-yes -y nodejs build-essential
 rm nodesource_setup.sh
 
-#get the npm modules for js files of webpages
+#install npm modules for browser client dependencies
 mkdir -p src/main/webapp/WEB-INF/node_modules
-npm install --prefix ../src/main/webapp/WEB-INF
+npm install --prefix src/main/webapp/WEB-INF

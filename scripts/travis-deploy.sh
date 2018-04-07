@@ -7,7 +7,7 @@ echo ">> REDEPLOYING APPLICATION"
 echo ""
 
 echo "] Shutdown tomcat and wait for the socket to become available"
-sudo systemctl stop tomcat
+sudo -H -u tomcat bash -c '/opt/tomcat/bin/shutdown.sh'
 sleep 5
 
 echo "] Removing the war file ..."
@@ -24,7 +24,7 @@ mvn package
 echo "] Packaging complete."
 
 echo "] Restarting tomcat ..."
-sudo systemctl restart tomcat
+sudo -H -u tomcat bash -c '/opt/tomcat/bin/startup.sh'
 sleep 5
 echo "] Restart complete."
 echo ""
