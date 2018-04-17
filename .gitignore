@@ -4,3 +4,4 @@
 .project
 .vagrant
 src/main/webapp/WEB-INF/node_modules
+data/log
