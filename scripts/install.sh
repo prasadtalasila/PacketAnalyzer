@@ -64,13 +64,12 @@ sudo cp conf/tomcat.service /etc/systemd/system/
 sudo cp conf/tomcat-users.xml /opt/tomcat/conf/tomcat-users.xml
 sudo chown tomcat:tomcat /opt/tomcat/conf/tomcat-users.xml
 
-#make tomcat a part of start-up scripts
-sudo update-rc.d tomcat defaults
-sudo update-rc.d tomcat enable
-
 #reload the systemd daemon so that it knows about our service file
 sudo systemctl daemon-reload
 sudo systemctl start tomcat
+
+#make tomcat a part of start-up scripts
+sudo systemctl enable tomcat.service
 
 #copy the correct property files
 cp -f conf/*.properties src/main/resources/META-INF/
