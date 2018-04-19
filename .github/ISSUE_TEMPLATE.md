@@ -1,6 +1,6 @@
 <!--
 
-Have you read AutolabJS' Code of Conduct? By filing an Issue, you are expected to comply with it, including treating everyone with respect: https://github.com/prasadtalasila/BITS-Darshini/blob/master/.github/CODE_OF_CONDUCT.md
+Have you read BITS-Darshini's Code of Conduct? By filing an Issue, you are expected to comply with it, including treating everyone with respect: https://github.com/prasadtalasila/BITS-Darshini/blob/master/.github/CODE_OF_CONDUCT.md
 -->
 
 ### Description
